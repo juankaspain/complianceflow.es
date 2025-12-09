@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>ComplianceFlow API · Documentación v1</title>
+  <meta name="description"
+        content="Documentación oficial de la API de ComplianceFlow: SII, Verifactu, KYC, fraude y análisis documental, con ejemplos y guías para desarrolladores." />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://complianceflow.es/docs/" />
+
+  <link rel="icon" href="../public/favicon.svg" type="image/svg+xml" />
+
+  <!-- Estilos globales -->
+  <link rel="stylesheet" href="../src/css/styles.css" />
+
+  <!-- Schema TechArticle para la documentación -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "name": "ComplianceFlow API · v1",
+      "headline": "Documentación técnica de la API de ComplianceFlow v1",
+      "description": "Guía técnica de la API de ComplianceFlow para automatizar SII, Verifactu, KYC, scoring de fraude y análisis documental.",
+      "author": {
+        "@type": "Organization",
+        "name": "ComplianceFlow"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ComplianceFlow",
+        "url": "https://www.complianceflow.es/"
+      },
+      "url": "https://www.complianceflow.es/docs/",
+      "inLanguage": "es",
+      "about": {
+        "@type": "SoftwareApplication",
+        "name": "ComplianceFlow",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web"
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <a href="#docs-main" class="skip-link">Saltar al contenido principal</a>
+
+  <!-- Header compartido con la landing -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">CF</div>
+        <div>
+          <span class="brand-name">ComplianceFlow</span>
+          <span class="brand-tagline">Compliance via APIs</span>
+        </div>
+      </div>
+
+      <nav class="main-nav" aria-label="Navegación principal">
+        <ul>
+          <li><a href="../index.html#producto">Producto</a></li>
+          <li><a href="../index.html#casos-uso">Casos de uso</a></li>
+          <li><a href="../index.html#pricing">Precios</a></li>
+          <li><a href="./index.html" aria-current="page">Docs API</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-cta">
+        <a href="../index.html#demo" class="btn btn-ghost">Ver demo</a>
+        <a href="#quickstart" class="btn btn-primary">Empezar rápido</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="docs-main" class="docs-main">
+    <div class="container docs-layout">
+      <!-- Sidebar índice -->
+      <aside class="docs-sidebar" aria-label="Índice de la documentación">
+        <nav>
+          <p class="docs-sidebar-title">Contenido</p>
+          <ol class="docs-toc">
+            <li><a href="#overview">1. Visión general</a></li>
+            <li><a href="#auth">2. Autenticación y entornos</a></li>
+            <li><a href="#conventions">3. Convenciones de la API</a></li>
+            <li><a href="#errors">4. Errores y códigos de estado</a></li>
+            <li><a href="#endpoints-sii">5. Endpoints SII &amp; Verifactu</a></li>
+            <li><a href="#endpoints-kyc">6. Endpoints KYC</a></li>
+            <li><a href="#endpoints-fraud">7. Endpoints de fraude</a></li>
+            <li><a href="#endpoints-docs">8. Endpoints de documentos</a></li>
+            <li><a href="#quickstart">9. Guía rápida por lenguaje</a></li>
+          </ol>
+        </nav>
+
+        <section class="docs-meta" aria-label="Información de la versión de la API">
+          <p><strong>Versión API:</strong> v1</p>
+          <p>
+            <strong>Base URL prod:</strong><br />
+            <code>https://api.complianceflow.es/v1</code>
+          </p>
+          <p>
+            <strong>Base URL sandbox:</strong><br />
+            <code>https://sandbox.api.complianceflow.es/v1</code>
+          </p>
+        </section>
+      </aside>
+
+      <!-- Contenido principal -->
+      <article class="docs-content">
+        <!-- 1. Overview -->
+        <section id="overview" class="docs-section">
+          <h1>ComplianceFlow API · v1</h1>
+          <p>
+            ComplianceFlow es una plataforma de APIs de compliance que unifica en una sola interfaz
+            SII/Verifactu, KYC, scoring de fraude y análisis documental. Esta documentación está pensada
+            para desarrolladores y equipos de producto que quieran integrar la API en sus sistemas.
+          </p>
+          <p>
+            Todas las llamadas se realizan sobre HTTPS y devuelven datos en formato JSON.
+            Se recomienda empezar en el entorno sandbox y pasar a producción cuando la integración esté validada.
+          </p>
+
+          <div class="docs-callout docs-callout--info">
+            <h2>Base URLs</h2>
+            <p class="docs-url-label">Sandbox</p>
+            <code class="docs-url">https://sandbox.api.complianceflow.es/v1</code>
+
+            <p class="docs-url-label">Producción</p>
+            <code class="docs-url">https://api.complianceflow.es/v1</code>
+          </div>
+        </section>
+
+        <!-- 2. Autenticación -->
+        <section id="auth" class="docs-section">
+          <h2>2. Autenticación y entornos</h2>
+          <p>
+            La autenticación se realiza mediante API keys específicas por entorno (sandbox y producción).
+            Cada petición debe incluir una cabecera <code>x-api-key</code> con una clave válida.
+          </p>
+          <p>
+            Las claves son secretas y no deben incrustarse en aplicaciones cliente públicas
+            (frontends web o apps móviles). Utiliza siempre tu backend como proxy cuando consumas la API
+            desde un frontal.
+          </p>
+
+          <h3>Cabeceras obligatorias</h3>
+          <table class="docs-table">
+            <thead>
+              <tr>
+                <th>Cabecera</th>
+                <th>Tipo</th>
+                <th>Obligatoria</th>
+                <th>Descripción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>x-api-key</code></td>
+                <td>string</td>
+                <td>Sí</td>
+                <td>Clave de acceso al entorno correspondiente (sandbox o producción).</td>
+              </tr>
+              <tr>
+                <td><code>Content-Type</code></td>
+                <td>string</td>
+                <td>Según endpoint</td>
+                <td><code>application/json</code> o <code>multipart/form-data</code> para subida de ficheros.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Ejemplo de llamada autenticada (cURL)</h3>
+          <pre class="code-block docs-code">
+curl -X GET "https://api.complianceflow.es/v1/usage/current-month" \
+  -H "x-api-key: YOUR_PROD_API_KEY"
+          </pre>
+        </section>
+
+        <!-- 3. Convenciones -->
+        <section id="conventions" class="docs-section">
+          <h2>3. Convenciones de la API</h2>
+          <ul>
+            <li><strong>Versionado:</strong> todas las rutas llevan prefijo <code>/v1</code>.</li>
+            <li><strong>Formato:</strong> entrada y salida en JSON, salvo endpoints que aceptan ficheros.</li>
+            <li><strong>Fechas:</strong> formato ISO‑8601 (ej. <code>2025-12-09T13:45:00Z</code>).</li>
+            <li><strong>Importes:</strong> numéricos con punto decimal y sin símbolo de moneda.</li>
+          </ul>
+          <p>
+            Los códigos HTTP siguen la semántica estándar: 2xx para éxito, 4xx para errores del cliente
+            y 5xx para errores internos. El cuerpo de error se documenta en la sección siguiente.
+          </p>
+        </section>
+
+        <!-- 4. Errores -->
+        <section id="errors" class="docs-section">
+          <h2>4. Errores y códigos de estado</h2>
+          <p>
+            Todas las respuestas de error siguen una estructura homogénea que facilita el tratamiento
+            automático y la trazabilidad.
+          </p>
+
+          <h3>Formato de error</h3>
+          <pre class="code-block docs-code">
+{
+  "error": "VALIDATION_ERROR",
+  "message": "El campo amount es obligatorio",
+  "details": {
+    "field": "amount"
+  },
+  "trace_id": "b7a1f79e-9c3f-4c2f-8b4a-01c1f2a9c001"
+}
+          </pre>
+
+          <table class="docs-table">
+            <thead>
+              <tr>
+                <th>Campo</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>error</code></td>
+                <td>string</td>
+                <td>Código interno de error (ej. <code>VALIDATION_ERROR</code>, <code>AUTH_ERROR</code>, <code>RATE_LIMIT</code>).</td>
+              </tr>
+              <tr>
+                <td><code>message</code></td>
+                <td>string</td>
+                <td>Mensaje legible para desarrolladores (no para mostrar al usuario final).</td>
+              </tr>
+              <tr>
+                <td><code>details</code></td>
+                <td>objeto</td>
+                <td>Información adicional según el contexto (campo inválido, etc.).</td>
+              </tr>
+              <tr>
+                <td><code>trace_id</code></td>
+                <td>string</td>
+                <td>Identificador único para soporte y auditoría.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Errores habituales</h3>
+          <table class="docs-table">
+            <thead>
+              <tr>
+                <th>Código HTTP</th>
+                <th><code>error</code></th>
+                <th>Cuándo ocurre</th>
+                <th>Cómo actuar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>400</td>
+                <td><code>VALIDATION_ERROR</code></td>
+                <td>Faltan campos obligatorios o el formato es incorrecto.</td>
+                <td>Revisa el cuerpo de la petición y corrige los campos indicados en <code>details</code>.</td>
+              </tr>
+              <tr>
+                <td>401</td>
+                <td><code>AUTH_ERROR</code></td>
+                <td>API key ausente, inválida o desactivada.</td>
+                <td>Confirma que estás usando la clave correcta para el entorno adecuado.</td>
+              </tr>
+              <tr>
+                <td>429</td>
+                <td><code>RATE_LIMIT</code></td>
+                <td>Se han superado los límites de peticiones permitidos.</td>
+                <td>Aplica backoff exponencial o contrata un plan con más capacidad.</td>
+              </tr>
+              <tr>
+                <td>500</td>
+                <td><code>INTERNAL_ERROR</code></td>
+                <td>Error inesperado en el servicio.</td>
+                <td>Reintenta más tarde y, si persiste, contacta con soporte indicando el <code>trace_id</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- 5. SII & Verifactu -->
+        <section id="endpoints-sii" class="docs-section">
+          <h2>5. Endpoints SII &amp; Verifactu</h2>
+
+          <article class="endpoint">
+            <h3>POST /sii/invoice</h3>
+            <p>
+              Envía una factura al SII. Acepta un fichero PDF o imagen y devuelve un objeto
+              JSON listo para registrar y, en su caso, enviar a la AEAT.
+            </p>
+
+            <div class="endpoint-meta">
+              <span class="tag tag--post">POST</span>
+              <code>/v1/sii/invoice</code>
+              <span class="endpoint-env">Sandbox &amp; Producción</span>
+            </div>
+
+            <h4>Parámetros</h4>
+            <table class="docs-table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>En</th>
+                  <th>Tipo</th>
+                  <th>Obligatorio</th>
+                  <th>Descripción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>invoice_pdf</code></td>
+                  <td>form-data</td>
+                  <td>file</td>
+                  <td>Sí</td>
+                  <td>Fichero PDF o imagen de la factura.</td>
+                </tr>
+                <tr>
+                  <td><code>external_id</code></td>
+                  <td>form-data</td>
+                  <td>string</td>
+                  <td>No</td>
+                  <td>Identificador interno de la factura en tu sistema.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h4>Ejemplo de petición (cURL)</h4>
+            <pre class="code-block docs-code">
+curl -X POST "https://api.complianceflow.es/v1/sii/invoice" \
+  -H "x-api-key: YOUR_PROD_API_KEY" \
+  -F "invoice_pdf=@factura.pdf" \
+  -F "external_id=ERP-12345"
+            </pre>
+
+            <h4>Ejemplo de respuesta</h4>
+            <pre class="code-block docs-code">
+{
+  "sii_id": "2026E001",
+  "estado": "Aceptado",
+  "importe_total": 1250.00,
+  "iva_21": 262.50,
+  "proveedor_nif": "B12345678",
+  "cliente_nif": "A87654321",
+  "external_id": "ERP-12345",
+  "trace_id": "b7a1f79e-9c3f-4c2f-8b4a-01c1f2a9c001"
+}
+            </pre>
+          </article>
+        </section>
+
+        <!-- 6. KYC -->
+        <section id="endpoints-kyc" class="docs-section">
+          <h2>6. Endpoints KYC</h2>
+
+          <article class="endpoint">
+            <h3>POST /kyc/complete</h3>
+            <p>
+              Realiza un flujo KYC completo combinando documento de identidad y selfie.
+              Devuelve un resultado de verificación y un score de riesgo.
+            </p>
+
+            <div class="endpoint-meta">
+              <span class="tag tag--post">POST</span>
+              <code>/v1/kyc/complete</code>
+              <span class="endpoint-env">Sandbox &amp; Producción</span>
+            </div>
+
+            <h4>Parámetros</h4>
+            <table class="docs-table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>En</th>
+                  <th>Tipo</th>
+                  <th>Obligatorio</th>
+                  <th>Descripción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>dni_front</code></td>
+                  <td>form-data</td>
+                  <td>file</td>
+                  <td>Sí</td>
+                  <td>Imagen frontal del documento.</td>
+                </tr>
+                <tr>
+                  <td><code>dni_back</code></td>
+                  <td>form-data</td>
+                  <td>file</td>
+                  <td>No</td>
+                  <td>Imagen trasera del documento (si aplica).</td>
+                </tr>
+                <tr>
+                  <td><code>selfie</code></td>
+                  <td>form-data</td>
+                  <td>file</td>
+                  <td>Sí</td>
+                  <td>Selfie de la persona a verificar.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h4>Ejemplo de respuesta</h4>
+            <pre class="code-block docs-code">
+{
+  "status": "APPROVED",
+  "risk_score": 32,
+  "document_type": "DNI",
+  "document_number": "00000000X",
+  "full_name": "Nombre Apellido",
+  "reason_codes": [],
+  "trace_id": "c2f3e9a0-1d39-4b33-b822-8212e4c0e9af"
+}
+            </pre>
+          </article>
+        </section>
+
+        <!-- 7. Fraude -->
+        <section id="endpoints-fraud" class="docs-section">
+          <h2>7. Endpoints de fraude</h2>
+
+          <article class="endpoint">
+            <h3>POST /score/risk</h3>
+            <p>
+              Calcula un score de riesgo 0‑100 para una transacción, combinando reglas PSD2
+              y modelos de riesgo entrenados.
+            </p>
+
+            <div class="endpoint-meta">
+              <span class="tag tag--post">POST</span>
+              <code>/v1/score/risk</code>
+              <span class="endpoint-env">Sandbox &amp; Producción</span>
+            </div>
+
+            <h4>Ejemplo de petición (JSON)</h4>
+            <pre class="code-block docs-code">
+{
+  "amount": 2500,
+  "currency": "EUR",
+  "ip_country": "ES",
+  "velocity_24h": 5,
+  "merchant_category": "crypto"
+}
+            </pre>
+
+            <h4>Ejemplo de respuesta</h4>
+            <pre class="code-block docs-code">
+{
+  "risk_score": 78,
+  "decision": "BLOCK",
+  "reason_codes": ["AMOUNT_HIGH", "MCC_HIGH_RISK"],
+  "trace_id": "d781f4e0-a0b7-4b7d-bb3a-92c3b5d22b8e"
+}
+            </pre>
+
+            <p>
+              Por defecto se recomienda tratar como <strong>alto riesgo</strong> los valores superiores a 70
+              y revisar manualmente los comprendidos entre 50 y 70.
+            </p>
+          </article>
+        </section>
+
+        <!-- 8. Documentos -->
+        <section id="endpoints-docs" class="docs-section">
+          <h2>8. Endpoints de documentos</h2>
+
+          <article class="endpoint">
+            <h3>POST /extract</h3>
+            <p>
+              Extrae datos estructurados de facturas, DNIs y otros documentos soportados.
+            </p>
+            <div class="endpoint-meta">
+              <span class="tag tag--post">POST</span>
+              <code>/v1/extract</code>
+              <span class="endpoint-env">Sandbox &amp; Producción</span>
+            </div>
+          </article>
+
+          <article class="endpoint">
+            <h3>POST /summarize</h3>
+            <p>
+              Genera un resumen ejecutivo de contratos y expedientes, incluyendo cláusulas clave detectadas.
+            </p>
+            <div class="endpoint-meta">
+              <span class="tag tag--post">POST</span>
+              <code>/v1/summarize</code>
+              <span class="endpoint-env">Sandbox &amp; Producción</span>
+            </div>
+          </article>
+        </section>
+
+        <!-- 9. Quickstart -->
+        <section id="quickstart" class="docs-section">
+          <h2>9. Guía rápida por lenguaje</h2>
+          <p>
+            Estos ejemplos muestran cómo hacer una llamada autenticada al endpoint
+            <code>/score/risk</code> desde distintos lenguajes. Son perfectos para validar
+            conectividad con sandbox.
+          </p>
+
+          <h3>Node.js (axios)</h3>
+          <pre class="code-block docs-code">
+import axios from "axios";
+
+const client = axios.create({
+  baseURL: "https://sandbox.api.complianceflow.es/v1",
+  headers: {
+    "x-api-key": process.env.COMPLIANCEFLOW_API_KEY
+  }
+});
+
+async function main() {
+  const response = await client.post("/score/risk", {
+    amount: 2500,
+    currency: "EUR",
+    ip_country: "ES"
+  });
+
+  console.log(response.data);
+}
+
+main().catch(console.error);
+          </pre>
+
+          <h3>Python (requests)</h3>
+          <pre class="code-block docs-code">
+import os
+import requests
+
+BASE_URL = "https://sandbox.api.complianceflow.es/v1"
+API_KEY = os.environ.get("COMPLIANCEFLOW_API_KEY")
+
+payload = {
+  "amount": 2500,
+  "currency": "EUR",
+  "ip_country": "ES"
+}
+
+response = requests.post(
+  f"{BASE_URL}/score/risk",
+  json=payload,
+  headers={"x-api-key": API_KEY},
+  timeout=10
+)
+
+print(response.status_code, response.json())
+          </pre>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <p>© <span id="year"></span> ComplianceFlow · Documentación de API.</p>
+        <p><a href="mailto:hola@complianceflow.es">hola@complianceflow.es</a></p>
+      </div>
+      <div class="footer-links">
+        <a href="../index.html">Volver a la landing</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Solo para actualizar el año
+    const y = document.getElementById("year");
+    if (y) {
+      y.textContent = new Date().getFullYear();
+    }
+  </script>
+</body>
+</html>

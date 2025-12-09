@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>ComplianceFlow · APIs de compliance para SII, PSD2 y KYC</title>
+  <meta name="description"
+        content="ComplianceFlow es una plataforma de APIs de compliance para automatizar SII, Verifactu, KYC, fraude y análisis documental legal sobre una única API." />
+
+  <!-- SEO básico -->
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://complianceflow.es/" />
+
+  <!-- OpenGraph / Social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="ComplianceFlow · Compliance via APIs" />
+  <meta property="og:description"
+        content="Automatiza SII, PSD2, KYC y fraude con una API pensada para desarrolladores y equipos de cumplimiento." />
+  <meta property="og:url" content="https://complianceflow.es/" />
+  <meta property="og:image" content="https://complianceflow.es/public/og-image.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="/public/favicon.svg" type="image/svg+xml" />
+
+  <!-- CSS externo -->
+  <link rel="stylesheet" href="./src/css/styles.css" />
+
+  <!-- Datos estructurados básicos (Organization) -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "ComplianceFlow",
+      "url": "https://www.complianceflow.es/",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "Plataforma de APIs de compliance para automatizar SII, Verifactu, KYC, fraude y análisis documental legal.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "ComplianceFlow",
+        "url": "https://www.complianceflow.es/"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR",
+        "category": "FreeTrial"
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <a href="#main" class="skip-link">Saltar al contenido principal</a>
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">CF</div>
+        <div>
+          <span class="brand-name">ComplianceFlow</span>
+          <span class="brand-tagline">Compliance via APIs</span>
+        </div>
+      </div>
+
+      <nav class="main-nav" aria-label="Navegación principal">
+        <ul>
+          <li><a href="#producto">Producto</a></li>
+          <li><a href="#casos-uso">Casos de uso</a></li>
+          <li><a href="#como-funciona">Cómo funciona</a></li>
+          <li><a href="#pricing">Precios</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="./docs/index.html">Docs API</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-cta">
+        <a href="./docs/index.html" class="btn btn-ghost">Docs API</a>
+        <a href="#demo" class="btn btn-primary">Probar gratis</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero-grid">
+        <div class="hero-text">
+          <h1 id="hero-title">
+            Compliance <span class="accent">SII, PSD2 y KYC</span> en una sola API.
+          </h1>
+          <p class="hero-subtitle">
+            Automatiza SII, Verifactu, KYC, prevención de blanqueo y análisis documental
+            legal en segundos, sin ampliar tu equipo de cumplimiento.
+          </p>
+
+          <div class="hero-badges" aria-label="Características destacadas">
+            <span class="badge">SII AEAT · Verifactu</span>
+            <span class="badge">PSD2 · KYC · AML</span>
+            <span class="badge">Infraestructura sobre Azure + Cloudflare</span>
+          </div>
+
+          <div class="hero-actions">
+            <a href="#demo" class="btn btn-primary">Probar 1.000 llamadas gratis</a>
+            <a href="#pricing" class="btn btn-secondary">Ver precios</a>
+          </div>
+
+          <ul class="hero-metrics" aria-label="Métricas de producto">
+            <li><strong>2 s</strong><span>Respuesta media por llamada.</span></li>
+            <li><strong>97 %</strong><span>exactitud en matching DNI + selfie.</span></li>
+            <li><strong>75 %</strong><span>ahorro de tiempo en tareas de compliance.</span></li>
+          </ul>
+        </div>
+
+        <aside class="hero-panel" aria-label="Ejemplo de petición API">
+          <h2 class="hero-panel-title">Ejemplo real de API</h2>
+          <p class="hero-panel-caption">Envía una factura al SII desde tu ERP.</p>
+          <pre class="code-block" aria-label="Ejemplo de llamada curl a la API">
+curl -X POST https://api.complianceflow.es/v1/sii/invoice \
+  -H "x-api-key: DEMO_KEY" \
+  -F "invoice_pdf=@factura.pdf"
+          </pre>
+          <p class="hero-panel-footnote">
+            Entorno sandbox · No uses datos sensibles reales hasta firmar contrato.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SOCIAL PROOF -->
+    <section class="logos" aria-label="Sectores donde se usa ComplianceFlow">
+      <div class="container logos-inner">
+        <p>Diseñado junto a equipos de:</p>
+        <ul>
+          <li>Fintech y pagos</li>
+          <li>ERPs y asesorías</li>
+          <li>Despachos legales</li>
+          <li>E‑commerce y marketplaces</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- PRODUCTO -->
+    <section id="producto" class="section" aria-labelledby="producto-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="producto-title">Una plataforma, cuatro bloques de APIs</h2>
+          <p>
+            ComplianceFlow está organizado en bloques modulares: Facturación (SII/Verifactu),
+            Identidad (KYC), Riesgo (fraude) y Documentos (OCR + contratos).
+            Integra solo lo que necesitas y escala al resto cuando tu negocio crezca.
+          </p>
+        </header>
+
+        <div class="cards-grid">
+          <article class="card">
+            <h3>/sii · /verifactu</h3>
+            <p class="card-label">Facturación y AEAT</p>
+            <p>
+              Convierte facturas en envíos SII válidos para la AEAT y genera tickets Verifactu
+              sin reescribir tu ERP ni tu software de facturación.
+            </p>
+            <ul>
+              <li>Mapeo automático de campos de factura.</li>
+              <li>Gestión de errores y reintentos.</li>
+              <li>Listo para futuras obligaciones de e‑factura.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>/kyc</h3>
+            <p class="card-label">Onboarding digital</p>
+            <p>
+              Procesa DNI/pasaporte + selfie, valida identidad y calcula un score de riesgo
+              compatible con PSD2 y políticas internas.
+            </p>
+            <ul>
+              <li>Detección de documentos manipulados.</li>
+              <li>Comparación biométrica selfie vs documento.</li>
+              <li>Respuestas explicables para compliance.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>/score/risk</h3>
+            <p class="card-label">Fraude transaccional</p>
+            <p>
+              Calcula en milisegundos el riesgo de cada pago o movimiento
+              combinando reglas deterministas e IA.
+            </p>
+            <ul>
+              <li>Reglas configurables por producto.</li>
+              <li>Modelos entrenados con patrones de fraude.</li>
+              <li>Salida 0‑100 con motivos del bloqueo.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>/extract · /summarize</h3>
+            <p class="card-label">Documentos y contratos</p>
+            <p>
+              Extrae datos clave de facturas, DNIs, contratos y expedientes,
+              y genera resúmenes ejecutivos para decisiones rápidas.
+            </p>
+            <ul>
+              <li>OCR multiformato (PDF, imagen).</li>
+              <li>Detección de cláusulas sensibles.</li>
+              <li>Resúmenes listos para informes internos.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CASOS DE USO -->
+    <section id="casos-uso" class="section section-alt" aria-labelledby="casos-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="casos-title">Casos de uso prioritarios</h2>
+          <p>
+            Nos centramos en procesos críticos: allí donde un error implica sanciones,
+            pérdida de clientes o pérdida de confianza del regulador.
+          </p>
+        </header>
+
+        <div class="cards-grid">
+          <article class="card">
+            <h3>Fintech · Onboarding &amp; pagos</h3>
+            <ul>
+              <li>Alta KYC completa en segundos desde tu app.</li>
+              <li>Scoring PSD2 en tiempo real por cada pago.</li>
+              <li>Justificación completa para auditorías y supervisores.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>ERPs y asesorías</h3>
+            <ul>
+              <li>Automatiza SII y facturación electrónica sin tocar el core.</li>
+              <li>Disminuye el riesgo de sanciones y errores manuales.</li>
+              <li>Ofrece nuevo valor añadido a tus clientes finales.</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Legal &amp; compliance</h3>
+            <ul>
+              <li>Screening masivo de contratos y expedientes.</li>
+              <li>Identificación de cláusulas y riesgos clave.</li>
+              <li>Informes ejecutivos para comités de riesgo.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CÓMO FUNCIONA -->
+    <section id="como-funciona" class="section" aria-labelledby="flow-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="flow-title">Cómo funciona ComplianceFlow</h2>
+          <p>
+            El flujo es siempre el mismo: ingesta por API, extracción y normalización,
+            aplicación de reglas + IA y respuesta JSON lista para guardar en tu sistema.
+          </p>
+        </header>
+
+        <ol class="steps">
+          <li>
+            <h3>1. Ingesta</h3>
+            <p>Envías documentos o eventos a través de HTTPS con tu API key.</p>
+          </li>
+          <li>
+            <h3>2. Normalización</h3>
+            <p>Se limpian, extraen y validan los datos con modelos especializados.</p>
+          </li>
+          <li>
+            <h3>3. Reglas + IA</h3>
+            <p>Se aplican reglas normativas e IA entrenada en patrones de riesgo.</p>
+          </li>
+          <li>
+            <h3>4. Respuesta y logs</h3>
+            <p>Recibes una respuesta JSON con identificadores para auditoría.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- DEMO (ganchos de JS) -->
+    <section id="demo" class="section section-alt" aria-labelledby="demo-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="demo-title">Prueba rápida en sandbox</h2>
+          <p>
+            Estas demos se conectan (cuando lo actives) al entorno sandbox
+            en <code>api.complianceflow.es</code>. Ideal para ver tiempos de respuesta y estructura de datos.
+          </p>
+        </header>
+
+        <div class="demo-grid">
+          <article class="card demo-card">
+            <h3>Demo SII</h3>
+            <p>Sube una factura de prueba y obtén JSON SII‑ready.</p>
+            <input id="demo-sii-file" type="file" accept="application/pdf,image/*" />
+            <button type="button" class="btn btn-secondary" id="btn-demo-sii">Llamar API</button>
+            <pre id="demo-sii-output" class="demo-output" aria-live="polite"></pre>
+          </article>
+
+          <article class="card demo-card">
+            <h3>Demo KYC</h3>
+            <p>Simula un alta KYC con imágenes de prueba.</p>
+            <input id="demo-kyc-files" type="file" multiple accept="image/*,.pdf" />
+            <button type="button" class="btn btn-secondary" id="btn-demo-kyc">Llamar API</button>
+            <pre id="demo-kyc-output" class="demo-output" aria-live="polite"></pre>
+          </article>
+
+          <article class="card demo-card">
+            <h3>Demo fraude</h3>
+            <p>Edita el JSON y observa cómo varía el riesgo.</p>
+            <textarea id="demo-fraud-input" rows="6" aria-label="JSON de transacción de prueba">
+{"amount": 2500, "currency": "EUR", "ip_country": "ES", "velocity_24h": 5}
+            </textarea>
+            <button type="button" class="btn btn-secondary" id="btn-demo-fraud">Calcular riesgo</button>
+            <pre id="demo-fraud-output" class="demo-output" aria-live="polite"></pre>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing" class="section" aria-labelledby="pricing-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="pricing-title">Precios pensados para producto</h2>
+          <p>Empieza gratis y escala por volumen; sin costes ocultos ni permanencias.</p>
+        </header>
+
+        <div class="pricing-grid">
+          <article class="price-card">
+            <h3>Sandbox</h3>
+            <p class="price">0 € / mes</p>
+            <ul>
+              <li>1.000 llamadas/mes.</li>
+              <li>Acceso a todos los endpoints.</li>
+              <li>Sin tarjeta de crédito.</li>
+            </ul>
+          </article>
+
+          <article class="price-card price-card--highlight">
+            <h3>Pro</h3>
+            <p class="price">99 € / mes</p>
+            <ul>
+              <li>100.000 llamadas/mes.</li>
+              <li>SLA 99,9 % y soporte email.</li>
+              <li>Dashboard de métricas y alertas.</li>
+            </ul>
+          </article>
+
+          <article class="price-card">
+            <h3>Enterprise</h3>
+            <p class="price">A medida</p>
+            <ul>
+              <li>Volumen y SLAs personalizados.</li>
+              <li>Opciones de despliegue dedicado.</li>
+              <li>Integración con compliance interno.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section section-alt" aria-labelledby="faq-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="faq-title">Preguntas frecuentes</h2>
+        </header>
+
+        <div class="faq-list">
+          <details>
+            <summary>¿Necesito cambiar mi ERP o core bancario para usar ComplianceFlow?</summary>
+            <p>No. Normalmente se añade una capa ligera que transforma tus datos internos
+               al formato JSON que espera cada endpoint, manteniendo tus sistemas actuales.</p>
+          </details>
+          <details>
+            <summary>¿Dónde se alojan los datos?</summary>
+            <p>El procesamiento se realiza en centros de datos de la UE sobre Azure;
+               los detalles concretos de retención se pactan en el contrato de servicio.</p>
+          </details>
+          <details>
+            <summary>¿Cumple con GDPR y requisitos de supervisores?</summary>
+            <p>ComplianceFlow se diseña siguiendo principios de privacy‑by‑design,
+               cifrado en tránsito y en reposo y registro de actividad para auditoría.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="docs">
+    <div class="container footer-inner">
+      <div>
+        <p>© <span id="year"></span> ComplianceFlow · APIs de compliance para España y la UE.</p>
+        <p>
+          <a href="mailto:hola@complianceflow.es">hola@complianceflow.es</a> ·
+          <a href="https://github.com/juankaspain/complianceflow.es">GitHub</a>
+        </p>
+      </div>
+      <div class="footer-links">
+        <a href="./legal/privacidad.html">Privacidad</a>
+        <a href="./legal/terminos.html">Términos</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./src/js/main.js" defer></script>
+</body>
+</html>
