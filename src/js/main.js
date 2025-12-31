@@ -1,7 +1,8 @@
 /**
  * ComplianceFlow Main JavaScript
- * @version 2.0.0
+ * @version 2.0.1
  * @description Demo functionality and interactive elements
+ * @license MIT
  */
 
 'use strict';
@@ -11,6 +12,8 @@ const CONFIG = {
   API_BASE: 'https://api.complianceflow.es/v1',
   DEMO_KEY: 'DEMO_PUBLIC_KEY',
   TIMEOUT: 30000, // 30 seconds
+  MAX_FILE_SIZE: 10, // MB
+  ALLOWED_FILE_TYPES: ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg'],
 };
 
 // Utility Functions
@@ -30,10 +33,11 @@ const utils = {
     element.textContent = JSON.stringify(data, null, 2);
     element.style.borderColor = success ? '#22c55e' : '#ef4444';
     element.setAttribute('aria-live', 'polite');
+    element.setAttribute('aria-atomic', 'true');
   },
 
   /**
-   * Make API request with timeout
+   * Make API request with timeout and error handling
    * @param {string} url - API endpoint
    * @param {object} options - Fetch options
    * @returns {Promise}
@@ -57,6 +61,7 @@ const utils = {
       if (!response.ok) {
         const error = await response.json().catch(() => ({
           error: 'Error de conexión con la API',
+          status: response.status,
         }));
         throw new Error(JSON.stringify(error));
       }
@@ -68,6 +73,7 @@ const utils = {
       if (error.name === 'AbortError') {
         throw new Error(JSON.stringify({
           error: 'Timeout: La petición tardó demasiado',
+          timeout: CONFIG.TIMEOUT,
         }));
       }
       
@@ -82,7 +88,7 @@ const utils = {
    * @param {number} maxSize - Maximum file size in MB
    * @returns {object} Validation result
    */
-  validateFiles(files, minFiles = 1, maxSize = 10) {
+  validateFiles(files, minFiles = 1, maxSize = CONFIG.MAX_FILE_SIZE) {
     if (!files || files.length < minFiles) {
       return {
         valid: false,
@@ -92,15 +98,42 @@ const utils = {
 
     const maxBytes = maxSize * 1024 * 1024;
     for (const file of files) {
+      // Check file size
       if (file.size > maxBytes) {
         return {
           valid: false,
           error: `El archivo ${file.name} excede ${maxSize}MB`,
         };
       }
+
+      // Check file type
+      if (!CONFIG.ALLOWED_FILE_TYPES.includes(file.type)) {
+        return {
+          valid: false,
+          error: `Tipo de archivo no permitido: ${file.type}`,
+        };
+      }
     }
 
     return { valid: true };
+  },
+
+  /**
+   * Debounce function to limit rate of function calls
+   * @param {Function} func - Function to debounce
+   * @param {number} wait - Wait time in ms
+   * @returns {Function}
+   */
+  debounce(func, wait = 300) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
   },
 };
 
@@ -114,6 +147,10 @@ const demoHandlers = {
     const outputId = 'demo-sii-output';
     const button = document.getElementById('btn-demo-sii');
 
+    if (!input || !button) {
+      return;
+    }
+
     // Validate input
     const validation = utils.validateFiles(input.files);
     if (!validation.valid) {
@@ -122,12 +159,15 @@ const demoHandlers = {
     }
 
     // Disable button during request
+    const originalText = button.textContent;
     button.disabled = true;
     button.textContent = 'Procesando...';
+    button.classList.add('loading');
 
     try {
       utils.showDemoResult(outputId, {
         status: 'Enviando factura a la API sandbox...',
+        timestamp: new Date().toISOString(),
       });
 
       const formData = new FormData();
@@ -141,7 +181,11 @@ const demoHandlers = {
         }
       );
 
-      utils.showDemoResult(outputId, data, true);
+      utils.showDemoResult(outputId, {
+        ...data,
+        demo: true,
+        completedAt: new Date().toISOString(),
+      }, true);
     } catch (error) {
       const errorData = JSON.parse(error.message || '{}');
       utils.showDemoResult(
@@ -151,7 +195,8 @@ const demoHandlers = {
       );
     } finally {
       button.disabled = false;
-      button.textContent = 'Llamar API';
+      button.textContent = originalText;
+      button.classList.remove('loading');
     }
   },
 
@@ -163,6 +208,10 @@ const demoHandlers = {
     const outputId = 'demo-kyc-output';
     const button = document.getElementById('btn-demo-kyc');
 
+    if (!input || !button) {
+      return;
+    }
+
     // Validate input
     const validation = utils.validateFiles(input.files, 2);
     if (!validation.valid) {
@@ -170,12 +219,16 @@ const demoHandlers = {
       return;
     }
 
+    const originalText = button.textContent;
     button.disabled = true;
     button.textContent = 'Procesando...';
+    button.classList.add('loading');
 
     try {
       utils.showDemoResult(outputId, {
         status: 'Procesando documentos KYC de prueba...',
+        files: input.files.length,
+        timestamp: new Date().toISOString(),
       });
 
       const formData = new FormData();
@@ -193,7 +246,11 @@ const demoHandlers = {
 
       const riskScore = data.risk_score || 0;
       const success = riskScore < 70;
-      utils.showDemoResult(outputId, data, success);
+      utils.showDemoResult(outputId, {
+        ...data,
+        demo: true,
+        completedAt: new Date().toISOString(),
+      }, success);
     } catch (error) {
       const errorData = JSON.parse(error.message || '{}');
       utils.showDemoResult(
@@ -203,7 +260,8 @@ const demoHandlers = {
       );
     } finally {
       button.disabled = false;
-      button.textContent = 'Llamar API';
+      button.textContent = originalText;
+      button.classList.remove('loading');
     }
   },
 
@@ -214,6 +272,10 @@ const demoHandlers = {
     const textarea = document.getElementById('demo-fraud-input');
     const outputId = 'demo-fraud-output';
     const button = document.getElementById('btn-demo-fraud');
+
+    if (!textarea || !button) {
+      return;
+    }
 
     // Validate JSON
     let payload;
@@ -228,12 +290,15 @@ const demoHandlers = {
       return;
     }
 
+    const originalText = button.textContent;
     button.disabled = true;
     button.textContent = 'Calculando...';
+    button.classList.add('loading');
 
     try {
       utils.showDemoResult(outputId, {
         status: 'Calculando score de riesgo...',
+        timestamp: new Date().toISOString(),
       });
 
       const data = await utils.apiRequest(
@@ -249,7 +314,11 @@ const demoHandlers = {
 
       const riskScore = data.risk_score || 0;
       const success = riskScore < 70;
-      utils.showDemoResult(outputId, data, success);
+      utils.showDemoResult(outputId, {
+        ...data,
+        demo: true,
+        completedAt: new Date().toISOString(),
+      }, success);
     } catch (error) {
       const errorData = JSON.parse(error.message || '{}');
       utils.showDemoResult(
@@ -259,7 +328,59 @@ const demoHandlers = {
       );
     } finally {
       button.disabled = false;
-      button.textContent = 'Calcular riesgo';
+      button.textContent = originalText;
+      button.classList.remove('loading');
+    }
+  },
+};
+
+// Performance optimizations
+const performance = {
+  /**
+   * Lazy load images when they enter viewport
+   */
+  lazyLoadImages() {
+    if ('IntersectionObserver' in window) {
+      const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            if (img.dataset.src) {
+              img.src = img.dataset.src;
+              img.removeAttribute('data-src');
+              imageObserver.unobserve(img);
+            }
+          }
+        });
+      });
+
+      document.querySelectorAll('img[data-src]').forEach((img) => {
+        imageObserver.observe(img);
+      });
+    }
+  },
+
+  /**
+   * Preload critical resources
+   */
+  preloadCriticalResources() {
+    // Preload API if user is near demo section
+    const demoSection = document.getElementById('demo');
+    if (demoSection && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // User is near demo, preconnect to API
+            const link = document.createElement('link');
+            link.rel = 'preconnect';
+            link.href = CONFIG.API_BASE;
+            document.head.appendChild(link);
+            observer.disconnect();
+          }
+        });
+      }, { rootMargin: '200px' });
+
+      observer.observe(demoSection);
     }
   },
 };
@@ -303,9 +424,17 @@ function init() {
           behavior: 'smooth',
           block: 'start',
         });
+        // Update URL without jumping
+        if (history.pushState) {
+          history.pushState(null, null, href);
+        }
       }
     });
   });
+
+  // Initialize performance optimizations
+  performance.lazyLoadImages();
+  performance.preloadCriticalResources();
 
   // Console message for developers
   if (typeof console !== 'undefined') {
@@ -314,8 +443,12 @@ function init() {
       'font-size: 20px; font-weight: bold; color: #22c55e;'
     );
     console.log(
-      '%cInteresado en nuestras APIs? Visita https://complianceflow.es/docs/',
+      '%c¿Interesado en nuestras APIs? Visita https://complianceflow.es/docs/',
       'font-size: 14px; color: #3b82f6;'
+    );
+    console.log(
+      '%cDocumentación completa: https://github.com/juankaspain/complianceflow.es',
+      'font-size: 12px; color: #6b7280;'
     );
   }
 }
@@ -325,4 +458,9 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
+}
+
+// Export for testing (if module system available)
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { utils, demoHandlers, CONFIG };
 }
