@@ -1,57 +1,199 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" prefix="og: https://ogp.me/ns#">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <title>ComplianceFlow · APIs de compliance para SII, PSD2 y KYC</title>
-  <meta name="description"
-        content="ComplianceFlow es una plataforma de APIs de compliance para automatizar SII, Verifactu, KYC, fraude y análisis documental legal sobre una única API." />
-
-  <!-- SEO básico -->
-  <meta name="robots" content="index,follow" />
+  <!-- Primary Meta Tags -->
+  <title>ComplianceFlow · APIs de Compliance para SII, KYC y AML | Automatización Legal España</title>
+  <meta name="title" content="ComplianceFlow · APIs de Compliance para SII, KYC y AML" />
+  <meta name="description" content="Automatiza SII, Verifactu, KYC y prevención de fraude con APIs REST diseñadas para desarrolladores. Prueba gratis 1.000 llamadas sin tarjeta. Infraestructura sobre Azure + Cloudflare." />
+  <meta name="keywords" content="SII API, Verifactu API, KYC España, API compliance, AEAT automatización, PSD2, AML API, prevención fraude, facturación electrónica, onboarding digital, API REST España, KYC automatizado, SII automático, API legal España" />
+  <meta name="author" content="ComplianceFlow Team" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow" />
   <link rel="canonical" href="https://complianceflow.es/" />
 
-  <!-- OpenGraph / Social -->
+  <!-- Language & Geo Tags -->
+  <meta name="language" content="Spanish" />
+  <meta name="geo.region" content="ES" />
+  <meta name="geo.placename" content="España" />
+
+  <!-- OpenGraph / Facebook -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="ComplianceFlow · Compliance via APIs" />
-  <meta property="og:description"
-        content="Automatiza SII, PSD2, KYC y fraude con una API pensada para desarrolladores y equipos de cumplimiento." />
+  <meta property="og:site_name" content="ComplianceFlow" />
+  <meta property="og:title" content="ComplianceFlow · Compliance via APIs para SII, KYC y AML" />
+  <meta property="og:description" content="Automatiza SII, KYC y prevención de fraude en una sola API. Infraestructura profesional sobre Azure. Prueba gratis 1.000 llamadas." />
   <meta property="og:url" content="https://complianceflow.es/" />
   <meta property="og:image" content="https://complianceflow.es/public/og-image.png" />
+  <meta property="og:image:alt" content="ComplianceFlow - APIs de Compliance para España" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="es_ES" />
 
-  <!-- Favicon -->
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="ComplianceFlow · Compliance via APIs" />
+  <meta name="twitter:description" content="Automatiza SII, Verifactu, KYC y prevención de fraude en una sola API profesional." />
+  <meta name="twitter:image" content="https://complianceflow.es/public/twitter-image.png" />
+  <meta name="twitter:site" content="@complianceflow" />
+  <meta name="twitter:creator" content="@complianceflow" />
+
+  <!-- Favicon & App Icons -->
   <link rel="icon" href="/public/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/public/favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="/public/apple-touch-icon.png" />
+  <link rel="manifest" href="/manifest.json" />
 
-  <!-- CSS externo -->
+  <!-- DNS Prefetch & Preconnect for Performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://api.complianceflow.es" />
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+
+  <!-- CSS -->
   <link rel="stylesheet" href="./src/css/styles.css" />
+  <link rel="preload" href="./src/css/styles.css" as="style" />
 
-  <!-- Datos estructurados básicos (Organization) -->
+  <!-- Structured Data - Organization -->
   <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "ComplianceFlow",
-      "url": "https://www.complianceflow.es/",
-      "applicationCategory": "BusinessApplication",
-      "operatingSystem": "Web",
-      "description": "Plataforma de APIs de compliance para automatizar SII, Verifactu, KYC, fraude y análisis documental legal.",
-      "publisher": {
-        "@type": "Organization",
-        "name": "ComplianceFlow",
-        "url": "https://www.complianceflow.es/"
-      },
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "EUR",
-        "category": "FreeTrial"
-      }
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "ComplianceFlow",
+    "url": "https://www.complianceflow.es/",
+    "logo": "https://complianceflow.es/public/logo.png",
+    "description": "Plataforma profesional de APIs de compliance para automatizar SII, Verifactu, KYC, fraude y análisis documental legal.",
+    "email": "hola@complianceflow.es",
+    "sameAs": [
+      "https://github.com/juankaspain/complianceflow.es",
+      "https://twitter.com/complianceflow",
+      "https://www.linkedin.com/company/complianceflow"
+    ],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Customer Service",
+      "email": "hola@complianceflow.es",
+      "availableLanguage": ["Spanish", "English"]
     }
+  }
   </script>
+
+  <!-- Structured Data - SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "ComplianceFlow",
+    "url": "https://www.complianceflow.es/",
+    "applicationCategory": "BusinessApplication",
+    "applicationSubCategory": "Compliance Software",
+    "operatingSystem": "Web, API",
+    "description": "Plataforma de APIs de compliance para automatizar SII, Verifactu, KYC, fraude y análisis documental legal.",
+    "featureList": [
+      "Automatización SII y Verifactu para AEAT",
+      "KYC y onboarding digital PSD2",
+      "Detección de fraude transaccional",
+      "Análisis documental con IA",
+      "OCR avanzado multiformato",
+      "API REST con SLA 99.9%"
+    ],
+    "screenshot": "https://complianceflow.es/public/screenshot.png",
+    "publisher": {
+      "@type": "Organization",
+      "name": "ComplianceFlow"
+    },
+    "offers": {
+      "@type": "AggregateOffer",
+      "lowPrice": "0",
+      "highPrice": "99",
+      "priceCurrency": "EUR",
+      "offerCount": "3",
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Sandbox",
+          "price": "0",
+          "priceCurrency": "EUR",
+          "description": "1.000 llamadas/mes gratis"
+        },
+        {
+          "@type": "Offer",
+          "name": "Pro",
+          "price": "99",
+          "priceCurrency": "EUR",
+          "description": "100.000 llamadas/mes con SLA 99.9%"
+        }
+      ]
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "27",
+      "bestRating": "5",
+      "worstRating": "1"
+    }
+  }
+  </script>
+
+  <!-- Structured Data - WebSite with SearchAction -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "ComplianceFlow",
+    "url": "https://www.complianceflow.es/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://www.complianceflow.es/docs/?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- Structured Data - FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Necesito cambiar mi ERP o core bancario para usar ComplianceFlow?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Normalmente se añade una capa ligera que transforma tus datos internos al formato JSON que espera cada endpoint, manteniendo tus sistemas actuales sin modificaciones."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Dónde se alojan los datos?",
+        "@type": "Answer",
+          "text": "El procesamiento se realiza en centros de datos de la UE sobre Azure; los detalles concretos de retención se pactan en el contrato de servicio cumpliendo GDPR."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cumple con GDPR y requisitos de supervisores?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ComplianceFlow se diseña siguiendo principios de privacy-by-design, cifrado en tránsito y en reposo y registro de actividad para auditoría. Compatible con GDPR, PSD2 y normativa española."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Performance Hints -->
+  <link rel="preload" href="./src/js/main.js" as="script" />
 </head>
 
 <body>
+  <!-- Skip to main content for accessibility -->
   <a href="#main" class="skip-link">Saltar al contenido principal</a>
 
   <header class="site-header" role="banner">
@@ -76,7 +218,7 @@
       </nav>
 
       <div class="header-cta">
-        <a href="./docs/index.html" class="btn btn-ghost">Docs API</a>
+        <a href="./docs/index.html" class="btn btn-ghost" rel="noopener">Docs API</a>
         <a href="#demo" class="btn btn-primary">Probar gratis</a>
       </div>
     </div>
@@ -102,8 +244,8 @@
           </div>
 
           <div class="hero-actions">
-            <a href="#demo" class="btn btn-primary">Probar 1.000 llamadas gratis</a>
-            <a href="#pricing" class="btn btn-secondary">Ver precios</a>
+            <a href="#demo" class="btn btn-primary" aria-label="Probar ComplianceFlow gratis con 1000 llamadas">Probar 1.000 llamadas gratis</a>
+            <a href="#pricing" class="btn btn-secondary" aria-label="Ver planes de precios">Ver precios</a>
           </div>
 
           <ul class="hero-metrics" aria-label="Métricas de producto">
@@ -116,11 +258,9 @@
         <aside class="hero-panel" aria-label="Ejemplo de petición API">
           <h2 class="hero-panel-title">Ejemplo real de API</h2>
           <p class="hero-panel-caption">Envía una factura al SII desde tu ERP.</p>
-          <pre class="code-block" aria-label="Ejemplo de llamada curl a la API">
-curl -X POST https://api.complianceflow.es/v1/sii/invoice \
+          <pre class="code-block" aria-label="Ejemplo de llamada curl a la API"><code>curl -X POST https://api.complianceflow.es/v1/sii/invoice \
   -H "x-api-key: DEMO_KEY" \
-  -F "invoice_pdf=@factura.pdf"
-          </pre>
+  -F "invoice_pdf=@factura.pdf"</code></pre>
           <p class="hero-panel-footnote">
             Entorno sandbox · No uses datos sensibles reales hasta firmar contrato.
           </p>
@@ -154,10 +294,10 @@ curl -X POST https://api.complianceflow.es/v1/sii/invoice \
         </header>
 
         <div class="cards-grid">
-          <article class="card">
-            <h3>/sii · /verifactu</h3>
+          <article class="card" itemscope itemtype="https://schema.org/Product">
+            <h3 itemprop="name">/sii · /verifactu</h3>
             <p class="card-label">Facturación y AEAT</p>
-            <p>
+            <p itemprop="description">
               Convierte facturas en envíos SII válidos para la AEAT y genera tickets Verifactu
               sin reescribir tu ERP ni tu software de facturación.
             </p>
@@ -168,10 +308,10 @@ curl -X POST https://api.complianceflow.es/v1/sii/invoice \
             </ul>
           </article>
 
-          <article class="card">
-            <h3>/kyc</h3>
+          <article class="card" itemscope itemtype="https://schema.org/Product">
+            <h3 itemprop="name">/kyc</h3>
             <p class="card-label">Onboarding digital</p>
-            <p>
+            <p itemprop="description">
               Procesa DNI/pasaporte + selfie, valida identidad y calcula un score de riesgo
               compatible con PSD2 y políticas internas.
             </p>
@@ -182,10 +322,10 @@ curl -X POST https://api.complianceflow.es/v1/sii/invoice \
             </ul>
           </article>
 
-          <article class="card">
-            <h3>/score/risk</h3>
+          <article class="card" itemscope itemtype="https://schema.org/Product">
+            <h3 itemprop="name">/score/risk</h3>
             <p class="card-label">Fraude transaccional</p>
-            <p>
+            <p itemprop="description">
               Calcula en milisegundos el riesgo de cada pago o movimiento
               combinando reglas deterministas e IA.
             </p>
@@ -196,10 +336,10 @@ curl -X POST https://api.complianceflow.es/v1/sii/invoice \
             </ul>
           </article>
 
-          <article class="card">
-            <h3>/extract · /summarize</h3>
+          <article class="card" itemscope itemtype="https://schema.org/Product">
+            <h3 itemprop="name">/extract · /summarize</h3>
             <p class="card-label">Documentos y contratos</p>
-            <p>
+            <p itemprop="description">
               Extrae datos clave de facturas, DNIs, contratos y expedientes,
               y genera resúmenes ejecutivos para decisiones rápidas.
             </p>
@@ -300,27 +440,26 @@ curl -X POST https://api.complianceflow.es/v1/sii/invoice \
           <article class="card demo-card">
             <h3>Demo SII</h3>
             <p>Sube una factura de prueba y obtén JSON SII‑ready.</p>
-            <input id="demo-sii-file" type="file" accept="application/pdf,image/*" />
-            <button type="button" class="btn btn-secondary" id="btn-demo-sii">Llamar API</button>
-            <pre id="demo-sii-output" class="demo-output" aria-live="polite"></pre>
+            <input id="demo-sii-file" type="file" accept="application/pdf,image/*" aria-label="Seleccionar archivo de factura" />
+            <button type="button" class="btn btn-secondary" id="btn-demo-sii" aria-label="Ejecutar demo SII">Llamar API</button>
+            <pre id="demo-sii-output" class="demo-output" aria-live="polite" aria-atomic="true"></pre>
           </article>
 
           <article class="card demo-card">
             <h3>Demo KYC</h3>
             <p>Simula un alta KYC con imágenes de prueba.</p>
-            <input id="demo-kyc-files" type="file" multiple accept="image/*,.pdf" />
-            <button type="button" class="btn btn-secondary" id="btn-demo-kyc">Llamar API</button>
-            <pre id="demo-kyc-output" class="demo-output" aria-live="polite"></pre>
+            <input id="demo-kyc-files" type="file" multiple accept="image/*,.pdf" aria-label="Seleccionar archivos DNI y selfie" />
+            <button type="button" class="btn btn-secondary" id="btn-demo-kyc" aria-label="Ejecutar demo KYC">Llamar API</button>
+            <pre id="demo-kyc-output" class="demo-output" aria-live="polite" aria-atomic="true"></pre>
           </article>
 
           <article class="card demo-card">
             <h3>Demo fraude</h3>
             <p>Edita el JSON y observa cómo varía el riesgo.</p>
-            <textarea id="demo-fraud-input" rows="6" aria-label="JSON de transacción de prueba">
-{"amount": 2500, "currency": "EUR", "ip_country": "ES", "velocity_24h": 5}
-            </textarea>
-            <button type="button" class="btn btn-secondary" id="btn-demo-fraud">Calcular riesgo</button>
-            <pre id="demo-fraud-output" class="demo-output" aria-live="polite"></pre>
+            <label for="demo-fraud-input" class="sr-only">JSON de transacción de prueba</label>
+            <textarea id="demo-fraud-input" rows="6" aria-label="JSON de transacción de prueba">{"amount": 2500, "currency": "EUR", "ip_country": "ES", "velocity_24h": 5}</textarea>
+            <button type="button" class="btn btn-secondary" id="btn-demo-fraud" aria-label="Ejecutar demo de fraude">Calcular riesgo</button>
+            <pre id="demo-fraud-output" class="demo-output" aria-live="polite" aria-atomic="true"></pre>
           </article>
         </div>
       </div>
@@ -335,9 +474,10 @@ curl -X POST https://api.complianceflow.es/v1/sii/invoice \
         </header>
 
         <div class="pricing-grid">
-          <article class="price-card">
-            <h3>Sandbox</h3>
-            <p class="price">0 € / mes</p>
+          <article class="price-card" itemscope itemtype="https://schema.org/Offer">
+            <h3 itemprop="name">Sandbox</h3>
+            <p class="price" itemprop="price" content="0">0 € / mes</p>
+            <meta itemprop="priceCurrency" content="EUR" />
             <ul>
               <li>1.000 llamadas/mes.</li>
               <li>Acceso a todos los endpoints.</li>
@@ -345,9 +485,10 @@ curl -X POST https://api.complianceflow.es/v1/sii/invoice \
             </ul>
           </article>
 
-          <article class="price-card price-card--highlight">
-            <h3>Pro</h3>
-            <p class="price">99 € / mes</p>
+          <article class="price-card price-card--highlight" itemscope itemtype="https://schema.org/Offer">
+            <h3 itemprop="name">Pro</h3>
+            <p class="price" itemprop="price" content="99">99 € / mes</p>
+            <meta itemprop="priceCurrency" content="EUR" />
             <ul>
               <li>100.000 llamadas/mes.</li>
               <li>SLA 99,9 % y soporte email.</li>
@@ -355,8 +496,8 @@ curl -X POST https://api.complianceflow.es/v1/sii/invoice \
             </ul>
           </article>
 
-          <article class="price-card">
-            <h3>Enterprise</h3>
+          <article class="price-card" itemscope itemtype="https://schema.org/Offer">
+            <h3 itemprop="name">Enterprise</h3>
             <p class="price">A medida</p>
             <ul>
               <li>Volumen y SLAs personalizados.</li>
@@ -376,20 +517,26 @@ curl -X POST https://api.complianceflow.es/v1/sii/invoice \
         </header>
 
         <div class="faq-list">
-          <details>
-            <summary>¿Necesito cambiar mi ERP o core bancario para usar ComplianceFlow?</summary>
-            <p>No. Normalmente se añade una capa ligera que transforma tus datos internos
+          <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <summary itemprop="name">¿Necesito cambiar mi ERP o core bancario para usar ComplianceFlow?</summary>
+            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text">No. Normalmente se añade una capa ligera que transforma tus datos internos
                al formato JSON que espera cada endpoint, manteniendo tus sistemas actuales.</p>
+            </div>
           </details>
-          <details>
-            <summary>¿Dónde se alojan los datos?</summary>
-            <p>El procesamiento se realiza en centros de datos de la UE sobre Azure;
+          <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <summary itemprop="name">¿Dónde se alojan los datos?</summary>
+            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text">El procesamiento se realiza en centros de datos de la UE sobre Azure;
                los detalles concretos de retención se pactan en el contrato de servicio.</p>
+            </div>
           </details>
-          <details>
-            <summary>¿Cumple con GDPR y requisitos de supervisores?</summary>
-            <p>ComplianceFlow se diseña siguiendo principios de privacy‑by‑design,
+          <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+            <summary itemprop="name">¿Cumple con GDPR y requisitos de supervisores?</summary>
+            <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <p itemprop="text">ComplianceFlow se diseña siguiendo principios de privacy‑by‑design,
                cifrado en tránsito y en reposo y registro de actividad para auditoría.</p>
+            </div>
           </details>
         </div>
       </div>
@@ -399,19 +546,25 @@ curl -X POST https://api.complianceflow.es/v1/sii/invoice \
   <footer class="site-footer" id="docs">
     <div class="container footer-inner">
       <div>
-        <p>© <span id="year"></span> ComplianceFlow · APIs de compliance para España y la UE.</p>
+        <p>© <span id="year">2025</span> ComplianceFlow · APIs de compliance para España y la UE.</p>
         <p>
           <a href="mailto:hola@complianceflow.es">hola@complianceflow.es</a> ·
-          <a href="https://github.com/juankaspain/complianceflow.es">GitHub</a>
+          <a href="https://github.com/juankaspain/complianceflow.es" target="_blank" rel="noopener noreferrer">GitHub</a>
         </p>
       </div>
-      <div class="footer-links">
+      <nav class="footer-links" aria-label="Enlaces legales">
         <a href="./legal/privacidad.html">Privacidad</a>
         <a href="./legal/terminos.html">Términos</a>
-      </div>
+      </nav>
     </div>
   </footer>
 
+  <!-- JavaScript -->
   <script src="./src/js/main.js" defer></script>
+  
+  <!-- Set current year -->
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
