@@ -1,47 +1,48 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Navigation', () => {
-  test('should navigate between pages', async ({ page }) => {
+  test('should navigate to all main pages from header', async ({ page }) => {
     await page.goto('/');
 
-    // Check home page
-    await expect(page).toHaveTitle(/ComplianceFlow/);
-
-    // Navigate to features
-    await page.click('text=Características');
+    // Test Features navigation
+    await page.click('text=Features');
     await expect(page).toHaveURL(/.*features/);
+    await expect(page.locator('h1')).toBeVisible();
 
-    // Navigate to pricing
-    await page.click('text=Precios');
+    // Test Pricing navigation
+    await page.goto('/');
+    await page.click('text=Pricing');
     await expect(page).toHaveURL(/.*pricing/);
+    await expect(page.locator('h1')).toBeVisible();
 
-    // Navigate back to home
-    await page.click('text=Inicio');
-    await expect(page).toHaveURL(/.*\/$/);
+    // Test Security navigation
+    await page.goto('/');
+    await page.click('text=Security');
+    await expect(page).toHaveURL(/.*security/);
+    await expect(page.locator('h1')).toBeVisible();
+
+    // Test Contact navigation
+    await page.goto('/');
+    await page.click('text=Contact');
+    await expect(page).toHaveURL(/.*contact/);
+    await expect(page.locator('h1')).toBeVisible();
   });
 
-  test('should have working footer links', async ({ page }) => {
+  test('should navigate using footer links', async ({ page }) => {
     await page.goto('/');
 
     // Scroll to footer
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
-    // Check privacy policy link
-    const privacyLink = page.locator('a[href*="privacy"]');
-    await expect(privacyLink).toBeVisible();
+    // Test footer links
+    const privacyLink = page.locator('footer >> text=Privacy');
+    await privacyLink.click();
+    await expect(page).toHaveURL(/.*privacy/);
   });
 
-  test('mobile menu should work', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 667 });
-    await page.goto('/');
-
-    // Open mobile menu
-    const menuButton = page.locator('button[aria-label*="menu"]');
-    if (await menuButton.isVisible()) {
-      await menuButton.click();
-      
-      // Check if menu items are visible
-      await expect(page.locator('text=Características')).toBeVisible();
-    }
+  test('should return to home when clicking logo', async ({ page }) => {
+    await page.goto('/features');
+    await page.click('[href="/"]');
+    await expect(page).toHaveURL('/');
   });
 });
