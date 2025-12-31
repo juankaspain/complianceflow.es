@@ -1,51 +1,59 @@
 'use client';
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React from 'react';
 
-interface Props {
-  children: ReactNode;
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
 }
 
-interface State {
+interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
 }
 
-class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
+export default class ErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error: Error): State {
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('Error caught by boundary:', error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center">
-            <div className="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20">
-              <svg className="w-8 h-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-            </div>
-            <h1 className="text-2xl font-bold text-white mb-2">
-              Algo salió mal
-            </h1>
-            <p className="text-gray-400 mb-6">
-              Lo sentimos, ha ocurrido un error inesperado.
+        <div className="min-h-screen flex items-center justify-center bg-gray-950 text-white">
+          <div className="max-w-md p-8 bg-gray-900 rounded-lg border border-gray-800">
+            <h2 className="text-2xl font-bold mb-4 text-red-400">
+              Something went wrong
+            </h2>
+            <p className="text-gray-400 mb-4">
+              We're sorry, but something unexpected happened. Please try refreshing the page.
             </p>
+            {this.state.error && (
+              <details className="text-sm text-gray-500">
+                <summary className="cursor-pointer hover:text-gray-400">
+                  Error details
+                </summary>
+                <pre className="mt-2 p-2 bg-gray-950 rounded overflow-auto">
+                  {this.state.error.message}
+                </pre>
+              </details>
+            )}
             <button
               onClick={() => window.location.reload()}
-              className="w-full px-6 py-3 bg-primary hover:bg-primary-600 text-white font-semibold rounded-xl transition-colors"
+              className="mt-6 w-full bg-primary hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
             >
-              Recargar página
+              Reload Page
             </button>
           </div>
         </div>
@@ -55,5 +63,3 @@ class ErrorBoundary extends Component<Props, State> {
     return this.props.children;
   }
 }
-
-export default ErrorBoundary;
