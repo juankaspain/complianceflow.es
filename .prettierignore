@@ -1,0 +1,33 @@
+# Dependencies
+node_modules
+
+# Build outputs
+.next
+out
+build
+dist
+
+# Coverage
+coverage
+
+# Logs
+*.log
+
+# Environment
+.env*
+
+# Cache
+.cache
+.temp
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Lighthouse
+.lighthouseci
+
+# Generated
+*.gen.ts
+*.generated.ts
