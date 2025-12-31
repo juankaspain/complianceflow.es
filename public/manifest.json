@@ -1,118 +1,93 @@
 {
-  "name": "ComplianceFlow - Gestión de Cumplimiento Normativo",
+  "name": "ComplianceFlow - Gestión de Cumplimiento",
   "short_name": "ComplianceFlow",
-  "description": "Plataforma profesional para gestión de cumplimiento normativo y regulatorio",
+  "description": "Plataforma profesional de gestión de cumplimiento normativo para empresas",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#3b82f6",
+  "theme_color": "#2563eb",
   "orientation": "portrait-primary",
-  "scope": "/",
-  "lang": "es-ES",
-  "dir": "ltr",
-  "categories": ["business", "productivity", "utilities"],
   "icons": [
     {
-      "src": "/icons/icon-72x72.png",
+      "src": "/icon-72x72.png",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-96x96.png",
+      "src": "/icon-96x96.png",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-128x128.png",
+      "src": "/icon-128x128.png",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-144x144.png",
+      "src": "/icon-144x144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-152x152.png",
+      "src": "/icon-152x152.png",
       "sizes": "152x152",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-192x192.png",
+      "src": "/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-384x384.png",
+      "src": "/icon-384x384.png",
       "sizes": "384x384",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-512x512.png",
+      "src": "/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
   ],
+  "categories": ["business", "productivity", "finance"],
   "screenshots": [
     {
-      "src": "/screenshots/desktop-1.png",
+      "src": "/screenshots/home.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "platform": "wide",
-      "label": "Dashboard principal de ComplianceFlow"
+      "label": "Pantalla principal de ComplianceFlow"
     },
     {
-      "src": "/screenshots/mobile-1.png",
-      "sizes": "750x1334",
+      "src": "/screenshots/dashboard.png",
+      "sizes": "1280x720",
       "type": "image/png",
-      "platform": "narrow",
-      "label": "Vista móvil de ComplianceFlow"
+      "label": "Panel de control"
     }
   ],
   "shortcuts": [
     {
       "name": "Dashboard",
-      "short_name": "Dashboard",
-      "description": "Acceso rápido al dashboard",
       "url": "/dashboard",
-      "icons": [{ "src": "/icons/dashboard-96x96.png", "sizes": "96x96" }]
+      "description": "Ir al panel de control"
     },
     {
-      "name": "Nueva Auditoría",
-      "short_name": "Auditoría",
-      "description": "Crear nueva auditoría",
-      "url": "/audits/new",
-      "icons": [{ "src": "/icons/audit-96x96.png", "sizes": "96x96" }]
+      "name": "Nuevo informe",
+      "url": "/reports/new",
+      "description": "Crear nuevo informe de cumplimiento"
+    },
+    {
+      "name": "Tareas",
+      "url": "/tasks",
+      "description": "Ver tareas pendientes"
     }
   ],
-  "related_applications": [],
-  "prefer_related_applications": false,
-  "share_target": {
-    "action": "/share",
-    "method": "POST",
-    "enctype": "multipart/form-data",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url",
-      "files": [
-        {
-          "name": "documents",
-          "accept": ["application/pdf", ".pdf", ".doc", ".docx"]
-        }
-      ]
-    }
-  },
-  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
-  "edge_side_panel": {
-    "preferred_width": 400
-  }
+  "prefer_related_applications": false
 }
