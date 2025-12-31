@@ -1,6 +1,7 @@
 import DemoSection from '@/components/sections/DemoSection';
 import SecuritySection from '@/components/sections/SecuritySection';
 import FeaturesSection from '@/components/sections/FeaturesSection';
+import ComparisonSection from '@/components/sections/ComparisonSection';
 import CTASection from '@/components/sections/CTASection';
 import TestimonialsSection from '@/components/sections/TestimonialsSection';
 import NewsletterSection from '@/components/sections/NewsletterSection';
@@ -271,13 +272,16 @@ export default function HomePage() {
         {/* Security & Compliance Section */}
         <SecuritySection />
 
+        {/* Features Section */}
+        <FeaturesSection />
+
+        {/* Comparison Section - NEW */}
+        <ComparisonSection />
+
         {/* Demo Section */}
         <section id="demos" className="bg-gray-950" aria-labelledby="demos-heading">
           <DemoSection />
         </section>
-
-        {/* Features Section */}
-        <FeaturesSection />
 
         {/* Testimonials Section */}
         <TestimonialsSection />
