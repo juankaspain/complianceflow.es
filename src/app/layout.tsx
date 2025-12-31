@@ -1,61 +1,63 @@
-import type { Metadata, Viewport } from 'next';
+import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { siteConfig } from '@/config/site';
+import { ThemeProvider } from '@/components/providers/ThemeProvider';
+import { AnalyticsProvider } from '@/components/providers/AnalyticsProvider';
 import '@/styles/globals.css';
 
 const inter = Inter({
   subsets: ['latin'],
-  display: 'swap',
   variable: '--font-inter',
+  display: 'swap',
 });
 
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 5,
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
-  ],
-};
-
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
+  metadataBase: new URL('https://complianceflow.es'),
   title: {
-    default: siteConfig.name,
-    template: `%s | ${siteConfig.name}`,
+    default: 'ComplianceFlow · APIs de Compliance para SII, KYC y AML',
+    template: '%s | ComplianceFlow',
   },
-  description: siteConfig.description,
-  keywords: siteConfig.keywords,
-  authors: [
-    {
-      name: 'ComplianceFlow',
-      url: siteConfig.url,
-    },
+  description:
+    'Automatiza SII, Verifactu, KYC y prevención de fraude con APIs diseñadas para desarrolladores. Prueba gratis 1.000 llamadas.',
+  keywords: [
+    'SII API',
+    'Verifactu',
+    'KYC España',
+    'API compliance',
+    'AEAT automatización',
+    'PSD2',
+    'AML',
+    'prevención fraude',
+    'onboarding digital',
   ],
+  authors: [{ name: 'ComplianceFlow', url: 'https://complianceflow.es' }],
   creator: 'ComplianceFlow',
+  publisher: 'ComplianceFlow',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
     type: 'website',
     locale: 'es_ES',
-    url: siteConfig.url,
-    title: siteConfig.name,
-    description: siteConfig.description,
-    siteName: siteConfig.name,
+    url: 'https://complianceflow.es',
+    title: 'ComplianceFlow · Compliance via APIs',
+    description: 'Automatiza SII, KYC y fraude en una sola API',
+    siteName: 'ComplianceFlow',
     images: [
       {
-        url: siteConfig.ogImage,
+        url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: siteConfig.name,
+        alt: 'ComplianceFlow - Compliance via APIs',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: siteConfig.name,
-    description: siteConfig.description,
-    images: [siteConfig.ogImage],
-    creator: '@complianceflow',
+    title: 'ComplianceFlow · Compliance via APIs',
+    description: 'Automatiza SII, KYC y fraude en una sola API',
+    images: ['/twitter-image.png'],
   },
   robots: {
     index: true,
@@ -68,27 +70,33 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
+  alternates: {
+    canonical: 'https://complianceflow.es',
+    languages: {
+      'es-ES': 'https://complianceflow.es',
+    },
   },
-  manifest: '/site.webmanifest',
+  verification: {
+    google: 'your-google-verification-code',
+  },
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="es" className={inter.variable} suppressHydrationWarning>
-      <head />
-      <body className="min-h-screen bg-background font-sans antialiased">
-        <a href="#main-content" className="skip-link">
-          Saltar al contenido principal
-        </a>
-        {children}
+    <html lang="es" suppressHydrationWarning>
+      <body className={inter.variable}>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+          <AnalyticsProvider>
+            <a href="#main-content" className="skip-link">
+              Saltar al contenido principal
+            </a>
+            {children}
+          </AnalyticsProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

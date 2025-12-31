@@ -1,26 +1,18 @@
 export const siteConfig = {
   name: 'ComplianceFlow',
   description:
-    'APIs de compliance para automatizar SII, Verifactu, KYC, fraude y análisis documental legal sobre una única API.',
+    'APIs de compliance para automatizar SII, Verifactu, KYC, fraude y análisis documental legal.',
   url: 'https://complianceflow.es',
   ogImage: 'https://complianceflow.es/og-image.png',
   links: {
     github: 'https://github.com/juankaspain/complianceflow.es',
+    docs: '/documentacion',
     email: 'hola@complianceflow.es',
-    support: 'soporte@complianceflow.es',
   },
-  keywords: [
-    'SII API',
-    'Verifactu',
-    'KYC España',
-    'API compliance',
-    'AEAT automatización',
-    'PSD2',
-    'AML',
-    'prevención fraude',
-    'onboarding digital',
-    'facturación electrónica',
-  ],
+  api: {
+    baseUrl: process.env.NEXT_PUBLIC_API_URL || 'https://api.complianceflow.es',
+    version: 'v1',
+  },
 };
 
 export type SiteConfig = typeof siteConfig;

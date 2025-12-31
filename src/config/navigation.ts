@@ -1,4 +1,4 @@
-export const mainNavigation = [
+export const mainNav = [
   {
     title: 'Producto',
     href: '/#producto',
@@ -25,27 +25,26 @@ export const mainNavigation = [
   },
 ];
 
-export const footerNavigation = {
-  producto: [
-    { title: 'Características', href: '/#producto' },
+export const footerNav = {
+  product: [
+    { title: 'APIs', href: '/producto' },
     { title: 'Precios', href: '/#pricing' },
-    { title: 'Casos de uso', href: '/#casos-uso' },
-    { title: 'Demo', href: '/#demo' },
-  ],
-  recursos: [
     { title: 'Documentación', href: '/documentacion' },
+    { title: 'Changelog', href: '/changelog' },
+  ],
+  company: [
+    { title: 'Sobre nosotros', href: '/sobre-nosotros' },
     { title: 'Blog', href: '/blog' },
-    { title: 'FAQ', href: '/#faq' },
-    { title: 'Soporte', href: 'mailto:soporte@complianceflow.es' },
+    { title: 'Contacto', href: '/contacto' },
   ],
   legal: [
     { title: 'Privacidad', href: '/legal/privacidad' },
     { title: 'Términos', href: '/legal/terminos' },
     { title: 'Cookies', href: '/legal/cookies' },
   ],
-  empresa: [
-    { title: 'Sobre nosotros', href: '/sobre-nosotros' },
-    { title: 'Contacto', href: 'mailto:hola@complianceflow.es' },
+  social: [
     { title: 'GitHub', href: 'https://github.com/juankaspain/complianceflow.es' },
+    { title: 'Twitter', href: '#' },
+    { title: 'LinkedIn', href: '#' },
   ],
 };
