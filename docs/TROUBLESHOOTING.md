@@ -1,300 +1,511 @@
-# Troubleshooting Guide
+# 🔧 Troubleshooting Guide - ComplianceFlow
 
-Common issues and solutions for ComplianceFlow.
-
-## Build Issues
-
-### Build fails with "Module not found"
-
-**Problem**: TypeScript can't find a module.
-
-**Solution**:
-```bash
-# Clear cache and reinstall
-rm -rf node_modules .next
-npm ci
-npm run build
-```
-
-### Build fails with "Out of memory"
-
-**Problem**: Node.js runs out of memory during build.
-
-**Solution**:
-```bash
-# Increase Node.js memory limit
-NODE_OPTIONS="--max-old-space-size=4096" npm run build
-```
-
-### TypeScript errors in CI but not locally
-
-**Problem**: Different TypeScript versions.
-
-**Solution**:
-```bash
-# Use exact versions in package.json
-npm ci  # instead of npm install
-```
-
-## Runtime Issues
-
-### "NEXT_PUBLIC_ variables not defined"
-
-**Problem**: Environment variables not loaded.
-
-**Solution**:
-1. Check `.env.local` exists
-2. Restart dev server after env changes
-3. Ensure variables start with `NEXT_PUBLIC_` for client-side
-
-### API routes return 404
-
-**Problem**: Routes not properly configured.
-
-**Solution**:
-1. Check file is in `src/app/api/` directory
-2. File must export named functions (GET, POST, etc.)
-3. Restart dev server
-
-### Images not loading
-
-**Problem**: Image optimization failing.
-
-**Solution**:
-```javascript
-// next.config.js
-images: {
-  domains: ['your-domain.com'],
-  unoptimized: false,
-}
-```
-
-### "Hydration mismatch" error
-
-**Problem**: Server and client render differently.
-
-**Solution**:
-- Don't use `window` or `document` during render
-- Use `useEffect` for browser-only code
-- Ensure consistent data between server and client
-
-## Database Issues
-
-### "Connection timeout"
-
-**Problem**: Can't connect to database.
-
-**Solution**:
-1. Check DATABASE_URL is correct
-2. Verify database is running
-3. Check firewall rules
-4. Verify network connectivity
-
-### "Too many connections"
-
-**Problem**: Database connection pool exhausted.
-
-**Solution**:
-```env
-DATABASE_POOL_MIN=2
-DATABASE_POOL_MAX=10
-```
-
-## Performance Issues
-
-### Slow page loads
-
-**Diagnosis**:
-```bash
-# Run Lighthouse audit
-npm run lighthouse
-
-# Analyze bundle size
-npm run analyze
-```
-
-**Solutions**:
-- Enable code splitting
-- Lazy load components
-- Optimize images
-- Enable caching
-
-### High memory usage
-
-**Problem**: Memory leaks in application.
-
-**Solution**:
-- Check for uncleared intervals/timeouts
-- Remove event listeners properly
-- Use React.memo for expensive components
-- Profile with Chrome DevTools
-
-## Security Issues
-
-### CSP violations
-
-**Problem**: Content Security Policy blocking resources.
-
-**Solution**:
-```javascript
-// next.config.js
-ContentSecurityPolicy: `
-  default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' *.trusted-domain.com;
-  style-src 'self' 'unsafe-inline';
-`
-```
-
-### Rate limit triggering
-
-**Problem**: Too many requests.
-
-**Solution**:
-- Implement exponential backoff
-- Add request caching
-- Batch API calls
-- Increase rate limits if legitimate
-
-## Docker Issues
-
-### Container won't start
-
-**Problem**: Docker build or startup fails.
-
-**Solution**:
-```bash
-# View logs
-docker logs complianceflow-app
-
-# Rebuild without cache
-docker-compose build --no-cache
-
-# Check health
-docker-compose ps
-```
-
-### Volume permission errors
-
-**Problem**: Can't write to mounted volumes.
-
-**Solution**:
-```bash
-# Fix permissions
-sudo chown -R $USER:$USER ./data
-```
-
-## Deployment Issues
-
-### Netlify build fails
-
-**Problem**: Build fails in Netlify.
-
-**Solution**:
-1. Check build logs in Netlify dashboard
-2. Verify environment variables are set
-3. Check Node version matches local
-4. Test build locally: `npm run build`
-
-### Environment variables not working in production
-
-**Problem**: Vars not available in deployed app.
-
-**Solution**:
-1. Set in Netlify dashboard (Site settings > Environment variables)
-2. Client-side vars must start with `NEXT_PUBLIC_`
-3. Redeploy after changing vars
-
-## Email Issues
-
-### Emails not sending
-
-**Problem**: SMTP configuration issue.
-
-**Solution**:
-```bash
-# Test SMTP connection
-telnet smtp.gmail.com 587
-
-# Check credentials
-# Enable "Less secure app access" for Gmail
-```
-
-### Emails going to spam
-
-**Problem**: Missing SPF/DKIM records.
-
-**Solution**:
-1. Add SPF record to DNS
-2. Configure DKIM
-3. Set up DMARC
-4. Use dedicated sending domain
-
-## Testing Issues
-
-### Tests failing in CI but passing locally
-
-**Problem**: Environment differences.
-
-**Solution**:
-```bash
-# Use same Node version
-# Check CI environment variables
-# Run tests with --runInBand flag
-npm run test -- --runInBand
-```
-
-### E2E tests timing out
-
-**Problem**: Tests too slow or flaky.
-
-**Solution**:
-```typescript
-// Increase timeout
-test.setTimeout(60000);
-
-// Use proper waits
-await page.waitForSelector('[data-testid="element"]');
-```
-
-## Getting Help
-
-### Log Collection
-
-```bash
-# Application logs
-npm run dev > app.log 2>&1
-
-# Docker logs
-docker-compose logs > docker.log
-
-# System info
-node --version
-npm --version
-git --version
-```
-
-### Report an Issue
-
-1. Search existing issues: [GitHub Issues](https://github.com/juankaspain/complianceflow.es/issues)
-2. Create new issue with:
-   - Error message
-   - Steps to reproduce
-   - Expected vs actual behavior
-   - Environment details
-   - Relevant logs
-
-### Community Support
-
-- GitHub Discussions
-- Email: support@complianceflow.es
-- Slack: [Join our Slack]
+## Common Issues & Solutions
 
 ---
 
-**Still having issues?**
+## Build & Development Issues
 
-Contact our support team at support@complianceflow.es with:
-- Detailed problem description
-- Error logs
-- Environment information
-- Steps to reproduce
+### Issue: `npm install` fails
+
+**Síntomas:**
+```bash
+npm ERR! code ERESOLVE
+npm ERR! ERESOLVE unable to resolve dependency tree
+```
+
+**Solución:**
+```bash
+# Limpiar cache
+npm cache clean --force
+
+# Borrar node_modules y package-lock
+rm -rf node_modules package-lock.json
+
+# Reinstalar con legacy peer deps
+npm install --legacy-peer-deps
+
+# O usar flag force
+npm install --force
+```
+
+---
+
+### Issue: TypeScript errors after update
+
+**Síntomas:**
+```
+Type error: Cannot find module '@/components/...' or its corresponding type declarations.
+```
+
+**Solución:**
+```bash
+# Verificar tsconfig.json paths
+cat tsconfig.json
+
+# Reiniciar TypeScript server en VSCode
+# Cmd/Ctrl + Shift + P -> "TypeScript: Restart TS Server"
+
+# Regenerar types
+rm -rf .next
+npm run build
+```
+
+---
+
+### Issue: `next dev` no inicia
+
+**Síntomas:**
+```bash
+Error: listen EADDRINUSE: address already in use :::3000
+```
+
+**Solución:**
+```bash
+# Encontrar proceso usando puerto 3000
+lsof -ti:3000
+
+# Matar proceso
+kill -9 $(lsof -ti:3000)
+
+# O usar puerto diferente
+npm run dev -- -p 3001
+```
+
+---
+
+## Styling Issues
+
+### Issue: Tailwind classes no funcionan
+
+**Síntomas:**
+- Clases no aplican estilos
+- Colores no se muestran
+
+**Solución:**
+```bash
+# 1. Verificar tailwind.config.js content paths
+cat tailwind.config.js
+
+# 2. Limpiar cache y rebuild
+rm -rf .next
+npm run build
+
+# 3. Verificar que globals.css importa Tailwind
+cat src/app/globals.css
+# Debe tener:
+# @tailwind base;
+# @tailwind components;
+# @tailwind utilities;
+```
+
+---
+
+### Issue: Colores custom no aparecen
+
+**Síntomas:**
+```tsx
+<div className="bg-primary"> // No funciona
+```
+
+**Solución:**
+```javascript
+// tailwind.config.js debe tener:
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          DEFAULT: '#4F46E5',
+          50: '#EDEEFF',
+          // ...
+        },
+      },
+    },
+  },
+};
+```
+
+---
+
+## Performance Issues
+
+### Issue: Build muy lento
+
+**Síntomas:**
+- `npm run build` toma >5 minutos
+- High CPU usage
+
+**Solución:**
+```bash
+# 1. Verificar dependencias pesadas
+npm run analyze
+
+# 2. Excluir archivos innecesarios
+# En next.config.js:
+module.exports = {
+  webpack: (config) => {
+    config.watchOptions = {
+      ignored: ['**/node_modules', '**/.git'],
+    };
+    return config;
+  },
+};
+
+# 3. Usar SWC (ya configurado)
+# En next.config.js: swcMinify: true
+```
+
+---
+
+### Issue: Imágenes no optimizan
+
+**Síntomas:**
+- Imágenes cargan lentas
+- Lighthouse penaliza
+
+**Solución:**
+```tsx
+// Usar Next.js Image component
+import Image from 'next/image';
+
+<Image
+  src="/logo.svg"
+  alt="Logo"
+  width={100}
+  height={100}
+  priority // Para hero images
+  loading="lazy" // Para images below fold
+/>
+
+// En next.config.js:
+images: {
+  formats: ['image/avif', 'image/webp'],
+  deviceSizes: [640, 768, 1024, 1280, 1536],
+}
+```
+
+---
+
+## SEO Issues
+
+### Issue: Google no indexa el sitio
+
+**Síntomas:**
+- No aparece en búsquedas
+- Search Console sin datos
+
+**Solución:**
+```bash
+# 1. Verificar robots.txt
+curl https://complianceflow.netlify.app/robots.txt
+
+# 2. Verificar sitemap.xml
+curl https://complianceflow.netlify.app/sitemap.xml
+
+# 3. Submit en Google Search Console
+# https://search.google.com/search-console
+
+# 4. Verificar meta robots
+# En layout.tsx:
+robots: {
+  index: true,
+  follow: true,
+}
+```
+
+---
+
+### Issue: OpenGraph image no aparece
+
+**Síntomas:**
+- Al compartir en redes sociales no sale imagen
+- Facebook debugger muestra error
+
+**Solución:**
+```bash
+# 1. Verificar imagen existe
+ls -lh public/og-image.png
+
+# 2. Verificar metadata
+# En layout.tsx o page.tsx:
+openGraph: {
+  images: [{
+    url: 'https://complianceflow.netlify.app/og-image.png',
+    width: 1200,
+    height: 630,
+  }],
+}
+
+# 3. Limpiar cache de Facebook
+# https://developers.facebook.com/tools/debug/
+
+# 4. Verificar Twitter
+# https://cards-dev.twitter.com/validator
+```
+
+---
+
+## Deployment Issues
+
+### Issue: Deploy falla en Netlify
+
+**Síntomas:**
+```
+Build failed: Command failed with exit code 1
+```
+
+**Solución:**
+```bash
+# 1. Verificar build local
+npm run build
+
+# 2. Verificar Node version
+# En netlify.toml:
+[build.environment]
+  NODE_VERSION = "18"
+
+# 3. Verificar environment variables
+# Netlify Dashboard -> Site settings -> Environment variables
+
+# 4. Check build logs
+# Netlify Dashboard -> Deploys -> Failed deploy -> Logs
+```
+
+---
+
+### Issue: Environment variables no funcionan
+
+**Síntomas:**
+- `process.env.NEXT_PUBLIC_X` es undefined
+- Analytics no trackea
+
+**Solución:**
+```bash
+# 1. Verificar prefijo NEXT_PUBLIC_
+# Solo variables con este prefijo son accesibles en cliente
+
+# 2. Crear .env.local
+cp .env.example .env.local
+
+# 3. En Netlify:
+# Site settings -> Environment variables -> Add variable
+
+# 4. Rebuild después de añadir variables
+# Netlify Dashboard -> Deploys -> Trigger deploy
+```
+
+---
+
+## Component Issues
+
+### Issue: Hydration error
+
+**Síntomas:**
+```
+Error: Hydration failed because the initial UI does not match what was rendered on the server.
+```
+
+**Solución:**
+```tsx
+// 1. Usar 'use client' en componentes con estado
+'use client';
+import { useState } from 'react';
+
+// 2. Verificar HTML válido
+// ❌ <p><div>...</div></p>
+// ✅ <div><p>...</p></div>
+
+// 3. Usar useEffect para código que depende de browser
+import { useEffect, useState } from 'react';
+
+function Component() {
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  if (!mounted) return null;
+  
+  return <div>{window.innerWidth}</div>;
+}
+```
+
+---
+
+### Issue: Componente no renderiza
+
+**Síntomas:**
+- Componente no aparece
+- Console sin errores
+
+**Solución:**
+```tsx
+// 1. Verificar export/import
+// component.tsx
+export default function Component() { ... }
+
+// page.tsx
+import Component from '@/components/Component';
+
+// 2. Verificar conditional rendering
+{isLoading && <Component />} // Solo muestra si isLoading es true
+{isLoading ? <Loading /> : <Component />} // Mejor
+
+// 3. Check props
+console.log('Props:', props);
+```
+
+---
+
+## Analytics Issues
+
+### Issue: PostHog no trackea eventos
+
+**Síntomas:**
+- Dashboard sin datos
+- `window.posthog` undefined
+
+**Solución:**
+```tsx
+// 1. Verificar API key en .env.local
+NEXT_PUBLIC_POSTHOG_KEY=phc_...
+
+// 2. Verificar inicialización
+// src/lib/analytics/posthog.tsx
+import posthog from 'posthog-js';
+
+if (typeof window !== 'undefined') {
+  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
+    api_host: 'https://app.posthog.com',
+  });
+}
+
+// 3. Verificar en browser console
+window.posthog
+```
+
+---
+
+### Issue: Google Analytics no funciona
+
+**Síntomas:**
+- Real-time sin usuarios
+
+**Solución:**
+```tsx
+// 1. Añadir Google Analytics
+// src/app/layout.tsx
+<Script
+  src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
+  strategy="afterInteractive"
+/>
+<Script id="google-analytics" strategy="afterInteractive">
+  {`
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}');
+  `}
+</Script>
+
+// 2. Verificar measurement ID
+// Debe empezar con G-XXXXXXXXXX
+
+// 3. Test con GA Debugger extension
+// Chrome Web Store -> Google Analytics Debugger
+```
+
+---
+
+## Email & Newsletter Issues
+
+### Issue: Newsletter no envía emails
+
+**Síntomas:**
+- Form se envía pero no llega email
+
+**Solución:**
+```typescript
+// 1. Implementar API route
+// src/app/api/newsletter/route.ts
+import { NextResponse } from 'next/server';
+
+export async function POST(request: Request) {
+  const { email } = await request.json();
+  
+  // Mailchimp
+  const response = await fetch(
+    `https://${DC}.api.mailchimp.com/3.0/lists/${LIST_ID}/members`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.MAILCHIMP_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email_address: email,
+        status: 'subscribed',
+      }),
+    }
+  );
+  
+  return NextResponse.json({ success: true });
+}
+
+// 2. Actualizar component para usar API
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  const response = await fetch('/api/newsletter', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  });
+};
+```
+
+---
+
+## Performance Monitoring
+
+### Lighthouse CI no pasa thresholds
+
+**Solución:**
+```bash
+# 1. Run Lighthouse local
+npm run lighthouse
+
+# 2. Identificar issues
+# Check informe HTML generado
+
+# 3. Ajustar thresholds si es necesario
+# lighthouserc.js
+assertions: {
+  'categories:performance': ['warn', { minScore: 0.85 }],
+}
+```
+
+---
+
+## Need More Help?
+
+### Resources
+
+- **Next.js Docs**: https://nextjs.org/docs
+- **Tailwind Docs**: https://tailwindcss.com/docs
+- **TypeScript Handbook**: https://www.typescriptlang.org/docs
+- **Lighthouse**: https://web.dev/lighthouse
+
+### Community
+
+- **Next.js Discord**: https://discord.gg/nextjs
+- **GitHub Issues**: https://github.com/juankaspain/complianceflow.es/issues
+
+### Contact
+
+- **Email**: support@complianceflow.com
+- **GitHub**: @juankaspain
+
+---
+
+**Last Updated:** 31 Diciembre 2025
