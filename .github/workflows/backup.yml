@@ -1,0 +1,68 @@
+name: Repository Backup
+
+on:
+  schedule:
+    - cron: '0 2 * * 0' # Every Sunday at 2 AM
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  backup:
+    name: Create Backup
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create backup archive
+        run: |
+          DATE=$(date +%Y%m%d-%H%M%S)
+          BACKUP_NAME="complianceflow-backup-${DATE}"
+          
+          # Create archive excluding unnecessary files
+          tar -czf "${BACKUP_NAME}.tar.gz" \
+            --exclude='node_modules' \
+            --exclude='.next' \
+            --exclude='out' \
+            --exclude='.git' \
+            --exclude='coverage' \
+            .
+          
+          echo "BACKUP_FILE=${BACKUP_NAME}.tar.gz" >> $GITHUB_ENV
+          echo "Backup created: ${BACKUP_NAME}.tar.gz"
+
+      - name: Upload backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: repository-backup-${{ github.run_number }}
+          path: ${{ env.BACKUP_FILE }}
+          retention-days: 90
+
+      - name: Backup summary
+        run: |
+          echo "## Backup Created ✅" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Date**: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "- **File**: ${{ env.BACKUP_FILE }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Size**: $(du -h ${{ env.BACKUP_FILE }} | cut -f1)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Retention**: 90 days" >> $GITHUB_STEP_SUMMARY
+
+  database-backup:
+    name: Database Backup
+    runs-on: ubuntu-latest
+    if: false # Enable when you have a database
+    
+    steps:
+      - name: Backup database
+        run: |
+          echo "Database backup would run here"
+          # Add your database backup logic

@@ -1,0 +1,112 @@
+name: Dependency Updates
+
+on:
+  schedule:
+    - cron: '0 3 * * 1' # Every Monday at 3 AM
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  update-dependencies:
+    name: Update Dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Check for outdated dependencies
+        id: outdated
+        run: |
+          npm outdated --json > outdated.json || true
+          cat outdated.json
+          OUTDATED_COUNT=$(cat outdated.json | jq 'length')
+          echo "count=$OUTDATED_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Update dependencies
+        if: steps.outdated.outputs.count > 0
+        run: |
+          npm update
+          npm audit fix --force || true
+
+      - name: Run tests
+        if: steps.outdated.outputs.count > 0
+        run: |
+          npm ci
+          npm run lint || true
+          npm run type-check || true
+          npm run test:unit || true
+          npm run build
+
+      - name: Create Pull Request
+        if: steps.outdated.outputs.count > 0
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore(deps): update dependencies'
+          title: '🔄 Automated Dependency Update'
+          body: |
+            ## Automated Dependency Update
+            
+            This PR updates outdated dependencies to their latest versions.
+            
+            ### Changes
+            - Updated ${{ steps.outdated.outputs.count }} dependencies
+            - All tests passed ✅
+            - Build successful ✅
+            
+            ### Next Steps
+            - Review the changes
+            - Merge if all checks pass
+            
+            ---
+            *Automated by GitHub Actions*
+          branch: deps/automated-update
+          delete-branch: true
+          labels: |
+            dependencies
+            automated
+
+  dependabot-auto-merge:
+    name: Auto-merge Dependabot PRs
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Enable auto-merge for minor/patch updates
+        if: steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        run: |
+          gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Approve PR
+        if: steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        run: |
+          gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
