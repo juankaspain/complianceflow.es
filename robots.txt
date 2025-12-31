@@ -16,7 +16,7 @@ Allow: /src/js/
 Allow: /public/
 
 # Sitemaps
-Sitemap: https://complianceflow.es/sitemap.xml
+Sitemap: https://complianceflow.netlify.app/sitemap.xml
 
 # Crawl-delay for heavy bots (optional)
 User-agent: AhrefsBot
