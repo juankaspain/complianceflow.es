@@ -18,6 +18,7 @@
     "test:coverage": "vitest run --coverage",
     "lighthouse": "lhci autorun",
     "check:env": "node scripts/check-env.js",
+    "verify:integration": "node scripts/verify-integration.js",
     "setup": "bash scripts/setup.sh",
     "prepare": "husky install",
     "analyze": "ANALYZE=true npm run build",
