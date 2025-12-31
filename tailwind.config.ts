@@ -10,7 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#4F46E5', // Indigo-600
+          DEFAULT: '#4F46E5',
           50: '#EEF2FF',
           100: '#E0E7FF',
           200: '#C7D2FE',
@@ -24,7 +24,7 @@ const config: Config = {
           950: '#1E1B4B',
         },
         secondary: {
-          DEFAULT: '#10B981', // Emerald-500
+          DEFAULT: '#10B981',
           50: '#ECFDF5',
           100: '#D1FAE5',
           200: '#A7F3D0',
@@ -35,41 +35,68 @@ const config: Config = {
           700: '#047857',
           800: '#065F46',
           900: '#064E3B',
-          950: '#022C22',
+        },
+        gray: {
+          50: '#F9FAFB',
+          100: '#F3F4F6',
+          200: '#E5E7EB',
+          300: '#D1D5DB',
+          400: '#9CA3AF',
+          500: '#6B7280',
+          600: '#4B5563',
+          700: '#374151',
+          800: '#1F2937',
+          900: '#111827',
+          950: '#030712',
         },
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
       },
       animation: {
-        'fade-in': 'fadeIn 0.5s ease-in-out',
-        'slide-up': 'slideUp 0.5s ease-out',
-        'slide-down': 'slideDown 0.5s ease-out',
-        'spin-slow': 'spin 3s linear infinite',
+        'fade-in': 'fade-in 0.6s ease-out',
+        'float': 'float 6s ease-in-out infinite',
+        'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
       },
       keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
+        'fade-in': {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(20px)',
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0)',
+          },
         },
-        slideUp: {
-          '0%': { transform: 'translateY(20px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
+        'float': {
+          '0%, 100%': {
+            transform: 'translateY(0)',
+          },
+          '50%': {
+            transform: 'translateY(-20px)',
+          },
         },
-        slideDown: {
-          '0%': { transform: 'translateY(-20px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
+        'pulse-glow': {
+          '0%, 100%': {
+            opacity: '1',
+          },
+          '50%': {
+            opacity: '0.5',
+          },
         },
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      },
       boxShadow: {
-        'inner-lg': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.1)',
+        'glow': '0 0 20px rgba(79, 70, 229, 0.5)',
+        'glow-lg': '0 0 40px rgba(79, 70, 229, 0.6)',
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-  ],
+  plugins: [require('tailwindcss-animate')],
 };
 
 export default config;
