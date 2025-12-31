@@ -1,4 +1,36 @@
+# ComplianceFlow Robots.txt
+# Updated: 2025-12-31
+
 User-agent: *
 Allow: /
 
-Sitemap: https://www.complianceflow.es/sitemap.xml
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /private/
+Disallow: /_*
+Disallow: /api/internal/
+
+# Allow important resources
+Allow: /src/css/
+Allow: /src/js/
+Allow: /public/
+
+# Sitemaps
+Sitemap: https://complianceflow.es/sitemap.xml
+
+# Crawl-delay for heavy bots (optional)
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+# Block unwanted bots
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
