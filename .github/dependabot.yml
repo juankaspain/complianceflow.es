@@ -1,59 +1,92 @@
 version: 2
 updates:
-  # Enable version updates for npm
+  # NPM dependencies
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "09:00"
+      time: "03:00"
+      timezone: "Europe/Madrid"
     open-pull-requests-limit: 10
     reviewers:
       - "juankaspain"
     assignees:
       - "juankaspain"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
     labels:
       - "dependencies"
-      - "automerge"
-    commit-message:
-      prefix: "chore"
-      prefix-development: "chore"
-      include: "scope"
+      - "automated"
+    versioning-strategy: increase
     
-    # Group minor and patch updates
+    # Group updates for related packages
     groups:
-      production-dependencies:
-        dependency-type: "production"
-        update-types:
-          - "minor"
-          - "patch"
-      development-dependencies:
-        dependency-type: "development"
-        update-types:
-          - "minor"
-          - "patch"
+      react:
+        patterns:
+          - "react*"
+          - "@types/react*"
+      next:
+        patterns:
+          - "next*"
+      radix:
+        patterns:
+          - "@radix-ui/*"
+      testing:
+        patterns:
+          - "*test*"
+          - "@testing-library/*"
+          - "vitest"
+          - "playwright"
+      eslint:
+        patterns:
+          - "eslint*"
+          - "@typescript-eslint/*"
+      build-tools:
+        patterns:
+          - "typescript"
+          - "postcss"
+          - "autoprefixer"
+          - "tailwindcss"
     
-    # Security updates
-    allow:
-      - dependency-type: "all"
-    
+    # Ignore specific packages
     ignore:
-      # Ignore major version updates for stable releases
-      - dependency-name: "next"
-        update-types: ["version-update:semver-major"]
+      # Ignore major version updates for stable packages
       - dependency-name: "react"
         update-types: ["version-update:semver-major"]
       - dependency-name: "react-dom"
         update-types: ["version-update:semver-major"]
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
 
-  # Enable version updates for GitHub Actions
+  # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
-    labels:
-      - "dependencies"
-      - "github-actions"
+      time: "03:00"
+      timezone: "Europe/Madrid"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "juankaspain"
     commit-message:
       prefix: "ci"
+      include: "scope"
+    labels:
+      - "github-actions"
+      - "automated"
+
+  # Docker (if using)
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "chore(docker)"
+    labels:
+      - "docker"
+      - "automated"

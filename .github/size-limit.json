@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Client Bundle",
+    "path": ".next/**/*.js",
+    "limit": "500 KB",
+    "webpack": false
+  },
+  {
+    "name": "First Load JS",
+    "path": ".next/static/chunks/pages/*.js",
+    "limit": "200 KB",
+    "webpack": false
+  },
+  {
+    "name": "Main CSS",
+    "path": ".next/**/*.css",
+    "limit": "50 KB",
+    "webpack": false
+  }
+]

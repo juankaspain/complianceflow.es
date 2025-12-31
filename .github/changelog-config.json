@@ -1,0 +1,94 @@
+{
+  "categories": [
+    {
+      "title": "🚀 Features",
+      "labels": ["feat", "feature", "enhancement"]
+    },
+    {
+      "title": "🐛 Bug Fixes",
+      "labels": ["fix", "bug", "bugfix"]
+    },
+    {
+      "title": "📝 Documentation",
+      "labels": ["docs", "documentation"]
+    },
+    {
+      "title": "🛠️ Maintenance",
+      "labels": ["chore", "refactor", "style"]
+    },
+    {
+      "title": "⚡ Performance",
+      "labels": ["perf", "performance"]
+    },
+    {
+      "title": "🔒 Security",
+      "labels": ["security"]
+    },
+    {
+      "title": "🧪 Tests",
+      "labels": ["test", "tests"]
+    },
+    {
+      "title": "🔧 CI/CD",
+      "labels": ["ci", "cd", "build"]
+    },
+    {
+      "title": "📦 Dependencies",
+      "labels": ["dependencies", "deps"]
+    }
+  ],
+  "ignore_labels": [
+    "skip-changelog",
+    "duplicate",
+    "invalid",
+    "wontfix"
+  ],
+  "sort": "ASC",
+  "template": "${{CHANGELOG}}\n\n### Contributors\n\n${{CONTRIBUTORS}}",
+  "pr_template": "- ${{TITLE}} (#${{NUMBER}})",
+  "empty_template": "- No changes",
+  "label_extractor": [
+    {
+      "pattern": "^(feat|feature)(\\(.+\\))?:",
+      "target": "feat"
+    },
+    {
+      "pattern": "^fix(\\(.+\\))?:",
+      "target": "fix"
+    },
+    {
+      "pattern": "^docs?(\\(.+\\))?:",
+      "target": "docs"
+    },
+    {
+      "pattern": "^(chore|refactor|style)(\\(.+\\))?:",
+      "target": "chore"
+    },
+    {
+      "pattern": "^perf(\\(.+\\))?:",
+      "target": "perf"
+    },
+    {
+      "pattern": "^test(\\(.+\\))?:",
+      "target": "test"
+    },
+    {
+      "pattern": "^(ci|build)(\\(.+\\))?:",
+      "target": "ci"
+    }
+  ],
+  "duplicate_filter": {
+    "pattern": "\\[.*\\]",
+    "on_property": "title"
+  },
+  "transformers": [
+    {
+      "pattern": "[\\-\\*] (\\[(...|TEST|CI|SKIP)\\] )?",
+      "target": ""
+    }
+  ],
+  "max_tags_to_fetch": 200,
+  "max_pull_requests": 200,
+  "max_back_track_time_days": 365,
+  "exclude_merge_branches": []
+}
