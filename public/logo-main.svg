@@ -1,0 +1,45 @@
+<svg width="240" height="60" viewBox="0 0 240 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shield icon with checkmark -->
+  <g id="icon">
+    <!-- Shield background with gradient -->
+    <defs>
+      <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#10B981;stop-opacity:1" />
+      </linearGradient>
+      <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+        <stop offset="50%" style="stop-color:#6366F1;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#10B981;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+    
+    <!-- Shield shape -->
+    <path d="M30 8C30 8 22 10 15 10C8 10 0 8 0 8V25C0 38 15 48 15 48C15 48 30 38 30 25V8Z" 
+          fill="url(#shieldGradient)" 
+          transform="translate(5, 6)"/>
+    
+    <!-- Checkmark -->
+    <path d="M12 24L17 29L28 18" 
+          stroke="white" 
+          stroke-width="3" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+    
+    <!-- Document lines inside shield -->
+    <rect x="14" y="16" width="8" height="1.5" rx="0.75" fill="white" opacity="0.6"/>
+    <rect x="14" y="19" width="6" height="1.5" rx="0.75" fill="white" opacity="0.6"/>
+  </g>
+  
+  <!-- Text: ComplianceFlow -->
+  <g id="text" transform="translate(50, 0)">
+    <!-- Compliance -->
+    <text x="0" y="28" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">
+      Compliance
+    </text>
+    <!-- Flow with gradient -->
+    <text x="0" y="48" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="700" fill="url(#textGradient)">
+      Flow
+    </text>
+  </g>
+</svg>

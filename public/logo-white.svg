@@ -1,14 +1,28 @@
-<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Icon -->
-  <rect x="2" y="10" width="40" height="40" rx="8" fill="white"/>
-  <path d="M22 20L30 28L22 36" stroke="#0066FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M14 28H28" stroke="#0066FF" stroke-width="3" stroke-linecap="round"/>
+<svg width="240" height="60" viewBox="0 0 240 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shield icon -->
+  <g id="icon">
+    <!-- Shield outline -->
+    <path d="M30 8C30 8 22 10 15 10C8 10 0 8 0 8V25C0 38 15 48 15 48C15 48 30 38 30 25V8Z" 
+          stroke="white" 
+          stroke-width="2"
+          fill="none"
+          transform="translate(5, 6)"/>
+    
+    <!-- Checkmark -->
+    <path d="M12 24L17 29L28 18" 
+          stroke="white" 
+          stroke-width="3" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+  </g>
   
-  <!-- Text -->
-  <text x="50" y="32" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="white">
-    ComplianceFlow
-  </text>
-  <text x="50" y="45" font-family="Arial, sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">
-    Compliance via APIs
-  </text>
+  <!-- Text: ComplianceFlow -->
+  <g id="text" transform="translate(50, 0)">
+    <text x="0" y="28" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">
+      Compliance
+    </text>
+    <text x="0" y="48" font-family="Inter, system-ui, sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">
+      Flow
+    </text>
+  </g>
 </svg>

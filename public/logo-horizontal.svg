@@ -1,0 +1,29 @@
+<svg width="300" height="48" viewBox="0 0 300 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#10B981;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Icon -->
+  <g transform="translate(0, 6)">
+    <path d="M28 6C28 6 20 8 13 8C6 8 0 6 0 6V23C0 36 13 44 13 44C13 44 26 36 26 23V6Z" 
+          fill="url(#hGradient)"/>
+    <path d="M10 22L14 26L22 18" 
+          stroke="white" 
+          stroke-width="2.5" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+    <rect x="11" y="14" width="7" height="1.5" rx="0.75" fill="white" opacity="0.5"/>
+    <rect x="11" y="17" width="5" height="1.5" rx="0.75" fill="white" opacity="0.5"/>
+  </g>
+  
+  <!-- Text inline -->
+  <text x="42" y="32" font-family="Inter, system-ui, sans-serif" font-size="24" font-weight="700" fill="#FFFFFF">
+    ComplianceFlow
+  </text>
+  <text x="246" y="32" font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="500" fill="#9CA3AF">
+    Enterprise APIs
+  </text>
+</svg>
