@@ -5,8 +5,8 @@ import path from 'path';
 export default defineConfig({
   plugins: [react()],
   test: {
-    globals: true,
     environment: 'jsdom',
+    globals: true,
     setupFiles: ['./tests/setup.ts'],
     coverage: {
       provider: 'v8',
@@ -14,23 +14,25 @@ export default defineConfig({
       exclude: [
         'node_modules/',
         'tests/',
-        '**/*.config.*',
-        '**/*.d.ts',
-        '**/types/**',
+        '*.config.{js,ts}',
         '.next/',
-        'out/',
+        'public/',
+        '**/*.d.ts',
       ],
       thresholds: {
-        lines: 60,
-        functions: 60,
-        branches: 60,
-        statements: 60,
+        lines: 80,
+        functions: 80,
+        branches: 80,
+        statements: 80,
       },
     },
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@/components': path.resolve(__dirname, './src/components'),
+      '@/lib': path.resolve(__dirname, './src/lib'),
+      '@/app': path.resolve(__dirname, './src/app'),
     },
   },
 });
