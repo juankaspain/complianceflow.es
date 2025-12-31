@@ -1,7 +1,8 @@
 /**
  * ComplianceFlow - Modern SaaS Design System
- * Version: 3.0.0
- * Professional B2B SaaS styling with glassmorphism and modern aesthetics
+ * Version: 3.1.0 - Ultra Professional Edition
+ * @description Enhanced B2B SaaS styling with premium aesthetics
+ * @license MIT
  */
 
 /* Import Inter font */
@@ -146,6 +147,7 @@
   --z-modal: 1050;
   --z-popover: 1060;
   --z-tooltip: 1070;
+  --z-toast: 9999;
 }
 
 /* ==========================================================================
@@ -170,6 +172,14 @@ html {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
@@ -229,6 +239,12 @@ a {
 
 a:hover {
   color: var(--color-primary-700);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
 }
 
 strong {
@@ -332,6 +348,7 @@ code {
 
 .brand:hover {
   transform: scale(1.02);
+  color: var(--color-text-primary);
 }
 
 .brand-mark {
@@ -475,6 +492,11 @@ code {
   transform: none !important;
 }
 
+.btn:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
 /* ==========================================================================
    7. Hero Section
    ========================================================================== */
@@ -553,6 +575,12 @@ code {
   font-weight: var(--font-medium);
   color: var(--color-text-secondary);
   box-shadow: var(--shadow-sm);
+  transition: all var(--transition-base);
+}
+
+.badge:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .hero-actions {
@@ -682,6 +710,7 @@ code {
   background: var(--color-primary-50);
   color: var(--color-primary-700);
   transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
 }
 
 /* ==========================================================================
@@ -725,6 +754,15 @@ code {
   font-size: var(--text-xl);
   margin-bottom: var(--space-3);
   color: var(--color-primary-700);
+}
+
+.card-icon {
+  display: block;
+  text-align: center;
+  margin-bottom: var(--space-4);
+  font-size: 2.5rem;
+  line-height: 1;
+  opacity: 0.9;
 }
 
 .card-label {
@@ -864,6 +902,7 @@ code {
 .demo-card textarea:focus {
   outline: none;
   border-color: var(--color-primary-400);
+  box-shadow: 0 0 0 3px var(--color-primary-100);
 }
 
 .demo-card textarea {
@@ -966,6 +1005,7 @@ code {
   flex-direction: column;
   gap: var(--space-4);
   flex-grow: 1;
+  margin-bottom: var(--space-6);
 }
 
 .price-card li {
@@ -1067,7 +1107,7 @@ code {
 .footer-inner {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
   gap: var(--space-8);
 }
@@ -1088,7 +1128,8 @@ code {
 
 .footer-links {
   display: flex;
-  gap: var(--space-6);
+  flex-direction: column;
+  gap: var(--space-3);
 }
 
 .footer-links a {
@@ -1165,6 +1206,17 @@ code {
   }
 }
 
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+}
+
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
@@ -1192,10 +1244,6 @@ code {
   .card:nth-child(2) { animation-delay: 0.2s; }
   .card:nth-child(3) { animation-delay: 0.3s; }
   .card:nth-child(4) { animation-delay: 0.4s; }
-
-  .btn:hover {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
 }
 
 /* ==========================================================================
@@ -1232,6 +1280,14 @@ code {
   .price-card--highlight {
     transform: scale(1);
   }
+
+  .footer-inner {
+    flex-direction: column;
+  }
+
+  .footer-links {
+    width: 100%;
+  }
 }
 
 /* ==========================================================================
@@ -1262,5 +1318,13 @@ code {
   .price-card {
     box-shadow: none;
     border: 1px solid #000;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
   }
 }
