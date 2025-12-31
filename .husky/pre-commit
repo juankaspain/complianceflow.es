@@ -1,9 +1,15 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "🔍 Running pre-commit checks..."
-
 # Run lint-staged
 npx lint-staged
 
-echo "✅ Pre-commit checks passed!"
+# Check for console.log statements (warning only)
+if git diff --cached --name-only --diff-filter=ACM | grep '\.tsx\?$' | xargs grep -n 'console\.log' 2>/dev/null; then
+  echo "⚠️  Warning: Found console.log statements. Consider removing them before committing."
+fi
+
+# Check for TODO/FIXME comments (warning only)
+if git diff --cached --name-only --diff-filter=ACM | grep '\.tsx\?$' | xargs grep -n 'TODO\|FIXME' 2>/dev/null; then
+  echo "⚠️  Warning: Found TODO/FIXME comments."
+fi
