@@ -60,16 +60,10 @@
   to = "/index.html"
   status = 200
 
-# Redirect to HTTPS
+# Redirect HTTP to HTTPS
 [[redirects]]
-  from = "http://complianceflow.es/*"
-  to = "https://complianceflow.es/:splat"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "http://www.complianceflow.es/*"
-  to = "https://complianceflow.es/:splat"
+  from = "http://complianceflow.netlify.app/*"
+  to = "https://complianceflow.netlify.app/:splat"
   status = 301
   force = true
 
