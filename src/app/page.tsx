@@ -11,7 +11,7 @@ import SocialProof from '@/components/ui/SocialProof';
 import LiveMetricsBar from '@/components/ui/LiveMetricsBar';
 import ScrollToTop from '@/components/ui/ScrollToTop';
 import { Metadata } from 'next';
-import Image from 'next/image';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'ComplianceFlow – Enterprise Compliance APIs | ISO 27001 & SOC 2 Certified',
@@ -222,16 +222,16 @@ export default function HomePage() {
 
               {/* Enhanced CTAs */}
               <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a
-                  href="#demos"
+                <Link
+                  href="/dashboard"
                   className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white transition-all duration-300 bg-primary hover:bg-primary-600 rounded-xl shadow-lg shadow-primary/50 hover:shadow-primary/80 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-950"
-                  aria-label="Ver demos interactivos"
+                  aria-label="Acceder al dashboard de APIs"
                 >
-                  <span>Explorar demos</span>
+                  <span>Ir al Dashboard</span>
                   <svg className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </a>
+                </Link>
                 <a
                   href="/docs"
                   className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white transition-all duration-300 bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 hover:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-gray-950"
