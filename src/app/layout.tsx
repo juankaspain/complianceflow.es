@@ -227,9 +227,8 @@ export default function RootLayout({
                     <p className="text-sm text-gray-500">Enterprise Compliance APIs</p>
                   </div>
                 </div>
-                <p className="text-sm text-gray-400 max-w-md">
-                  Infraestructura enterprise-grade con las certificaciones y estándares más exigentes del sector. 
-                  ISO 27001, SOC 2 Type II, GDPR compliant.
+                <p className="text-sm text-gray-400 max-w-2xl">
+                  Infraestructura enterprise-grade con las certificaciones y estándares más exigentes del sector: ISO 27001, SOC 2 Type II, GDPR compliant.
                 </p>
               </div>
               
