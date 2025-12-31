@@ -1,7 +1,7 @@
 /**
  * ComplianceFlow Main JavaScript
- * @version 2.0.1
- * @description Demo functionality and interactive elements
+ * @version 3.0.0
+ * @description Enhanced interactions, animations, and demo functionality
  * @license MIT
  */
 
@@ -20,27 +20,22 @@ const CONFIG = {
 const utils = {
   /**
    * Display demo results in output element
-   * @param {string} id - Element ID
-   * @param {object} data - Data to display
-   * @param {boolean} success - Success status
    */
   showDemoResult(id, data, success = true) {
     const element = document.getElementById(id);
-    if (!element) {
-      return;
-    }
+    if (!element) return;
     
     element.textContent = JSON.stringify(data, null, 2);
-    element.style.borderColor = success ? '#22c55e' : '#ef4444';
+    element.style.borderColor = success ? 'var(--color-accent-600)' : 'var(--color-error)';
     element.setAttribute('aria-live', 'polite');
     element.setAttribute('aria-atomic', 'true');
+
+    // Animate result appearance
+    element.style.animation = 'fadeIn 0.4s ease-out';
   },
 
   /**
    * Make API request with timeout and error handling
-   * @param {string} url - API endpoint
-   * @param {object} options - Fetch options
-   * @returns {Promise}
    */
   async apiRequest(url, options = {}) {
     const controller = new AbortController();
@@ -83,10 +78,6 @@ const utils = {
 
   /**
    * Validate file input
-   * @param {FileList} files - Files to validate
-   * @param {number} minFiles - Minimum number of files
-   * @param {number} maxSize - Maximum file size in MB
-   * @returns {object} Validation result
    */
   validateFiles(files, minFiles = 1, maxSize = CONFIG.MAX_FILE_SIZE) {
     if (!files || files.length < minFiles) {
@@ -98,7 +89,6 @@ const utils = {
 
     const maxBytes = maxSize * 1024 * 1024;
     for (const file of files) {
-      // Check file size
       if (file.size > maxBytes) {
         return {
           valid: false,
@@ -106,7 +96,6 @@ const utils = {
         };
       }
 
-      // Check file type
       if (!CONFIG.ALLOWED_FILE_TYPES.includes(file.type)) {
         return {
           valid: false,
@@ -119,10 +108,38 @@ const utils = {
   },
 
   /**
-   * Debounce function to limit rate of function calls
-   * @param {Function} func - Function to debounce
-   * @param {number} wait - Wait time in ms
-   * @returns {Function}
+   * Show toast notification
+   */
+  showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast--${type}`;
+    toast.textContent = message;
+    toast.style.cssText = `
+      position: fixed;
+      bottom: var(--space-6);
+      right: var(--space-6);
+      background: ${type === 'success' ? 'var(--color-accent-600)' : 'var(--color-error)'};
+      color: white;
+      padding: var(--space-4) var(--space-6);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      z-index: var(--z-toast, 9999);
+      animation: slideInRight 0.3s ease-out;
+      max-width: 400px;
+      font-size: var(--text-sm);
+      font-weight: var(--font-medium);
+    `;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.animation = 'slideOutRight 0.3s ease-out';
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  },
+
+  /**
+   * Debounce function
    */
   debounce(func, wait = 300) {
     let timeout;
@@ -147,18 +164,15 @@ const demoHandlers = {
     const outputId = 'demo-sii-output';
     const button = document.getElementById('btn-demo-sii');
 
-    if (!input || !button) {
-      return;
-    }
+    if (!input || !button) return;
 
-    // Validate input
     const validation = utils.validateFiles(input.files);
     if (!validation.valid) {
       utils.showDemoResult(outputId, { error: validation.error }, false);
+      utils.showToast(validation.error, 'error');
       return;
     }
 
-    // Disable button during request
     const originalText = button.textContent;
     button.disabled = true;
     button.textContent = 'Procesando...';
@@ -186,6 +200,8 @@ const demoHandlers = {
         demo: true,
         completedAt: new Date().toISOString(),
       }, true);
+      
+      utils.showToast('✓ Factura procesada correctamente', 'success');
     } catch (error) {
       const errorData = JSON.parse(error.message || '{}');
       utils.showDemoResult(
@@ -193,6 +209,7 @@ const demoHandlers = {
         errorData.error ? errorData : { error: 'Error en la demo SII' },
         false
       );
+      utils.showToast('Error al procesar la factura', 'error');
     } finally {
       button.disabled = false;
       button.textContent = originalText;
@@ -208,14 +225,12 @@ const demoHandlers = {
     const outputId = 'demo-kyc-output';
     const button = document.getElementById('btn-demo-kyc');
 
-    if (!input || !button) {
-      return;
-    }
+    if (!input || !button) return;
 
-    // Validate input
     const validation = utils.validateFiles(input.files, 2);
     if (!validation.valid) {
       utils.showDemoResult(outputId, { error: validation.error }, false);
+      utils.showToast(validation.error, 'error');
       return;
     }
 
@@ -251,6 +266,11 @@ const demoHandlers = {
         demo: true,
         completedAt: new Date().toISOString(),
       }, success);
+      
+      utils.showToast(
+        success ? '✓ Verificación KYC exitosa' : '⚠ Score de riesgo alto',
+        success ? 'success' : 'error'
+      );
     } catch (error) {
       const errorData = JSON.parse(error.message || '{}');
       utils.showDemoResult(
@@ -258,6 +278,7 @@ const demoHandlers = {
         errorData.error ? errorData : { error: 'Error en la demo KYC' },
         false
       );
+      utils.showToast('Error al procesar documentos KYC', 'error');
     } finally {
       button.disabled = false;
       button.textContent = originalText;
@@ -273,11 +294,8 @@ const demoHandlers = {
     const outputId = 'demo-fraud-output';
     const button = document.getElementById('btn-demo-fraud');
 
-    if (!textarea || !button) {
-      return;
-    }
+    if (!textarea || !button) return;
 
-    // Validate JSON
     let payload;
     try {
       payload = JSON.parse(textarea.value);
@@ -287,6 +305,7 @@ const demoHandlers = {
         { error: 'JSON no válido. Verifica la sintaxis.' },
         false
       );
+      utils.showToast('JSON inválido', 'error');
       return;
     }
 
@@ -319,6 +338,11 @@ const demoHandlers = {
         demo: true,
         completedAt: new Date().toISOString(),
       }, success);
+      
+      utils.showToast(
+        `Score de riesgo: ${riskScore}`,
+        success ? 'success' : 'error'
+      );
     } catch (error) {
       const errorData = JSON.parse(error.message || '{}');
       utils.showDemoResult(
@@ -326,6 +350,7 @@ const demoHandlers = {
         errorData.error ? errorData : { error: 'Error en la demo de fraude' },
         false
       );
+      utils.showToast('Error al calcular riesgo', 'error');
     } finally {
       button.disabled = false;
       button.textContent = originalText;
@@ -334,8 +359,62 @@ const demoHandlers = {
   },
 };
 
-// Performance optimizations
-const performance = {
+// Animations & Visual Effects
+const animations = {
+  /**
+   * Initialize scroll animations using IntersectionObserver
+   */
+  initScrollAnimations() {
+    if (!('IntersectionObserver' in window)) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px',
+      }
+    );
+
+    // Observe cards, pricing, and other elements
+    document.querySelectorAll('.card, .price-card, .steps li, .faq-list details').forEach((el) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(30px)';
+      el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+      observer.observe(el);
+    });
+
+    // Add style for animated elements
+    const style = document.createElement('style');
+    style.textContent = `
+      .animate-in {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+      }
+    `;
+    document.head.appendChild(style);
+  },
+
+  /**
+   * Add parallax effect to hero background
+   */
+  initParallax() {
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
+
+    window.addEventListener('scroll', utils.debounce(() => {
+      const scrolled = window.pageYOffset;
+      const rate = scrolled * 0.5;
+      hero.style.transform = `translateY(${rate}px)`;
+    }, 10));
+  },
+
   /**
    * Lazy load images when they enter viewport
    */
@@ -364,13 +443,11 @@ const performance = {
    * Preload critical resources
    */
   preloadCriticalResources() {
-    // Preload API if user is near demo section
     const demoSection = document.getElementById('demo');
     if (demoSection && 'IntersectionObserver' in window) {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // User is near demo, preconnect to API
             const link = document.createElement('link');
             link.rel = 'preconnect';
             link.href = CONFIG.API_BASE;
@@ -382,6 +459,55 @@ const performance = {
 
       observer.observe(demoSection);
     }
+  },
+};
+
+// Mobile Menu
+const mobileMenu = {
+  init() {
+    const header = document.querySelector('.site-header');
+    if (!header) return;
+
+    // Add mobile menu button if not exists
+    const existingButton = document.querySelector('.mobile-menu-button');
+    if (existingButton || window.innerWidth > 1023) return;
+
+    const button = document.createElement('button');
+    button.className = 'mobile-menu-button';
+    button.setAttribute('aria-label', 'Toggle menu');
+    button.innerHTML = `
+      <span></span>
+      <span></span>
+      <span></span>
+    `;
+    button.style.cssText = `
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    `;
+
+    button.querySelectorAll('span').forEach((span) => {
+      span.style.cssText = `
+        width: 24px;
+        height: 2px;
+        background: var(--color-text-primary);
+        transition: all 0.3s;
+      `;
+    });
+
+    const headerInner = document.querySelector('.header-inner');
+    headerInner?.appendChild(button);
+
+    button.addEventListener('click', () => {
+      const nav = document.querySelector('.main-nav');
+      if (nav) {
+        nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
+      }
+    });
   },
 };
 
@@ -413,9 +539,7 @@ function init() {
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener('click', function (e) {
       const href = this.getAttribute('href');
-      if (href === '#') {
-        return;
-      }
+      if (href === '#') return;
       
       e.preventDefault();
       const target = document.querySelector(href);
@@ -424,7 +548,6 @@ function init() {
           behavior: 'smooth',
           block: 'start',
         });
-        // Update URL without jumping
         if (history.pushState) {
           history.pushState(null, null, href);
         }
@@ -432,9 +555,13 @@ function init() {
     });
   });
 
-  // Initialize performance optimizations
-  performance.lazyLoadImages();
-  performance.preloadCriticalResources();
+  // Initialize animations and effects
+  animations.initScrollAnimations();
+  animations.lazyLoadImages();
+  animations.preloadCriticalResources();
+  
+  // Initialize mobile menu
+  mobileMenu.init();
 
   // Console message for developers
   if (typeof console !== 'undefined') {
@@ -443,12 +570,8 @@ function init() {
       'font-size: 20px; font-weight: bold; color: #22c55e;'
     );
     console.log(
-      '%c¿Interesado en nuestras APIs? Visita https://complianceflow.es/docs/',
+      '%c¿Interesado en nuestras APIs? Visita https://complianceflow.netlify.app/docs/',
       'font-size: 14px; color: #3b82f6;'
-    );
-    console.log(
-      '%cDocumentación completa: https://github.com/juankaspain/complianceflow.es',
-      'font-size: 12px; color: #6b7280;'
     );
   }
 }
