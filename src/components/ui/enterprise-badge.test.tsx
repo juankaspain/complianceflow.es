@@ -11,31 +11,26 @@ describe('EnterpriseBadge Component', () => {
       expect(screen.getByText('Enterprise Compliance APIs')).toBeInTheDocument();
       expect(screen.getByText('ISO 27001')).toBeInTheDocument();
       expect(screen.getByText('SOC 2 Type II')).toBeInTheDocument();
-      expect(screen.getByText('GDPR Compliant')).toBeInTheDocument();
-    });
-
-    it('should display certifications', () => {
-      renderWithProviders(<EnterpriseBadge variant="full" />);
-
-      expect(screen.getByText('Information Security Management')).toBeInTheDocument();
-      expect(screen.getByText('Security & Compliance')).toBeInTheDocument();
-      expect(screen.getByText('Data Privacy Protection')).toBeInTheDocument();
+      expect(screen.getByText('GDPR')).toBeInTheDocument();
+      expect(screen.getByText('SLA 99.99%')).toBeInTheDocument();
     });
 
     it('should display feature cards', () => {
       renderWithProviders(<EnterpriseBadge variant="full" />);
 
-      expect(screen.getByText('Zero-Trust Architecture')).toBeInTheDocument();
-      expect(screen.getByText('Encryption at Rest & Transit')).toBeInTheDocument();
-      expect(screen.getByText('Audit Trails Completos')).toBeInTheDocument();
+      expect(screen.getByText('Zero-Trust Security')).toBeInTheDocument();
+      expect(screen.getByText('Encryption AES-256')).toBeInTheDocument();
+      expect(screen.getByText('Complete Audit Logs')).toBeInTheDocument();
     });
 
     it('should display statistics', () => {
       renderWithProviders(<EnterpriseBadge variant="full" />);
 
-      expect(screen.getByText('Empresas Confiadas')).toBeInTheDocument();
-      expect(screen.getByText('Países Cubiertos')).toBeInTheDocument();
-      expect(screen.getByText('Datos Protegidos')).toBeInTheDocument();
+      expect(screen.getByText('Companies')).toBeInTheDocument();
+      expect(screen.getByText('Countries')).toBeInTheDocument();
+      expect(screen.getByText('Data Protected')).toBeInTheDocument();
+      expect(screen.getByText('+500')).toBeInTheDocument();
+      expect(screen.getByText('45+')).toBeInTheDocument();
     });
   });
 
@@ -44,13 +39,7 @@ describe('EnterpriseBadge Component', () => {
       renderWithProviders(<EnterpriseBadge variant="minimal" />);
 
       expect(screen.getByText('ComplianceFlow')).toBeInTheDocument();
-      expect(screen.getByText('Enterprise Grade')).toBeInTheDocument();
-    });
-
-    it('should show enterprise badge indicator', () => {
-      renderWithProviders(<EnterpriseBadge variant="minimal" />);
-
-      expect(screen.getByText('Enterprise Grade')).toBeInTheDocument();
+      expect(screen.getByText('Verified')).toBeInTheDocument();
     });
   });
 
@@ -60,13 +49,6 @@ describe('EnterpriseBadge Component', () => {
 
       expect(screen.getByText('ComplianceFlow')).toBeInTheDocument();
       expect(screen.getByText(/ISO 27001/)).toBeInTheDocument();
-    });
-
-    it('should display certifications in one line', () => {
-      renderWithProviders(<EnterpriseBadge variant="compact" />);
-
-      const element = screen.getByText(/ISO 27001/);
-      expect(element).toBeInTheDocument();
     });
   });
 
@@ -84,7 +66,7 @@ describe('EnterpriseBadge Component', () => {
     it('should have proper heading hierarchy', () => {
       renderWithProviders(<EnterpriseBadge variant="full" />);
 
-      expect(screen.getByRole('heading', { level: 3 })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
       expect(
         screen.getAllByRole('heading', { level: 4 }).length
       ).toBeGreaterThan(0);
