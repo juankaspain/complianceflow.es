@@ -1,227 +1,158 @@
-# Guía de Contribución 🤝
+# Contribuir a ComplianceFlow
 
-¡Gracias por tu interés en contribuir a ComplianceFlow! Esta guía te ayudará a entender cómo puedes colaborar en el proyecto.
+¡Gracias por tu interés en contribuir a ComplianceFlow! 🎉
 
-## 🎯 Código de Conducta
+## Código de Conducta
 
-Este proyecto se adhiere a un Código de Conducta. Al participar, se espera que mantengas un ambiente respetuoso y profesional.
+Este proyecto se adhiere a los estándares de conducta profesional. Se espera que todos los participantes:
 
-### Principios Básicos
-- Sé respetuoso y profesional
-- Acepta críticas constructivas
-- Enfoca en lo mejor para la comunidad
-- Muestra empatía hacia otros miembros
+- Sean respetuosos y considerados
+- Acepten críticas constructivas
+- Se centren en lo que es mejor para la comunidad
+- Muestren empatía hacia otros miembros
 
-## 🐛 Reportar Bugs
+## ¿Cómo puedo contribuir?
 
-Antes de crear un issue, verifica que:
-- El bug no haya sido reportado anteriormente
-- El bug se reproduce en la última versión
+### Reportar Bugs
 
-### Template de Bug Report
+Antes de crear un reporte de bug:
 
-```markdown
-**Descripción del bug**
-Una descripción clara del problema.
+1. **Verifica** que no exista ya un issue similar
+2. **Recopila información** sobre el bug:
+   - ¿Qué versión del navegador usas?
+   - ¿Cuáles son los pasos para reproducirlo?
+   - ¿Cuál es el comportamiento esperado vs el actual?
+   - ¿Tienes screenshots o logs?
 
-**Pasos para reproducir**
-1. Ve a '...'
-2. Haz click en '...'
-3. Scroll hasta '...'
-4. Ver error
+### Sugerir Mejoras
 
-**Comportamiento esperado**
-Qué debería suceder.
+Las sugerencias de mejoras son bienvenidas:
 
-**Screenshots**
-Si aplica, añade capturas de pantalla.
+1. **Usa un título claro y descriptivo**
+2. **Describe el caso de uso actual** y por qué es insuficiente
+3. **Explica la mejora propuesta** con ejemplos si es posible
+4. **Considera el impacto** en usuarios existentes
 
-**Entorno:**
- - OS: [e.g. macOS, Windows]
- - Navegador: [e.g. Chrome, Safari]
- - Versión: [e.g. 22]
+### Pull Requests
 
-**Contexto adicional**
-Cualquier otra información relevante.
-```
+1. **Fork** el repositorio
+2. **Crea una rama** desde `main`:
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
+3. **Haz tus cambios** siguiendo las guías de estilo
+4. **Ejecuta los tests**:
+   ```bash
+   npm run lint
+   npm run format
+   npm test
+   ```
+5. **Commit** tus cambios usando [Conventional Commits](https://www.conventionalcommits.org/):
+   ```bash
+   git commit -m "feat: add amazing feature"
+   ```
+6. **Push** a tu fork:
+   ```bash
+   git push origin feature/amazing-feature
+   ```
+7. **Abre un Pull Request**
 
-## ✨ Proponer Nuevas Funcionalidades
+## Guías de Estilo
 
-Para proponer una nueva funcionalidad:
-
-1. Abre un issue con el prefijo `[FEATURE]`
-2. Describe el problema que resuelve
-3. Propone una solución
-4. Menciona alternativas consideradas
-
-## 🛠️ Proceso de Desarrollo
-
-### Setup Inicial
-
-```bash
-# Fork y clona el repositorio
-git clone https://github.com/TU-USUARIO/complianceflow.es.git
-cd complianceflow.es
-
-# Instala dependencias
-npm install
-
-# Crea una rama para tu feature
-git checkout -b feature/nombre-descriptivo
-```
-
-### Convención de Nombres de Ramas
-
-- `feature/` - Nuevas funcionalidades
-- `fix/` - Corrección de bugs
-- `docs/` - Cambios en documentación
-- `refactor/` - Refactorización de código
-- `test/` - Añadir o modificar tests
-- `chore/` - Tareas de mantenimiento
-
-### Convención de Commits
+### Commits
 
 Usamos [Conventional Commits](https://www.conventionalcommits.org/):
 
-```
-type(scope): subject
+- `feat:` - Nueva funcionalidad
+- `fix:` - Corrección de bug
+- `docs:` - Cambios en documentación
+- `style:` - Cambios de formato (espacios, punto y coma, etc.)
+- `refactor:` - Refactorización de código
+- `perf:` - Mejoras de performance
+- `test:` - Añadir o corregir tests
+- `chore:` - Cambios en build, CI, etc.
 
-body (opcional)
-
-footer (opcional)
-```
-
-**Tipos permitidos:**
-- `feat`: Nueva funcionalidad
-- `fix`: Corrección de bug
-- `docs`: Cambios en documentación
-- `style`: Formato, punto y coma faltantes, etc.
-- `refactor`: Refactorización de código
-- `test`: Añadir tests
-- `chore`: Tareas de mantenimiento
-- `perf`: Mejoras de rendimiento
-- `ci`: Cambios en CI/CD
-
-**Ejemplos:**
+Ejemplos:
 ```bash
-feat(api): add KYC validation endpoint
-fix(ui): resolve mobile menu overflow issue
-docs(readme): update installation instructions
+feat: add support for multi-language
+fix: resolve mobile navigation bug
+docs: update API documentation
 ```
 
-## ✅ Checklist antes del Pull Request
+### Código JavaScript
 
-Antes de enviar tu PR, asegúrate de:
+- Usa **ESLint** para validar código
+- Usa **Prettier** para formatear
+- Escribe **JSDoc comments** para funciones públicas
+- Mantén funciones **pequeñas y enfocadas**
+- Usa **nombres descriptivos**
 
-- [ ] El código sigue las convenciones del proyecto
-- [ ] Has ejecutado `npm run lint` sin errores
-- [ ] Has ejecutado `npm run format`
-- [ ] Has añadido tests si aplica
-- [ ] Todos los tests pasan (`npm test`)
-- [ ] La documentación está actualizada
-- [ ] Los commits siguen Conventional Commits
-- [ ] No hay console.logs olvidados
-- [ ] Has probado en diferentes navegadores
-
-## 📤 Envío de Pull Request
-
-1. **Actualiza tu fork**
-```bash
-git remote add upstream https://github.com/juankaspain/complianceflow.es.git
-git fetch upstream
-git merge upstream/main
+Ejemplo:
+```javascript
+/**
+ * Validate user input before API call
+ * @param {string} email - User email address
+ * @param {string} password - User password
+ * @returns {Object} Validation result with errors if any
+ */
+function validateCredentials(email, password) {
+  // Implementation
+}
 ```
-
-2. **Push a tu fork**
-```bash
-git push origin feature/nombre-descriptivo
-```
-
-3. **Crea el Pull Request**
-   - Ve a GitHub y crea un PR desde tu rama
-   - Usa una descripción clara del cambio
-   - Referencia issues relacionados
-
-### Template de Pull Request
-
-```markdown
-## Descripción
-Descripción clara de los cambios.
-
-## Tipo de cambio
-- [ ] Bug fix (cambio que resuelve un issue)
-- [ ] Nueva funcionalidad (cambio que añade funcionalidad)
-- [ ] Breaking change (cambio que rompe compatibilidad)
-- [ ] Documentación
-
-## ¿Cómo se ha probado?
-Describe las pruebas realizadas.
-
-## Checklist:
-- [ ] Mi código sigue las guías de estilo
-- [ ] He realizado self-review
-- [ ] He comentado código complejo
-- [ ] He actualizado la documentación
-- [ ] Mis cambios no generan warnings
-- [ ] He añadido tests
-- [ ] Todos los tests pasan
-
-## Screenshots (si aplica)
-```
-
-## 📝 Guía de Estilo
 
 ### HTML
-- Usa HTML5 semántico
-- Incluye atributos ARIA apropiados
-- Optimiza para SEO
-- Asegura accesibilidad WCAG 2.1 AA
+
+- Usa **semántica HTML5**
+- Incluye **ARIA labels** cuando sea necesario
+- Asegúrate de que sea **accesible** (WCAG 2.1 AA)
+- Usa **alt text** descriptivo en imágenes
 
 ### CSS
-- Usa custom properties (CSS variables)
-- Mobile-first approach
-- Nombra clases con BEM cuando sea apropiado
-- Evita !important
 
-### JavaScript
-- Usa ES6+
-- Prefiere const sobre let
-- Evita var
-- Usa arrow functions apropiadamente
-- Comenta código complejo
-- Maneja errores apropiadamente
+- Usa **custom properties** para valores reutilizables
+- Sigue la metodología **BEM** cuando sea apropiado
+- Asegúrate de que sea **responsive**
+- Optimiza para **performance** (evita selectores pesados)
 
-### Commits
-- Mensajes claros y descriptivos
-- Commits atómicos (un cambio por commit)
-- Sigue Conventional Commits
-
-## 🔍 Review Process
+## Proceso de Revisión
 
 1. Un maintainer revisará tu PR
-2. Pueden solicitar cambios
-3. Una vez aprobado, se mergeará
-4. El deploy es automático a Netlify
+2. Puede solicitar cambios o mejoras
+3. Una vez aprobado, se mergeará a `main`
+4. El deploy a producción es automático
 
-## 💬 ¿Preguntas?
+## Testing
 
-Si tienes preguntas:
-- Abre un issue con la etiqueta `question`
-- Contacta a [hola@complianceflow.es](mailto:hola@complianceflow.es)
+Antes de enviar tu PR:
 
-## 🚀 Deployment
+```bash
+# Lint
+npm run lint
 
-El deployment es automático:
-- Push a `main` → Deploy a producción
-- Pull Requests → Deploy preview automático
+# Format
+npm run format
 
-## 📚 Recursos Útiles
+# Tests unitarios
+npm run test:unit
 
-- [Netlify Docs](https://docs.netlify.com/)
-- [MDN Web Docs](https://developer.mozilla.org/)
-- [Web.dev](https://web.dev/)
-- [WCAG Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
+# Tests E2E
+npm run test:e2e
 
----
+# Performance audit
+npm run lighthouse
+```
 
-¡Gracias por contribuir a ComplianceFlow! 🚀
+## Recursos
+
+- [Documentación API](https://complianceflow.es/docs/)
+- [Issues abiertos](https://github.com/juankaspain/complianceflow.es/issues)
+- [Roadmap del proyecto](https://github.com/juankaspain/complianceflow.es/projects)
+
+## Preguntas?
+
+Si tienes preguntas, no dudes en:
+
+- Abrir un [issue](https://github.com/juankaspain/complianceflow.es/issues/new)
+- Contactar a [hola@complianceflow.es](mailto:hola@complianceflow.es)
+
+¡Gracias por contribuir! 🚀
