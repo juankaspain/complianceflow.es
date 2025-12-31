@@ -1,30 +1,57 @@
-# EditorConfig helps maintain consistent coding styles
-# https://editorconfig.org
+# EditorConfig is awesome: https://EditorConfig.org
 
+# top-most EditorConfig file
 root = true
 
+# Unix-style newlines with a newline ending every file
 [*]
-charset = utf-8
 end_of_line = lf
 insert_final_newline = true
+charset = utf-8
 trim_trailing_whitespace = true
+
+# TypeScript, JavaScript, JSX, TSX
+[*.{js,jsx,ts,tsx}]
+indent_style = space
+indent_size = 2
+max_line_length = 100
+
+# JSON
+[*.json]
 indent_style = space
 indent_size = 2
 
+# YAML
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# Markdown
 [*.md]
 trim_trailing_whitespace = false
+max_line_length = off
 
-[*.{json,yml,yaml}]
+# Package manager files
+[{package.json,package-lock.json}]
+indent_style = space
 indent_size = 2
 
+# Shell scripts
+[*.sh]
+indent_style = space
+indent_size = 2
+
+# Docker
+[{Dockerfile,*.dockerfile}]
+indent_style = space
+indent_size = 2
+
+# CSS, SCSS
+[*.{css,scss}]
+indent_style = space
+indent_size = 2
+
+# HTML
 [*.html]
+indent_style = space
 indent_size = 2
-
-[*.css]
-indent_size = 2
-
-[*.js]
-indent_size = 2
-
-[Makefile]
-indent_style = tab

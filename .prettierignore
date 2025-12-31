@@ -1,33 +1,39 @@
-# Dependencies
-node_modules
-
 # Build outputs
-.next
-out
-build
-dist
+.next/
+out/
+build/
+dist/
 
-# Coverage
-coverage
+# Dependencies
+node_modules/
 
 # Logs
+logs/
 *.log
 
+# Coverage
+coverage/
+.nyc_output/
+
 # Environment
-.env*
+.env
+.env.*
 
 # Cache
-.cache
-.temp
+.cache/
+.parcel-cache/
 
 # Lock files
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
-# Lighthouse
-.lighthouseci
+# Generated files
+tsconfig.tsbuildinfo
 
-# Generated
-*.gen.ts
-*.generated.ts
+# Public assets
+public/sw.js
+public/workbox-*.js
+
+# Markdown
+CHANGELOG.md
