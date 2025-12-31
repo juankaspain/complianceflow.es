@@ -1,0 +1,74 @@
+{
+  "name": "ComplianceFlow - APIs de Compliance",
+  "short_name": "ComplianceFlow",
+  "description": "APIs de compliance para automatizar SII, Verifactu, KYC y prevención de fraude en España.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#22c55e",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "es",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/public/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/public/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "business",
+    "finance",
+    "productivity"
+  ],
+  "screenshots": [
+    {
+      "src": "/public/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/public/screenshot-mobile.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Documentación API",
+      "short_name": "Docs",
+      "description": "Ver documentación de la API",
+      "url": "/docs/index.html",
+      "icons": [
+        {
+          "src": "/public/icon-docs.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Precios",
+      "short_name": "Pricing",
+      "description": "Ver planes y precios",
+      "url": "/#pricing",
+      "icons": [
+        {
+          "src": "/public/icon-pricing.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}
