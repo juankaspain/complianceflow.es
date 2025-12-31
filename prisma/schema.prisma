@@ -1,0 +1,390 @@
+// ComplianceFlow Database Schema
+// PostgreSQL database with Prisma ORM
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Management
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  name          String?
+  image         String?
+  password      String?
+  role          UserRole  @default(USER)
+  
+  // OAuth
+  accounts      Account[]
+  sessions      Session[]
+  
+  // User data
+  organizations OrganizationMember[]
+  audits        Audit[]
+  tasks         Task[]
+  comments      Comment[]
+  
+  // Metadata
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastLoginAt   DateTime?
+  deletedAt     DateTime?
+  
+  @@index([email])
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+  AUDITOR
+  VIEWER
+}
+
+// OAuth Accounts
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+// Sessions
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+// Organizations
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  logo        String?
+  website     String?
+  industry    String?
+  size        String?
+  
+  // Relations
+  members     OrganizationMember[]
+  audits      Audit[]
+  frameworks  Framework[]
+  
+  // Settings
+  settings    Json?
+  
+  // Metadata
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+  
+  @@index([slug])
+  @@map("organizations")
+}
+
+model OrganizationMember {
+  id             String       @id @default(cuid())
+  organizationId String
+  userId         String
+  role           MemberRole   @default(MEMBER)
+  
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  
+  @@unique([organizationId, userId])
+  @@map("organization_members")
+}
+
+enum MemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+// Compliance Frameworks
+model Framework {
+  id             String       @id @default(cuid())
+  name           String
+  slug           String       @unique
+  description    String?
+  version        String?
+  organizationId String?
+  
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  controls       Control[]
+  audits         Audit[]
+  
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  
+  @@index([slug])
+  @@map("frameworks")
+}
+
+// Controls/Requirements
+model Control {
+  id          String   @id @default(cuid())
+  frameworkId String
+  code        String
+  title       String
+  description String?  @db.Text
+  category    String?
+  priority    Priority @default(MEDIUM)
+  
+  framework   Framework @relation(fields: [frameworkId], references: [id], onDelete: Cascade)
+  tasks       Task[]
+  evidence    Evidence[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([frameworkId, code])
+  @@index([frameworkId])
+  @@map("controls")
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+// Audits
+model Audit {
+  id             String       @id @default(cuid())
+  title          String
+  description    String?      @db.Text
+  status         AuditStatus  @default(DRAFT)
+  type           AuditType    @default(INTERNAL)
+  
+  organizationId String
+  frameworkId    String?
+  assigneeId     String?
+  
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  framework      Framework?   @relation(fields: [frameworkId], references: [id])
+  assignee       User?        @relation(fields: [assigneeId], references: [id])
+  
+  tasks          Task[]
+  findings       Finding[]
+  evidence       Evidence[]
+  
+  startDate      DateTime?
+  dueDate        DateTime?
+  completedAt    DateTime?
+  
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+  
+  @@index([organizationId])
+  @@index([status])
+  @@map("audits")
+}
+
+enum AuditStatus {
+  DRAFT
+  IN_PROGRESS
+  UNDER_REVIEW
+  COMPLETED
+  ARCHIVED
+}
+
+enum AuditType {
+  INTERNAL
+  EXTERNAL
+  CERTIFICATION
+  COMPLIANCE
+}
+
+// Tasks
+model Task {
+  id          String     @id @default(cuid())
+  title       String
+  description String?    @db.Text
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
+  
+  auditId     String?
+  controlId   String?
+  assigneeId  String?
+  
+  audit       Audit?     @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  control     Control?   @relation(fields: [controlId], references: [id])
+  assignee    User?      @relation(fields: [assigneeId], references: [id])
+  
+  evidence    Evidence[]
+  comments    Comment[]
+  
+  dueDate     DateTime?
+  completedAt DateTime?
+  
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  @@index([auditId])
+  @@index([assigneeId])
+  @@index([status])
+  @@map("tasks")
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  BLOCKED
+  IN_REVIEW
+  COMPLETED
+}
+
+// Findings
+model Finding {
+  id          String         @id @default(cuid())
+  title       String
+  description String         @db.Text
+  severity    FindingSeverity @default(MEDIUM)
+  status      FindingStatus   @default(OPEN)
+  
+  auditId     String
+  audit       Audit          @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  
+  evidence    Evidence[]
+  
+  remediation String?        @db.Text
+  dueDate     DateTime?
+  resolvedAt  DateTime?
+  
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  
+  @@index([auditId])
+  @@index([status])
+  @@map("findings")
+}
+
+enum FindingSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum FindingStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  ACCEPTED_RISK
+}
+
+// Evidence/Documents
+model Evidence {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  fileUrl     String
+  fileType    String
+  fileSize    Int
+  
+  auditId     String?
+  taskId      String?
+  controlId   String?
+  findingId   String?
+  
+  audit       Audit?   @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  task        Task?    @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  control     Control? @relation(fields: [controlId], references: [id])
+  finding     Finding? @relation(fields: [findingId], references: [id])
+  
+  uploadedBy  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([auditId])
+  @@index([taskId])
+  @@map("evidence")
+}
+
+// Comments
+model Comment {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  taskId    String
+  authorId  String
+  
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([taskId])
+  @@map("comments")
+}
+
+// Activity Log
+model ActivityLog {
+  id         String   @id @default(cuid())
+  action     String
+  entityType String
+  entityId   String
+  userId     String?
+  metadata   Json?
+  ipAddress  String?
+  userAgent  String?
+  
+  createdAt  DateTime @default(now())
+  
+  @@index([entityType, entityId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("activity_logs")
+}
+
+// Notifications
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String   @db.Text
+  type      String
+  read      Boolean  @default(false)
+  link      String?
+  metadata  Json?
+  
+  createdAt DateTime @default(now())
+  readAt    DateTime?
+  
+  @@index([userId, read])
+  @@index([createdAt])
+  @@map("notifications")
+}
