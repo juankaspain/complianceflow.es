@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bienvenido a ComplianceFlow</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f8fafc;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+    }
+    .header {
+      background: linear-gradient(135deg, #0066FF 0%, #00D4FF 100%);
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .logo {
+      width: 200px;
+      height: auto;
+    }
+    .content {
+      padding: 40px 30px;
+    }
+    .title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 20px;
+    }
+    .text {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #475569;
+      margin-bottom: 20px;
+    }
+    .button {
+      display: inline-block;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #0066FF 0%, #00D4FF 100%);
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 20px 0;
+    }
+    .features {
+      background-color: #f1f5f9;
+      border-radius: 12px;
+      padding: 30px;
+      margin: 30px 0;
+    }
+    .feature {
+      display: flex;
+      align-items: start;
+      margin-bottom: 20px;
+    }
+    .feature:last-child {
+      margin-bottom: 0;
+    }
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      background-color: #0066FF;
+      border-radius: 8px;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+    .feature-content h3 {
+      margin: 0 0 5px 0;
+      font-size: 18px;
+      color: #0f172a;
+    }
+    .feature-content p {
+      margin: 0;
+      font-size: 14px;
+      color: #64748b;
+    }
+    .footer {
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 30px;
+      text-align: center;
+    }
+    .footer-links {
+      margin: 20px 0;
+    }
+    .footer-links a {
+      color: #94a3b8;
+      text-decoration: none;
+      margin: 0 10px;
+      font-size: 14px;
+    }
+    .social-links {
+      margin: 20px 0;
+    }
+    .social-links a {
+      display: inline-block;
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="10" width="40" height="40" rx="8" fill="white"/>
+        <path d="M22 20L30 28L22 36" stroke="#0066FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M14 28H28" stroke="#0066FF" stroke-width="3" stroke-linecap="round"/>
+        <text x="50" y="32" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="white">
+          ComplianceFlow
+        </text>
+        <text x="50" y="45" font-family="Arial, sans-serif" font-size="10" fill="rgba(255,255,255,0.8)">
+          Compliance via APIs
+        </text>
+      </svg>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <h1 class="title">¡Bienvenido a ComplianceFlow! 🎉</h1>
+      
+      <p class="text">
+        Hola <strong>{{name}}</strong>,
+      </p>
+      
+      <p class="text">
+        Estamos emocionados de tenerte con nosotros. ComplianceFlow está diseñado para hacer que tus procesos de compliance sean más simples, rápidos y eficientes.
+      </p>
+
+      <div style="text-align: center;">
+        <a href="{{dashboardUrl}}" class="button">
+          Acceder al Dashboard
+        </a>
+      </div>
+
+      <!-- Features -->
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon"></div>
+          <div class="feature-content">
+            <h3>API Potente</h3>
+            <p>Integra ComplianceFlow en minutos con nuestra API RESTful completa</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon"></div>
+          <div class="feature-content">
+            <h3>Seguridad Enterprise</h3>
+            <p>Tus datos están protegidos con encriptación de grado militar</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon"></div>
+          <div class="feature-content">
+            <h3>Soporte 24/7</h3>
+            <p>Nuestro equipo está siempre disponible para ayudarte</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="text">
+        <strong>Próximos pasos:</strong>
+      </p>
+      <ol class="text">
+        <li>Completa tu perfil de empresa</li>
+        <li>Configura tu primera integración</li>
+        <li>Explora nuestra documentación</li>
+        <li>Comienza a automatizar tu compliance</li>
+      </ol>
+
+      <p class="text">
+        Si tienes alguna pregunta, no dudes en contactarnos. Estamos aquí para ayudarte.
+      </p>
+
+      <p class="text">
+        ¡Bienvenido a bordo!<br>
+        <strong>El equipo de ComplianceFlow</strong>
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-links">
+        <a href="{{docsUrl}}">Documentación</a>
+        <a href="{{supportUrl}}">Soporte</a>
+        <a href="{{blogUrl}}">Blog</a>
+      </div>
+      
+      <p style="font-size: 14px; color: #94a3b8; margin: 20px 0;">
+        ComplianceFlow<br>
+        Madrid, España<br>
+        <a href="mailto:support@complianceflow.es" style="color: #94a3b8;">support@complianceflow.es</a>
+      </p>
+
+      <p style="font-size: 12px; color: #64748b;">
+        © 2025 ComplianceFlow. Todos los derechos reservados.<br>
+        <a href="{{unsubscribeUrl}}" style="color: #64748b;">Cancelar suscripción</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>
