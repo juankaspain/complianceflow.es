@@ -1,41 +1,46 @@
 {
-  "name": "ComplianceFlow",
+  "name": "ComplianceFlow - Enterprise Compliance APIs",
   "short_name": "ComplianceFlow",
-  "description": "Automatiza tus procesos de compliance con nuestra plataforma API moderna y segura",
+  "description": "Automatiza el cumplimiento normativo con APIs enterprise. ISO 27001 & SOC 2 certified.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0066FF",
-  "theme_color": "#0066FF",
+  "background_color": "#030712",
+  "theme_color": "#4F46E5",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "/logo-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     },
     {
       "src": "/logo-icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/svg+xml"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/logo-icon.svg",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/svg+xml"
     }
   ],
   "categories": ["business", "productivity", "utilities"],
-  "dir": "ltr",
-  "lang": "es",
-  "scope": "/",
-  "prefer_related_applications": false
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Documentación",
+      "short_name": "Docs",
+      "description": "API Documentation",
+      "url": "/docs",
+      "icons": [{ "src": "/logo-icon.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Demos",
+      "short_name": "Demos",
+      "description": "Interactive Demos",
+      "url": "/#demos",
+      "icons": [{ "src": "/logo-icon.svg", "sizes": "96x96" }]
+    }
+  ]
 }
