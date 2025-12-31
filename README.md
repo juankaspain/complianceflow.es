@@ -1,211 +1,231 @@
-# ComplianceFlow 🚀
+# ComplianceFlow
 
-> APIs de compliance profesionales para automatizar SII, Verifactu, KYC y prevención de fraude en España.
+<div align="center">
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-BADGE-ID/deploy-status)](https://app.netlify.com/sites/complianceflow/deploys)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+![ComplianceFlow Logo](public/logo.png)
 
-## 🎯 Sobre el Proyecto
+**Plataforma profesional de gestión de cumplimiento normativo**
 
-ComplianceFlow es una plataforma de APIs REST diseñada para automatizar procesos críticos de compliance en España:
+[![CI/CD](https://github.com/juankaspain/complianceflow.es/actions/workflows/ci.yml/badge.svg)](https://github.com/juankaspain/complianceflow.es/actions)
+[![Security Scan](https://github.com/juankaspain/complianceflow.es/actions/workflows/security-scan.yml/badge.svg)](https://github.com/juankaspain/complianceflow.es/actions)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-2.0.0-green.svg)](CHANGELOG.md)
 
-- **SII & Verifactu**: Automatización de facturación electrónica con la AEAT
-- **KYC & Onboarding**: Verificación de identidad compatible con PSD2
-- **Prevención de Fraude**: Detección en tiempo real con IA
-- **Análisis Documental**: OCR y extracción de datos con ML
+[Website](https://complianceflow.netlify.app) • [Documentation](docs/) • [API Docs](docs/API.md) • [Contributing](docs/CONTRIBUTING_GUIDE.md)
 
-## 🚀 Demo
-
-🔗 **[Ver Demo en Vivo](https://complianceflow.netlify.app)**
-
-## 📚 Documentación
-
-- [Documentación API](https://complianceflow.netlify.app/docs/)
-- [Casos de Uso](https://complianceflow.netlify.app/#casos-uso)
-- [Precios](https://complianceflow.netlify.app/#pricing)
-- [FAQ](https://complianceflow.netlify.app/#faq)
-
-## 🛠️ Stack Tecnológico
-
-### Frontend
-- **HTML5** - Semántico y accesible (WCAG 2.1 AA)
-- **CSS3** - Custom properties y responsive design
-- **JavaScript** - Vanilla JS con demos interactivas
-- **PWA Ready** - Manifest y service worker preparado
-
-### Infraestructura
-- **Netlify** - Hosting y despliegue automático
-- **Cloudflare** - CDN global y protección DDoS
-- **Azure** - Backend APIs (no incluido en este repo)
-
-### Herramientas
-- **ESLint** - Linting de código JavaScript
-- **Prettier** - Formateo consistente
-- **Lighthouse CI** - Auditorías de performance
-
-## ⚙️ Instalación y Desarrollo
-
-### Requisitos Previos
-
-```bash
-# Node.js 18+ (para herramientas de desarrollo)
-node --version
-
-# npm 9+
-npm --version
-```
-
-### Instalación
-```bash
-# Clonar el repositorio
-git clone https://github.com/juankaspain/complianceflow.es.git
-cd complianceflow.es
-
-# Instalar dependencias
-npm install
-
-# Iniciar servidor de desarrollo (opcional)
-npx serve .
-```
-
-### Comandos Disponibles
-
-```bash
-# Validar código
-npm run lint
-
-# Formatear código
-npm run format
-
-# Ejecutar tests
-npm test
-
-# Auditoría de performance
-npm run lighthouse
-```
-
-## 📦 Estructura del Proyecto
-
-```
-complianceflow.es/
-├── index.html              # Página principal
-├── manifest.json           # PWA manifest
-├── robots.txt              # SEO robots
-├── sitemap.xml             # Sitemap XML
-├── netlify.toml            # Configuración Netlify + headers
-├── package.json            # Dependencias y scripts
-├── .eslintrc.json          # Configuración ESLint
-├── .prettierrc             # Configuración Prettier
-├── src/
-│   ├── css/
-│   │   └── styles.css       # Estilos principales
-│   ├── js/
-│   │   └── main.js          # JavaScript principal
-│   └── img/                # Imágenes
-├── docs/                   # Documentación API
-├── legal/                  # Páginas legales
-└── public/                 # Assets públicos
-```
-
-## 🔒 Seguridad
-
-Este proyecto implementa:
-
-- ✅ **Content Security Policy (CSP)** - Protección XSS
-- ✅ **HTTPS Enforcement** - Todo el tráfico forzado a HTTPS
-- ✅ **Security Headers** - X-Frame-Options, HSTS, etc.
-- ✅ **Sanitización de inputs** - Validación en demos
-- ✅ **DDoS Protection** - Via Cloudflare
-
-Para reportar vulnerabilidades: [security@complianceflow.es](mailto:security@complianceflow.es)
-
-## 📊 Performance
-
-- ⚡ **Lighthouse Score**: 95+
-- ⚡ **First Contentful Paint**: < 1.5s
-- ⚡ **Time to Interactive**: < 3s
-- ⚡ **Cumulative Layout Shift**: < 0.1
-
-## 🌍 SEO
-
-- ✅ Meta tags completos (Open Graph, Twitter Cards)
-- ✅ Structured Data (JSON-LD)
-- ✅ Sitemap XML dinámico
-- ✅ Robots.txt optimizado
-- ✅ Alt tags en todas las imágenes
-- ✅ Enlaces internos optimizados
-
-## ♿ Accesibilidad
-
-- ✅ **WCAG 2.1 Nivel AA** compliant
-- ✅ Navegación por teclado completa
-- ✅ ARIA labels apropiados
-- ✅ Contraste de color adecuado (4.5:1+)
-- ✅ Textos alternativos
-- ✅ Skip links para navegación
-
-## 🚀 Despliegue
-
-El proyecto se despliega automáticamente en Netlify cuando se hace push a `main`:
-
-```bash
-# Hacer cambios
-git add .
-git commit -m "feat: add new feature"
-git push origin main
-
-# Netlify detecta el cambio y despliega automáticamente
-```
-
-### Variables de Entorno
-
-No se requieren variables de entorno para el frontend estático.
-
-## 🤝 Contribuir
-
-Las contribuciones son bienvenidas. Por favor:
-
-1. Fork el proyecto
-2. Crea una rama (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'feat: add amazing feature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-Ver [CONTRIBUTING.md](CONTRIBUTING.md) para más detalles.
-
-## 📝 Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más información.
-
-## 📧 Contacto
-
-**ComplianceFlow Team**
-
-- Email: [hola@complianceflow.es](mailto:hola@complianceflow.es)
-- Website: [https://complianceflow.netlify.app](https://complianceflow.netlify.app)
-- GitHub: [@juankaspain](https://github.com/juankaspain)
-
-## 🚀 Roadmap
-
-- [x] Landing page responsive
-- [x] SEO avanzado
-- [x] Headers de seguridad
-- [x] PWA support
-- [ ] Blog con MDX
-- [ ] Dashboard de cliente
-- [ ] Integración Stripe
-- [ ] Tests E2E completos
-- [ ] Versión multiidioma (EN)
-
-## 👏 Agradecimientos
-
-- [Netlify](https://netlify.com) - Hosting y CI/CD
-- [Cloudflare](https://cloudflare.com) - CDN y seguridad
-- [Azure](https://azure.microsoft.com) - Infraestructura backend
+</div>
 
 ---
 
-<p align="center">
-  Hecho con ❤️ en España
-</p>
+## 🌟 Features
+
+### 🔒 Enterprise-Grade Security
+- **Rate Limiting**: Protection against brute force and DDoS attacks
+- **Security Headers**: Comprehensive CSP, HSTS, and XSS protection
+- **Input Sanitization**: Automatic validation and sanitization of all user inputs
+- **Environment Validation**: Type-safe configuration with Zod
+- **OWASP Compliant**: Following industry security standards
+
+### 📊 Monitoring & Observability
+- **Structured Logging**: Comprehensive logging system with multiple levels
+- **Performance Tracking**: Real-time performance metrics and Web Vitals
+- **Error Boundaries**: Graceful error handling with user-friendly fallbacks
+- **Analytics Integration**: PostHog for user behavior tracking
+
+### ⚡ Performance Optimized
+- **Smart Caching**: Multi-layer caching (memory + browser storage)
+- **Code Splitting**: Optimized bundle sizes with automatic splitting
+- **Image Optimization**: Modern formats (AVIF, WebP) with lazy loading
+- **Edge Computing**: Global CDN distribution via Netlify
+
+### 🎯 SEO & Marketing
+- **Dynamic Metadata**: Automatic SEO optimization for all pages
+- **Structured Data**: JSON-LD for enhanced search results
+- **OpenGraph**: Social media sharing optimization
+- **Sitemap**: Automatic sitemap generation
+
+### 🛠️ Developer Experience
+- **TypeScript**: Full type safety across the codebase
+- **Modern Stack**: Next.js 14, React 18, Tailwind CSS
+- **Custom Hooks**: Reusable React hooks for common patterns
+- **Feature Flags**: Controlled feature rollout system
+- **CI/CD**: Automated testing and deployment
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18+ and npm 9+
+- Git
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/juankaspain/complianceflow.es.git
+cd complianceflow.es
+
+# Install dependencies
+npm ci
+
+# Copy environment variables
+cp .env.example .env.local
+
+# Start development server
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 📚 Documentation
+
+- **[Architecture](docs/ARCHITECTURE.md)** - System architecture and design
+- **[API Documentation](docs/API.md)** - API endpoints and usage
+- **[Contributing Guide](docs/CONTRIBUTING_GUIDE.md)** - How to contribute
+- **[Deployment Guide](docs/DEPLOYMENT.md)** - Deployment instructions
+- **[Security Policy](SECURITY.md)** - Security guidelines
+- **[Changelog](CHANGELOG.md)** - Version history
+
+---
+
+## 💻 Tech Stack
+
+### Frontend
+- **Framework**: [Next.js 14](https://nextjs.org/) (React 18)
+- **Language**: [TypeScript 5.3](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS 3.4](https://tailwindcss.com/)
+- **UI Components**: [Radix UI](https://www.radix-ui.com/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Forms**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
+
+### Infrastructure
+- **Hosting**: [Netlify](https://www.netlify.com/)
+- **Analytics**: [PostHog](https://posthog.com/)
+- **CI/CD**: [GitHub Actions](https://github.com/features/actions)
+
+### Development
+- **Testing**: [Vitest](https://vitest.dev/) + [Playwright](https://playwright.dev/)
+- **Linting**: [ESLint](https://eslint.org/) + [Prettier](https://prettier.io/)
+- **Git Hooks**: [Husky](https://typicode.github.io/husky/) + [Lint-staged](https://github.com/okonet/lint-staged)
+
+---
+
+## 🛠️ Development
+
+### Available Scripts
+
+```bash
+# Development
+npm run dev              # Start dev server
+npm run build            # Build for production
+npm run start            # Start production server
+
+# Code Quality
+npm run lint             # Run ESLint
+npm run lint:fix         # Fix ESLint errors
+npm run type-check       # Check TypeScript types
+npm run format           # Format code with Prettier
+
+# Testing
+npm run test             # Run all tests
+npm run test:unit        # Run unit tests
+npm run test:e2e         # Run E2E tests
+npm run test:watch       # Watch mode for tests
+
+# Performance
+npm run lighthouse       # Run Lighthouse audit
+```
+
+### Project Structure
+
+```
+src/
+├── app/              # Next.js app directory (routes)
+├── components/       # React components
+├── hooks/            # Custom React hooks
+├── lib/              # Utility libraries
+│   ├── api-client.ts # API client with retry logic
+│   ├── cache.ts      # Caching utilities
+│   ├── logger.ts     # Structured logging
+│   ├── monitoring.ts # Performance monitoring
+│   ├── sanitize.ts   # Input sanitization
+│   └── seo.ts        # SEO utilities
+├── styles/           # Global styles
+├── types/            # TypeScript types
+└── middleware.ts     # Next.js middleware (rate limiting)
+```
+
+---
+
+## 🔒 Security
+
+We take security seriously. See [SECURITY.md](SECURITY.md) for:
+- Reporting vulnerabilities
+- Security features
+- Best practices
+- Compliance information
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](docs/CONTRIBUTING_GUIDE.md) for:
+- Code of conduct
+- Development workflow
+- Coding standards
+- Pull request process
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 💬 Support
+
+- **Issues**: [GitHub Issues](https://github.com/juankaspain/complianceflow.es/issues)
+- **Email**: support@complianceflow.es
+- **Security**: security@complianceflow.es
+
+---
+
+## 🌟 Star History
+
+If you find this project useful, please consider giving it a star ⭐
+
+---
+
+## 👥 Team
+
+**Maintainer**: [Juan Carlos Garcia Arriero](https://github.com/juankaspain)
+
+---
+
+## 🚀 Roadmap
+
+- [x] Professional SaaS architecture
+- [x] Comprehensive security implementation
+- [x] CI/CD pipelines
+- [x] Testing infrastructure
+- [ ] Sentry integration
+- [ ] Multi-language support (i18n)
+- [ ] PWA features
+- [ ] Advanced analytics dashboard
+- [ ] API v2 with GraphQL
+- [ ] Mobile app
+
+---
+
+<div align="center">
+
+**Built with ❤️ by the ComplianceFlow team**
+
+[Website](https://complianceflow.netlify.app) • [Twitter](https://twitter.com/complianceflow) • [LinkedIn](https://linkedin.com/company/complianceflow)
+
+</div>
