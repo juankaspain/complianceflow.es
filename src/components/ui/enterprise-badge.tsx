@@ -10,6 +10,7 @@ import {
   Globe,
   Award,
   FileCheck,
+  Sparkles,
 } from 'lucide-react';
 
 interface CertificationBadgeProps {
@@ -26,26 +27,28 @@ const CertificationBadge: React.FC<CertificationBadgeProps> = ({
   color,
 }) => {
   const colorClasses = {
-    teal: 'bg-teal-500/10 border-teal-500/20 text-teal-400 hover:bg-teal-500/15',
-    blue: 'bg-blue-500/10 border-blue-500/20 text-blue-400 hover:bg-blue-500/15',
-    amber: 'bg-amber-500/10 border-amber-500/20 text-amber-400 hover:bg-amber-500/15',
+    teal: 'from-teal-500/5 to-teal-400/0 border-teal-500/30 text-teal-300 hover:border-teal-500/50 hover:from-teal-500/10',
+    blue: 'from-blue-500/5 to-blue-400/0 border-blue-500/30 text-blue-300 hover:border-blue-500/50 hover:from-blue-500/10',
+    amber: 'from-amber-500/5 to-amber-400/0 border-amber-500/30 text-amber-300 hover:border-amber-500/50 hover:from-amber-500/10',
     emerald:
-      'bg-emerald-500/10 border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/15',
+      'from-emerald-500/5 to-emerald-400/0 border-emerald-500/30 text-emerald-300 hover:border-emerald-500/50 hover:from-emerald-500/10',
   };
 
   return (
     <motion.div
-      whileHover={{ scale: 1.02, translateY: -2 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className={`group relative flex flex-col items-center gap-3 rounded-xl border px-4 py-6 transition-all duration-300 ${colorClasses[color]}`}
+      whileHover={{ scale: 1.03, translateY: -4 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+      className={`group relative flex flex-col items-center gap-2 rounded-lg border bg-gradient-to-br px-3 py-5 sm:px-4 sm:py-6 transition-all duration-300 ${colorClasses[color]} overflow-hidden`}
     >
-      {/* Glow effect on hover */}
-      <div className="absolute inset-0 rounded-xl opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
+      {/* Subtle glow effect */}
+      <div className="absolute -inset-0.5 rounded-lg bg-gradient-to-r opacity-0 group-hover:opacity-20 blur transition-opacity duration-300 -z-10" />
 
-      <div className="relative z-10 text-2xl">{icon}</div>
-      <div className="relative z-10 text-center">
-        <h4 className="font-semibold text-sm">{title}</h4>
-        <p className="text-xs opacity-75 mt-1">{description}</p>
+      <div className="relative z-10 text-2xl group-hover:scale-110 transition-transform duration-300">
+        {icon}
+      </div>
+      <div className="relative z-10 text-center space-y-0.5">
+        <h4 className="font-bold text-xs sm:text-sm leading-tight">{title}</h4>
+        <p className="text-xs opacity-75 leading-tight">{description}</p>
       </div>
     </motion.div>
   );
@@ -65,19 +68,19 @@ export const EnterpriseBadge: React.FC<EnterpriseBadgeProps> = ({
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
+        staggerChildren: 0.08,
+        delayChildren: 0.15,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 15 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.5,
+        duration: 0.4,
         ease: 'easeOut',
       },
     },
@@ -86,41 +89,37 @@ export const EnterpriseBadge: React.FC<EnterpriseBadgeProps> = ({
   if (variant === 'minimal') {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`relative rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/0 p-8 backdrop-blur-md ${className}`}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className={`relative rounded-lg border border-white/10 bg-gradient-to-br from-white/3 to-transparent p-6 backdrop-blur-sm ${className}`}
       >
-        {/* Animated background grid */}
-        <div className="absolute inset-0 -z-10 overflow-hidden rounded-2xl">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(88,199,192,0.1),transparent_50%)]" />
-        </div>
-
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4">
           {/* Left section */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 min-w-0">
             <motion.div
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.6 }}
-              className="relative"
+              whileHover={{ rotate: 180 }}
+              transition={{ duration: 0.4 }}
+              className="relative flex-shrink-0"
             >
-              <Shield className="h-10 w-10 text-teal-400" strokeWidth={1.5} />
-              <div className="absolute inset-0 animate-pulse rounded-full bg-teal-400/20 blur" />
+              <Shield className="h-8 w-8 text-teal-400" strokeWidth={1.5} />
+              <div className="absolute inset-0 animate-pulse rounded-full bg-teal-400/15 blur-md" />
             </motion.div>
 
-            <div>
-              <p className="font-bold text-lg text-white">ComplianceFlow</p>
-              <p className="text-sm text-gray-400">Enterprise Compliance APIs</p>
+            <div className="min-w-0">
+              <p className="font-bold text-base text-white truncate">ComplianceFlow</p>
+              <p className="text-xs text-gray-400 truncate">Enterprise APIs</p>
             </div>
           </div>
 
           {/* Right section */}
-          <div className="text-right">
-            <div className="flex items-center justify-end gap-2 text-xs text-emerald-400">
-              <Check className="h-4 w-4" />
-              <span className="font-semibold">Enterprise Grade</span>
-            </div>
-          </div>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="flex items-center justify-end gap-1.5 text-xs text-emerald-400 font-semibold flex-shrink-0 px-2 py-1 bg-emerald-500/10 rounded"
+          >
+            <Check className="h-3.5 w-3.5" />
+            <span>Verified</span>
+          </motion.div>
         </div>
       </motion.div>
     );
@@ -129,18 +128,18 @@ export const EnterpriseBadge: React.FC<EnterpriseBadgeProps> = ({
   if (variant === 'compact') {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`rounded-lg border border-teal-500/20 bg-teal-500/5 p-4 backdrop-blur-sm ${className}`}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className={`rounded-lg border border-teal-500/20 bg-gradient-to-br from-teal-500/8 to-teal-400/0 p-4 backdrop-blur-sm ${className}`}
       >
-        <div className="space-y-2">
+        <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <Shield className="h-5 w-5 text-teal-400" />
-            <span className="font-bold text-white">ComplianceFlow</span>
+            <Shield className="h-5 w-5 text-teal-400 flex-shrink-0" />
+            <span className="font-bold text-sm text-white">ComplianceFlow</span>
           </div>
-          <p className="text-xs text-gray-400">
-            ISO 27001 • SOC 2 Type II • GDPR • Data Privacy
+          <p className="text-xs text-gray-400 leading-relaxed">
+            ISO 27001 • SOC 2 Type II • GDPR • SLA 99.99%
           </p>
         </div>
       </motion.div>
@@ -153,107 +152,116 @@ export const EnterpriseBadge: React.FC<EnterpriseBadgeProps> = ({
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className={`space-y-8 ${className}`}
+      className={`space-y-12 ${className}`}
     >
-      {/* Header */}
-      <motion.div
-        variants={itemVariants}
-        className="space-y-3 text-center"
-      >
+      {/* Premium Header */}
+      <motion.div variants={itemVariants} className="space-y-4 text-center">
         <motion.div
           className="flex items-center justify-center gap-3"
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.02 }}
         >
           <motion.div
             animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-            className="relative"
+            transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+            className="relative flex-shrink-0"
           >
-            <Shield className="h-12 w-12 text-teal-400" strokeWidth={1.5} />
-            <div className="absolute inset-0 animate-pulse rounded-full bg-teal-400/20 blur-lg" />
+            <Shield className="h-14 w-14 text-teal-400" strokeWidth={1.2} />
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="absolute inset-0 rounded-full bg-teal-400/20 blur-lg -z-10"
+            />
           </motion.div>
           <div>
-            <h3 className="text-2xl font-bold text-white">ComplianceFlow</h3>
-            <p className="text-sm text-gray-400">Enterprise Compliance APIs</p>
+            <motion.h2 className="text-3xl sm:text-4xl font-bold text-white leading-tight">
+              ComplianceFlow
+            </motion.h2>
+            <p className="text-sm sm:text-base text-teal-300 font-semibold mt-1">
+              Enterprise Compliance APIs
+            </p>
           </div>
         </motion.div>
       </motion.div>
 
-      {/* Description */}
-      <motion.p
-        variants={itemVariants}
-        className="mx-auto max-w-2xl text-center text-gray-300 leading-relaxed"
-      >
-        Infraestructura enterprise-grade con las certificaciones y estándares más
-        exigentes del sector. Protegemos tu cumplimiento normativo con soluciones
-        escalables, seguras y confiables.
-      </motion.p>
+      {/* Professional Description */}
+      <motion.div variants={itemVariants} className="space-y-3">
+        <p className="mx-auto max-w-3xl text-center text-base sm:text-lg text-gray-300 leading-relaxed">
+          Infraestructura enterprise-grade con las certificaciones y estándares
+          más exigentes del sector.
+        </p>
+        <p className="mx-auto max-w-3xl text-center text-sm text-gray-400">
+          Protegemos tu cumplimiento normativo con soluciones escalables, seguras
+          y confiables.
+        </p>
+      </motion.div>
 
-      {/* Certifications Grid */}
+      {/* Certifications Grid - IMPROVED */}
       <motion.div
         variants={itemVariants}
-        className="grid grid-cols-2 gap-4 sm:grid-cols-4"
+        className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4"
       >
         <CertificationBadge
-          icon={<Lock className="h-6 w-6" />}
+          icon={<Lock className="h-5 w-5 sm:h-6 sm:w-6" />}
           title="ISO 27001"
-          description="Information Security Management"
+          description="Security"
           color="teal"
         />
         <CertificationBadge
-          icon={<FileCheck className="h-6 w-6" />}
+          icon={<FileCheck className="h-5 w-5 sm:h-6 sm:w-6" />}
           title="SOC 2 Type II"
-          description="Security & Compliance"
+          description="Compliance"
           color="blue"
         />
         <CertificationBadge
-          icon={<Globe className="h-6 w-6" />}
-          title="GDPR Compliant"
-          description="Data Privacy Protection"
+          icon={<Globe className="h-5 w-5 sm:h-6 sm:w-6" />}
+          title="GDPR"
+          description="Privacy"
           color="amber"
         />
         <CertificationBadge
-          icon={<Award className="h-6 w-6" />}
-          title="Enterprise SLA"
-          description="99.99% Uptime Guarantee"
+          icon={<Award className="h-5 w-5 sm:h-6 sm:w-6" />}
+          title="SLA 99.99%"
+          description="Uptime"
           color="emerald"
         />
       </motion.div>
 
-      {/* Additional features */}
+      {/* Feature Highlights - IMPROVED */}
       <motion.div
         variants={itemVariants}
-        className="grid grid-cols-1 gap-4 sm:grid-cols-3"
+        className="grid grid-cols-1 gap-3 sm:grid-cols-3"
       >
         {[
           {
             icon: <Zap className="h-5 w-5" />,
-            title: 'Zero-Trust Architecture',
-            description:
-              'Seguridad de nivel militar en cada punto de acceso',
+            title: 'Zero-Trust Security',
+            description: 'Seguridad de nivel militar',
           },
           {
-            icon: <Shield className="h-5 w-5" />,
-            title: 'Encryption at Rest & Transit',
-            description: 'AES-256 y TLS 1.3 estándar',
+            icon: <Lock className="h-5 w-5" />,
+            title: 'Encryption AES-256',
+            description: 'At rest & in transit',
           },
           {
             icon: <Check className="h-5 w-5" />,
-            title: 'Audit Trails Completos',
-            description: 'Registro inmutable de todas las operaciones',
+            title: 'Complete Audit Logs',
+            description: 'Immutable records',
           },
         ].map((feature, index) => (
           <motion.div
             key={index}
-            whileHover={{ translateY: -4 }}
-            className="group rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:border-teal-500/30"
+            whileHover={{ scale: 1.02, translateY: -2 }}
+            className="group relative rounded-lg border border-white/10 bg-gradient-to-br from-white/4 to-transparent p-4 backdrop-blur-sm transition-all duration-300 hover:border-white/20 overflow-hidden"
           >
-            <div className="flex items-start gap-3">
-              <div className="mt-1 text-teal-400 group-hover:scale-110 transition-transform duration-300">
+            <div className="absolute inset-0 bg-gradient-to-r from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
+            <div className="flex items-start gap-3 relative z-10">
+              <div className="text-teal-400 group-hover:scale-110 transition-transform duration-300 flex-shrink-0 mt-0.5">
                 {feature.icon}
               </div>
-              <div>
-                <h4 className="font-semibold text-white">{feature.title}</h4>
+              <div className="min-w-0">
+                <h4 className="font-semibold text-sm text-white leading-tight">
+                  {feature.title}
+                </h4>
                 <p className="text-xs text-gray-400 mt-1">{feature.description}</p>
               </div>
             </div>
@@ -261,34 +269,40 @@ export const EnterpriseBadge: React.FC<EnterpriseBadgeProps> = ({
         ))}
       </motion.div>
 
-      {/* Stats */}
+      {/* Statistics - IMPROVED STYLING */}
       <motion.div
         variants={itemVariants}
-        className="grid grid-cols-3 gap-4 rounded-xl border border-white/10 bg-gradient-to-r from-teal-500/10 to-blue-500/10 p-6 backdrop-blur-sm"
+        className="grid grid-cols-3 gap-2 sm:gap-4 rounded-lg border border-white/10 bg-gradient-to-r from-teal-500/8 via-white/2 to-blue-500/8 p-6 sm:p-8 backdrop-blur-sm"
       >
         {[
-          { label: 'Empresas Confiadas', value: '+500' },
-          { label: 'Países Cubiertos', value: '45+' },
-          { label: 'Datos Protegidos', value: 'Petabytes' },
+          { label: 'Companies', value: '+500', icon: '🏢' },
+          { label: 'Countries', value: '45+', icon: '🌍' },
+          { label: 'Data Protected', value: 'PB+', icon: '🔒' },
         ].map((stat, index) => (
           <motion.div
             key={index}
-            className="text-center"
+            className="text-center space-y-1"
             whileHover={{ scale: 1.05 }}
           >
-            <p className="text-2xl font-bold text-teal-400">{stat.value}</p>
-            <p className="text-xs text-gray-400 mt-2">{stat.label}</p>
+            <p className="text-lg opacity-0">{stat.icon}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-teal-400 leading-tight">
+              {stat.value}
+            </p>
+            <p className="text-xs text-gray-400">{stat.label}</p>
           </motion.div>
         ))}
       </motion.div>
 
-      {/* Footer note */}
-      <motion.p
+      {/* Trust Badge */}
+      <motion.div
         variants={itemVariants}
-        className="text-center text-xs text-gray-500 border-t border-white/10 pt-6"
+        className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-white/10 bg-white/3 backdrop-blur-sm"
       >
-        Confía en los mismos estándares que utilizan Fortune 500 empresas
-      </motion.p>
+        <Sparkles className="h-4 w-4 text-amber-400" />
+        <p className="text-xs sm:text-sm text-gray-400 text-center">
+          Confía en los mismos estándares que utilizan empresas Fortune 500
+        </p>
+      </motion.div>
     </motion.div>
   );
 };
