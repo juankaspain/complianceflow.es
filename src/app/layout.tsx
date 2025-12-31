@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Analytics } from '@/lib/analytics/posthog';
@@ -11,6 +11,14 @@ const inter = Inter({
   display: 'swap',
   preload: true,
 });
+
+// Viewport configuration (separate from metadata as per Next.js 14 requirements)
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#4F46E5',
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://complianceflow.netlify.app'),
@@ -80,11 +88,6 @@ export const metadata: Metadata = {
     shortcut: '/favicon.svg',
   },
   manifest: '/manifest.json',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-  },
   verification: {
     google: 'google-site-verification-code', // Add your verification code
   },
@@ -103,8 +106,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         
-        {/* Theme color */}
-        <meta name="theme-color" content="#4F46E5" />
+        {/* msapplication-TileColor for Windows */}
         <meta name="msapplication-TileColor" content="#4F46E5" />
         
         {/* Apple specific */}
