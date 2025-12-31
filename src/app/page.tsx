@@ -1,179 +1,116 @@
 import DemoSection from '@/components/sections/DemoSection';
+import SecuritySection from '@/components/sections/SecuritySection';
+import FeaturesSection from '@/components/sections/FeaturesSection';
+import CTASection from '@/components/sections/CTASection';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'ComplianceFlow - Plataforma Enterprise de Gestión de Cumplimiento',
+  title: 'ComplianceFlow - Enterprise Compliance APIs',
   description:
-    'Automatiza tu cumplimiento normativo con ComplianceFlow. Gestión de GDPR, ISO, SOC2 y más con IA.',
+    'Infraestructura enterprise-grade con las certificaciones y estándares más exigentes del sector.',
   keywords: [
     'compliance',
     'cumplimiento normativo',
     'GDPR',
     'ISO 27001',
     'SOC2',
-    'gestión de riesgos',
+    'enterprise security',
   ],
   openGraph: {
-    title: 'ComplianceFlow - Gestión de Cumplimiento Enterprise',
+    title: 'ComplianceFlow - Enterprise Compliance APIs',
     description:
-      'Automatiza tu cumplimiento normativo con la plataforma líder del mercado',
+      'Seguridad y compliance por diseño. Infraestructura certificada ISO 27001.',
     url: 'https://complianceflow.netlify.app',
     siteName: 'ComplianceFlow',
     locale: 'es_ES',
     type: 'website',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'ComplianceFlow - Gestión de Cumplimiento',
-    description: 'Automatiza tu cumplimiento normativo con IA',
-  },
 };
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-white to-secondary/5 py-20 sm:py-32">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-gray-950">
+      {/* Hero Section - Dark Theme */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 py-32 sm:py-40">
+        <div className="absolute inset-0">
+          {/* Grid pattern background */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f46e520_1px,transparent_1px),linear-gradient(to_bottom,#4f46e520_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+          {/* Gradient overlays */}
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent" />
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
+        </div>
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              Gestión de Cumplimiento{' '}
-              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                Simplificada
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-sm text-primary-300">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
+              </span>
+              Enterprise-grade compliance APIs
+            </div>
+
+            <h1 className="text-5xl font-bold tracking-tight text-white sm:text-7xl lg:text-8xl">
+              <span className="block">Seguridad y compliance</span>
+              <span className="mt-2 block bg-gradient-to-r from-primary-400 via-primary-300 to-secondary-400 bg-clip-text text-transparent">
+                por diseño
               </span>
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600 sm:text-xl">
-              Automatiza tu cumplimiento normativo con la plataforma enterprise
-              más avanzada del mercado. GDPR, ISO 27001, SOC2 y más.
+
+            <p className="mt-8 text-xl leading-relaxed text-gray-300 sm:text-2xl max-w-4xl mx-auto">
+              Infraestructura enterprise-grade con las certificaciones y estándares
+              más exigentes del sector.
             </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
+
+            <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
                 href="#demos"
-                className="rounded-lg bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all"
+                className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white transition-all duration-200 bg-primary hover:bg-primary-600 rounded-xl shadow-lg shadow-primary/50 hover:shadow-primary/70 hover:scale-105"
               >
-                Probar demos
+                <span>Probar demos</span>
+                <svg className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
               </a>
               <a
                 href="/docs"
-                className="text-base font-semibold leading-7 text-gray-900 hover:text-primary transition-colors"
+                className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white transition-all duration-200 bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 hover:border-white/20"
               >
-                Ver documentación <span aria-hidden="true">→</span>
+                Ver documentación
               </a>
             </div>
-          </div>
 
-          {/* Stats */}
-          <div className="mt-16 grid grid-cols-2 gap-8 sm:grid-cols-4">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary">99.9%</div>
-              <div className="mt-1 text-sm text-gray-600">Uptime</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary">500+</div>
-              <div className="mt-1 text-sm text-gray-600">Empresas</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary">50+</div>
-              <div className="mt-1 text-sm text-gray-600">Normativas</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary">24/7</div>
-              <div className="mt-1 text-sm text-gray-600">Soporte</div>
+            {/* Trusted by section */}
+            <div className="mt-20 pt-10 border-t border-gray-800">
+              <p className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-8">
+                Confianza de empresas líderes
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center opacity-60">
+                {['500+ Empresas', '99.9% Uptime', 'ISO 27001', 'SOC 2 Type II'].map((item) => (
+                  <div key={item} className="text-lg font-semibold text-gray-400">
+                    {item}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Demo Section - INTEGRADO AUTOMÁTICAMENTE */}
-      <section id="demos">
+      {/* Security & Compliance Section */}
+      <SecuritySection />
+
+      {/* Demo Section */}
+      <section id="demos" className="bg-gray-950">
         <DemoSection />
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-              Todo lo que necesitas para el cumplimiento
-            </h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Funcionalidades enterprise para empresas de todos los tamaños
-            </p>
-          </div>
-
-          <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                </svg>
-              </div>
-              <h3 className="mt-4 text-xl font-semibold text-gray-900">
-                Seguridad Certificada
-              </h3>
-              <p className="mt-2 text-gray-600">
-                Cumplimiento de SOC2, ISO 27001 y certificaciones de seguridad internacionales.
-              </p>
-            </div>
-
-            <div className="rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-                </svg>
-              </div>
-              <h3 className="mt-4 text-xl font-semibold text-gray-900">
-                Automatización IA
-              </h3>
-              <p className="mt-2 text-gray-600">
-                Automatiza tareas repetitivas con IA y reduce el tiempo de cumplimiento en un 80%.
-              </p>
-            </div>
-
-            <div className="rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow">
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
-                </svg>
-              </div>
-              <h3 className="mt-4 text-xl font-semibold text-gray-900">
-                Reporting Avanzado
-              </h3>
-              <p className="mt-2 text-gray-600">
-                Informes detallados y dashboards en tiempo real para auditorías y directivos.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <FeaturesSection />
 
       {/* CTA Section */}
-      <section className="bg-primary/5 py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-              ¿Listo para simplificar tu cumplimiento?
-            </h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Únete a más de 500 empresas que confían en ComplianceFlow
-            </p>
-            <div className="mt-8 flex justify-center gap-4">
-              <a
-                href="/signup"
-                className="rounded-lg bg-primary px-8 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary/90 transition-all"
-              >
-                Comenzar gratis
-              </a>
-              <a
-                href="/contact"
-                className="rounded-lg border-2 border-primary px-8 py-3 text-base font-semibold text-primary hover:bg-primary/10 transition-all"
-              >
-                Contactar ventas
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CTASection />
     </main>
   );
 }
