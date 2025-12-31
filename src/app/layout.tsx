@@ -1,35 +1,39 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
-import '@/styles/globals.css';
 import { siteConfig } from '@/config/site';
-import { cn } from '@/lib/utils';
+import '@/styles/globals.css';
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-inter',
   display: 'swap',
+  variable: '--font-inter',
 });
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+  ],
+};
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
-    default: siteConfig.name + ' · APIs de Compliance para SII, KYC y AML',
+    default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  keywords: [
-    'SII API',
-    'Verifactu',
-    'KYC España',
-    'API compliance',
-    'AEAT automatización',
-    'PSD2',
-    'AML',
-    'detección fraude',
-    'onboarding digital',
+  keywords: siteConfig.keywords,
+  authors: [
+    {
+      name: 'ComplianceFlow',
+      url: siteConfig.url,
+    },
   ],
-  authors: [{ name: 'ComplianceFlow' }],
   creator: 'ComplianceFlow',
-  metadataBase: new URL(siteConfig.url),
   openGraph: {
     type: 'website',
     locale: 'es_ES',
@@ -78,12 +82,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang="es" className={inter.variable} suppressHydrationWarning>
       <head />
-      <body className={cn(
-        'min-h-screen bg-background font-sans antialiased',
-        inter.variable
-      )}>
+      <body className="min-h-screen bg-background font-sans antialiased">
         <a href="#main-content" className="skip-link">
           Saltar al contenido principal
         </a>
