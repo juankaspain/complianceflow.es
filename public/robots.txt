@@ -1,0 +1,66 @@
+# ComplianceFlow - robots.txt
+# https://complianceflow.netlify.app/robots.txt
+
+# Global rules
+User-agent: *
+Allow: /
+
+# Disallow private/admin areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /dashboard/settings/
+Disallow: /_next/
+Disallow: /private/
+
+# Allow public pages
+Allow: /api/og/*
+
+# Block specific bots
+User-agent: CCBot
+Disallow: /
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+# Allow all good bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: facebot
+Allow: /
+
+User-agent: ia_archiver
+Allow: /
+
+# Crawl delay for good behavior
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://complianceflow.netlify.app/sitemap.xml
+Sitemap: https://complianceflow.netlify.app/sitemap-0.xml
+Sitemap: https://complianceflow.netlify.app/sitemap-es.xml
+Sitemap: https://complianceflow.netlify.app/sitemap-en.xml
+
+# Host preference
+Host: https://complianceflow.netlify.app

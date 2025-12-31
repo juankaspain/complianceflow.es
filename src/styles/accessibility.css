@@ -1,0 +1,228 @@
+/**
+ * Accessibility Styles
+ * WCAG 2.1 Level AA compliance
+ */
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Make sr-only content visible on focus */
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Focus visible styles (keyboard navigation) */
+.focus-visible:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Skip link */
+.skip-link {
+  @apply sr-only;
+}
+
+.skip-link:focus {
+  @apply not-sr-only absolute top-4 left-4 z-50 rounded bg-blue-600 px-4 py-2 text-white;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  * {
+    border-color: currentColor !important;
+  }
+
+  button,
+  a {
+    text-decoration: underline;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus indicators */
+:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Remove outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Link styles for better accessibility */
+a {
+  text-decoration-skip-ink: auto;
+}
+
+/* Ensure interactive elements have adequate touch targets (min 44x44px) */
+button,
+a,
+input[type='button'],
+input[type='submit'],
+input[type='reset'] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Color contrast for disabled elements */
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Ensure form labels are always visible */
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* Error messages should be clearly visible */
+.error-message {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+/* Success messages */
+.success-message {
+  color: #16a34a;
+  font-weight: 500;
+}
+
+/* Loading states */
+[aria-busy='true'] {
+  cursor: wait;
+}
+
+/* Invalid form fields */
+[aria-invalid='true'] {
+  border-color: #dc2626;
+  border-width: 2px;
+}
+
+/* Required field indicator */
+[aria-required='true']::after {
+  content: ' *';
+  color: #dc2626;
+}
+
+/* Tooltip accessibility */
+[role='tooltip'] {
+  position: absolute;
+  z-index: 9999;
+  padding: 0.5rem 0.75rem;
+  background: #1f2937;
+  color: #ffffff;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+/* Modal/Dialog accessibility */
+[role='dialog'],
+[role='alertdialog'] {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Backdrop for modals */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+/* Alert accessibility */
+[role='alert'] {
+  padding: 1rem;
+  border-radius: 0.375rem;
+  border-left: 4px solid currentColor;
+}
+
+/* Status messages */
+[role='status'] {
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+}
+
+/* Progress indicators */
+[role='progressbar'] {
+  min-width: 100px;
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+/* Skeleton loading */
+.skeleton {
+  animation: skeleton-loading 1s linear infinite alternate;
+  background: linear-gradient(
+    90deg,
+    #f3f4f6 0%,
+    #e5e7eb 50%,
+    #f3f4f6 100%
+  );
+  background-size: 200% 100%;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  a[href]::after {
+    content: ' (' attr(href) ')';
+  }
+
+  abbr[title]::after {
+    content: ' (' attr(title) ')';
+  }
+}
