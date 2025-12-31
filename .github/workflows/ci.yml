@@ -1,44 +1,72 @@
-name: CI/CD Pipeline
+name: CI Pipeline
 
 on:
   push:
-    branches: [ main, develop, feat/* ]
+    branches: [main, develop, 'feat/**']
   pull_request:
-    branches: [ main ]
+    branches: [main, develop]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  CACHE_VERSION: v1
 
 jobs:
   lint:
     name: Code Quality
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
         
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
           
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            node_modules
+            .next/cache
+          key: ${{ runner.os }}-node-${{ env.CACHE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ env.CACHE_VERSION }}-
+          
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --prefer-offline
         
       - name: Run ESLint
         run: npm run lint
-        continue-on-error: true
         
       - name: Check formatting
         run: npm run format:check
-        continue-on-error: true
       
       - name: Type check
         run: npm run type-check
-        continue-on-error: true
+
+      - name: Report results
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const status = '${{ job.status }}';
+            console.log(`Lint job ${status}`);
 
   security:
     name: Security Audit
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     
     steps:
       - name: Checkout code
@@ -47,23 +75,30 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ env.CACHE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
           
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --prefer-offline
         
-      - name: Run security audit
+      - name: Run npm audit
         run: npm audit --audit-level=moderate
         continue-on-error: true
         
-      - name: Check for vulnerable dependencies
-        run: npm audit --production
+      - name: Check production dependencies
+        run: npm audit --production --audit-level=high
         continue-on-error: true
 
   build:
-    name: Build Check
+    name: Build Verification
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     
     steps:
       - name: Checkout code
@@ -72,19 +107,67 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            node_modules
+            .next/cache
+          key: ${{ runner.os }}-node-${{ env.CACHE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
           
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --prefer-offline
         
       - name: Build project
         run: npm run build
+        env:
+          NODE_ENV: production
 
-  notify:
-    name: Notify Status
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            .next
+            out
+          retention-days: 7
+
+  test:
+    name: Unit Tests
     runs-on: ubuntu-latest
-    needs: [lint, security, build]
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ env.CACHE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
+          
+      - name: Install dependencies
+        run: npm ci --prefer-offline
+        
+      - name: Run tests
+        run: npm run test:unit
+        continue-on-error: true
+
+  status-check:
+    name: CI Status
+    runs-on: ubuntu-latest
+    needs: [lint, security, build, test]
     if: always()
     
     steps:
@@ -93,10 +176,16 @@ jobs:
           echo "Lint: ${{ needs.lint.result }}"
           echo "Security: ${{ needs.security.result }}"
           echo "Build: ${{ needs.build.result }}"
+          echo "Test: ${{ needs.test.result }}"
           
           if [[ "${{ needs.build.result }}" == "failure" ]]; then
             echo "❌ Build failed - blocking deployment"
             exit 1
           fi
           
-          echo "✅ CI pipeline completed"
+          if [[ "${{ needs.lint.result }}" == "failure" ]]; then
+            echo "⚠️  Lint failed - please fix code quality issues"
+            exit 1
+          fi
+          
+          echo "✅ CI pipeline completed successfully"
