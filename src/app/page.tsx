@@ -2,6 +2,10 @@ import DemoSection from '@/components/sections/DemoSection';
 import SecuritySection from '@/components/sections/SecuritySection';
 import FeaturesSection from '@/components/sections/FeaturesSection';
 import CTASection from '@/components/sections/CTASection';
+import TestimonialsSection from '@/components/sections/TestimonialsSection';
+import NewsletterSection from '@/components/sections/NewsletterSection';
+import SocialProof from '@/components/ui/SocialProof';
+import ScrollToTop from '@/components/ui/ScrollToTop';
 import { Metadata } from 'next';
 import Image from 'next/image';
 
@@ -261,6 +265,9 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Social Proof Badges */}
+        <SocialProof />
+
         {/* Security & Compliance Section */}
         <SecuritySection />
 
@@ -272,8 +279,17 @@ export default function HomePage() {
         {/* Features Section */}
         <FeaturesSection />
 
+        {/* Testimonials Section */}
+        <TestimonialsSection />
+
+        {/* Newsletter Section */}
+        <NewsletterSection />
+
         {/* CTA Section */}
         <CTASection />
+
+        {/* Scroll to Top Button */}
+        <ScrollToTop />
       </main>
     </>
   );
