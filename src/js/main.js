@@ -443,7 +443,7 @@ function init() {
       'font-size: 20px; font-weight: bold; color: #22c55e;'
     );
     console.log(
-      '%c¿Interesado en nuestras APIs? Visita https://complianceflow.es/docs/',
+      '%c¿Interesado en nuestras APIs? Visita https://complianceflow.netlify.app/docs/',
       'font-size: 14px; color: #3b82f6;'
     );
     console.log(
