@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # Development Next.js Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: complianceflow-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_SITE_URL=http://localhost:3000
+      - NEXT_PUBLIC_API_URL=http://localhost:3000/api
+    env_file:
+      - .env.local
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - complianceflow-dev
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: complianceflow-db-dev
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=complianceflow_dev
+      - POSTGRES_USER=dev
+      - POSTGRES_PASSWORD=dev123
+    volumes:
+      - postgres-dev-data:/var/lib/postgresql/data
+    networks:
+      - complianceflow-dev
+    restart: unless-stopped
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: complianceflow-redis-dev
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-dev-data:/data
+    networks:
+      - complianceflow-dev
+    restart: unless-stopped
+
+  # MailHog (Email testing)
+  mailhog:
+    image: mailhog/mailhog
+    container_name: complianceflow-mailhog
+    ports:
+      - "1025:1025" # SMTP
+      - "8025:8025" # Web UI
+    networks:
+      - complianceflow-dev
+    restart: unless-stopped
+
+volumes:
+  postgres-dev-data:
+  redis-dev-data:
+
+networks:
+  complianceflow-dev:
+    driver: bridge

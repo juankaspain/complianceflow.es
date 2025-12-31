@@ -1,69 +1,96 @@
 version: '3.8'
 
 services:
-  # Main application
+  # Next.js Application
   app:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3000/api}
+      target: runner
+    container_name: complianceflow-app
     ports:
-      - '3000:3000'
+      - "3000:3000"
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-      - DATABASE_URL=${DATABASE_URL}
-      - REDIS_URL=${REDIS_URL}
+      - NEXT_PUBLIC_SITE_URL=http://localhost:3000
+      - NEXT_PUBLIC_API_URL=http://localhost:3000/api
+    env_file:
+      - .env.local
     depends_on:
+      - postgres
       - redis
-    restart: unless-stopped
     networks:
-      - complianceflow
+      - complianceflow-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
-  # Redis for caching
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: complianceflow-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=complianceflow
+      - POSTGRES_USER=complianceflow
+      - POSTGRES_PASSWORD=secure_password_change_me
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - complianceflow-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U complianceflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
   redis:
     image: redis:7-alpine
+    container_name: complianceflow-redis
     ports:
-      - '6379:6379'
+      - "6379:6379"
+    command: redis-server --requirepass secure_redis_password_change_me
     volumes:
-      - redis_data:/data
-    command: redis-server --appendonly yes
-    restart: unless-stopped
+      - redis-data:/data
     networks:
-      - complianceflow
+      - complianceflow-network
+    restart: unless-stopped
     healthcheck:
-      test: ['CMD', 'redis-cli', 'ping']
+      test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 3s
-      retries: 3
+      retries: 5
 
-  # PostgreSQL database (optional)
-  # postgres:
-  #   image: postgres:15-alpine
-  #   ports:
-  #     - '5432:5432'
-  #   environment:
-  #     - POSTGRES_USER=${POSTGRES_USER:-complianceflow}
-  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
-  #     - POSTGRES_DB=${POSTGRES_DB:-complianceflow}
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   restart: unless-stopped
-  #   networks:
-  #     - complianceflow
-  #   healthcheck:
-  #     test: ['CMD-SHELL', 'pg_isready -U $POSTGRES_USER']
-  #     interval: 10s
-  #     timeout: 3s
-  #     retries: 3
+  # Nginx Reverse Proxy (Optional)
+  nginx:
+    image: nginx:alpine
+    container_name: complianceflow-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - app
+    networks:
+      - complianceflow-network
+    restart: unless-stopped
 
 volumes:
-  redis_data:
-  # postgres_data:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
 
 networks:
-  complianceflow:
+  complianceflow-network:
     driver: bridge
