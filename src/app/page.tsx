@@ -2,10 +2,13 @@ import DemoSection from '@/components/sections/DemoSection';
 import SecuritySection from '@/components/sections/SecuritySection';
 import FeaturesSection from '@/components/sections/FeaturesSection';
 import ComparisonSection from '@/components/sections/ComparisonSection';
+import TrustIndicators from '@/components/sections/TrustIndicators';
+import ROICalculator from '@/components/sections/ROICalculator';
 import CTASection from '@/components/sections/CTASection';
 import TestimonialsSection from '@/components/sections/TestimonialsSection';
 import NewsletterSection from '@/components/sections/NewsletterSection';
 import SocialProof from '@/components/ui/SocialProof';
+import LiveMetricsBar from '@/components/ui/LiveMetricsBar';
 import ScrollToTop from '@/components/ui/ScrollToTop';
 import { Metadata } from 'next';
 import Image from 'next/image';
@@ -266,8 +269,14 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Live Metrics Bar - NEW */}
+        <LiveMetricsBar />
+
         {/* Social Proof Badges */}
         <SocialProof />
+
+        {/* Trust Indicators - NEW */}
+        <TrustIndicators />
 
         {/* Security & Compliance Section */}
         <SecuritySection />
@@ -275,8 +284,11 @@ export default function HomePage() {
         {/* Features Section */}
         <FeaturesSection />
 
-        {/* Comparison Section - NEW */}
+        {/* Comparison Section */}
         <ComparisonSection />
+
+        {/* ROI Calculator - NEW */}
+        <ROICalculator />
 
         {/* Demo Section */}
         <section id="demos" className="bg-gray-950" aria-labelledby="demos-heading">
