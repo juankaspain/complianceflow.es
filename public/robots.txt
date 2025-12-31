@@ -1,27 +1,26 @@
-# ComplianceFlow robots.txt
+# robots.txt for ComplianceFlow
+# https://complianceflow.netlify.app
 
-# Allow all crawlers
 User-agent: *
 Allow: /
 
-# Block sensitive areas
 Disallow: /api/
-Disallow: /admin/
-Disallow: /dashboard/
-Disallow: /account/
 Disallow: /_next/
-Disallow: /static/private/
+Disallow: /admin/
 
-# Block search results
-Disallow: /search?
-
-# Crawl-delay for specific bots
-User-agent: Bingbot
-Crawl-delay: 1
-
-User-agent: Googlebot
-Crawl-delay: 0
-
-# Sitemap location
+# Sitemaps
 Sitemap: https://complianceflow.netlify.app/sitemap.xml
-Sitemap: https://complianceflow.netlify.app/sitemap-0.xml
+
+# Search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Crawl-delay for aggressive bots
+User-agent: *
+Crawl-delay: 1
