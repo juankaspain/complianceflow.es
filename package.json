@@ -21,7 +21,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "posthog-js": "^1.96.1",
-    "lucide-react": "^0.294.0"
+    "lucide-react": "^0.294.0",
+    "framer-motion": "^10.16.16",
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^2.2.0"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^14.0.4",
