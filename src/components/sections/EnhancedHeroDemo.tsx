@@ -133,7 +133,12 @@ print(f'✅ Invoice submitted: {result.id}')`,
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
               Integración en{' '}
-              <span className="bg-gradient-to-r from-primary-400 via-primary-300 to-purple-400 bg-clip-text text-transparent">
+              <span 
+                className="bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 bg-clip-text text-transparent"
+                style={{
+                  textShadow: '0 0 40px rgba(103, 232, 249, 0.5), 0 0 20px rgba(147, 197, 253, 0.3)'
+                }}
+              >
                 minutos
               </span>
               , compliance para siempre
