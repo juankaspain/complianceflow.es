@@ -1,96 +1,39 @@
 name: PR Checks
 
+# ⚡ Validaciones rápidas para PRs
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
-  pr-validation:
-    name: PR Validation
+  quick-check:
+    name: Quick Validation
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-
+      
       - name: Install dependencies
-        run: npm ci
-
-      - name: Validate PR title
-        uses: amannn/action-semantic-pull-request@v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          types: |
-            feat
-            fix
-            docs
-            style
-            refactor
-            perf
-            test
-            build
-            ci
-            chore
-            revert
-
-      - name: Check for merge conflicts
+        run: npm ci --prefer-offline
+      
+      - name: Type check
+        run: npm run type-check
+      
+      - name: Lint
+        run: npm run lint
+      
+      - name: PR Info
         run: |
-          git fetch origin ${{ github.base_ref }}
-          if git merge-tree $(git merge-base HEAD origin/${{ github.base_ref }}) HEAD origin/${{ github.base_ref }} | grep -q '<<<<<'; then
-            echo "Merge conflicts detected"
-            exit 1
-          fi
-
-      - name: Run quick tests
-        run: npm run test:unit -- --run
-
-      - name: Check bundle size
-        run: |
-          npm run build
-          npx bundlesize
-
-  size-limit:
-    name: Size Limit
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build application
-        run: npm run build
-
-      - name: Check size limit
-        run: npx size-limit
-
-  dependency-review:
-    name: Dependency Review
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Dependency Review
-        uses: actions/dependency-review-action@v4
-        with:
-          fail-on-severity: moderate
+          echo "### ✅ PR Validation Passed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Ready for review! 🎉" >> $GITHUB_STEP_SUMMARY

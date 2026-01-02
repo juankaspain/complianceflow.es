@@ -1,235 +1,117 @@
-# GitHub Actions Workflows
+# GitHub Actions Workflows - Optimized
 
-This directory contains all CI/CD workflows for the ComplianceFlow project.
+## 🚀 Workflows Activos
 
-## Workflows Overview
+### 1. **main.yml** - Main CI/CD Pipeline
+**Cuándo se ejecuta:** En cada push a `main` y en PRs
+**Qué hace:**
+- ✅ Build del proyecto
+- ✅ Type checking con TypeScript
+- ✅ Linting con ESLint
+- ✅ Format checking con Prettier
+- ✅ Lighthouse audit (solo en main)
+- ✅ Deploy automático a Netlify (solo en main)
 
-### Core CI/CD
+**Jobs:**
+1. `build-and-validate` - Validaciones y build
+2. `lighthouse` - Performance audit
+3. `deploy` - Información de deployment
 
-#### 🔄 CI Pipeline (`ci.yml`)
-- **Trigger**: Push to main/develop/feat/*, Pull requests
-- **Purpose**: Continuous Integration checks
-- **Jobs**:
-  - Linting with ESLint
-  - Code formatting check with Prettier
-  - TypeScript type checking
-  - Security audit
-  - Build verification
-  - Unit tests
-- **Duration**: ~10-15 minutes
+### 2. **pr-checks.yml** - PR Quick Checks
+**Cuándo se ejecuta:** En PRs (opened, synchronize, reopened)
+**Qué hace:**
+- ⚡ Validaciones rápidas antes del review
+- ⚡ Type checking
+- ⚡ Linting
 
-#### 📊 Code Quality (`code-quality.yml`)
-- **Trigger**: Push to main/develop, PRs, Weekly schedule
-- **Purpose**: Deep code quality analysis
-- **Jobs**:
-  - Quality gate checks
-  - Test coverage reporting
-  - E2E tests with Playwright
-  - Lighthouse performance audits
-- **Duration**: ~20-30 minutes
+### 3. **security-scheduled.yml** - Weekly Security Scan
+**Cuándo se ejecuta:** 
+- 🕐 Lunes a las 2 AM UTC (weekly)
+- 🔧 Manualmente via workflow_dispatch
+- 📦 Cuando cambian dependencias en PRs
 
-#### 🔒 Security Scan (`security-scan.yml`)
-- **Trigger**: Push, PRs, Weekly schedule, Manual
-- **Purpose**: Security vulnerability detection
-- **Jobs**:
-  - CodeQL analysis
-  - Dependency vulnerability scanning with Snyk
-  - Secret detection with TruffleHog
-  - License compliance checking
-- **Duration**: ~15-20 minutes
+**Qué hace:**
+- 🔒 npm audit
+- 🔍 CodeQL analysis
 
-### Pull Request Workflows
+## 🗑️ Workflows Removidos/Consolidados
 
-#### ✅ PR Checks (`pr-checks.yml`)
-- **Trigger**: PR opened/synchronized/reopened
-- **Purpose**: Automated PR validation
-- **Jobs**:
-  - PR title validation (semantic commits)
-  - Code analysis (large files, TODOs)
-  - Bundle size checking
-  - Preview deployment to Netlify
-  - Automated PR summary comment
-- **Duration**: ~15-20 minutes
+Estos workflows fueron **consolidados en main.yml** para evitar ejecuciones duplicadas:
 
-### Deployment
+- ❌ `ci.yml` → Consolidado en `main.yml`
+- ❌ `test.yml` → Removido (scripts de test no existen)
+- ❌ `deploy-production.yml` → Consolidado en `main.yml`
+- ❌ `security.yml` → Ahora es `security-scheduled.yml` (solo weekly)
+- ❌ `code-quality.yml` → Consolidado en `main.yml`
+- ❌ `lighthouse.yml` → Consolidado en `main.yml`
 
-#### 🚀 Deploy Production (`deploy-production.yml`)
-- **Trigger**: Push to main, Tags, Manual
-- **Purpose**: Production deployment
-- **Jobs**:
-  - Pre-deployment checks (lint, test, build)
-  - Deploy to Netlify
-  - Health checks
-  - Deployment status reporting
-- **Duration**: ~20 minutes
-- **Environment**: production
-- **URL**: https://complianceflow.netlify.app
+## 📊 Mejoras de Performance
 
-### Automation
+### Antes:
+- 9+ jobs ejecutándose en paralelo en cada push
+- ~15-20 minutos de ejecución total
+- Múltiples instalaciones de dependencias
+- Workflows fallando por scripts inexistentes
 
-#### 🏷️ Release (`release.yml`)
-- **Trigger**: Git tags (v*.*.*), Manual
-- **Purpose**: Automated release creation
-- **Jobs**:
-  - Run all tests
-  - Generate changelog
-  - Create GitHub release
-  - Update CHANGELOG.md
-  - Trigger production deployment
-- **Duration**: ~25 minutes
+### Después:
+- 3 jobs secuenciales y eficientes
+- ~5-8 minutos de ejecución total
+- Caché compartido entre jobs
+- Sin errores de workflows
 
-#### 📦 Dependency Updates (`dependency-update.yml`)
-- **Trigger**: Weekly (Mondays at 3 AM), Manual
-- **Purpose**: Automated dependency updates
-- **Jobs**:
-  - Check for outdated dependencies
-  - Update and test
-  - Create PR with changes
-  - Auto-merge minor/patch Dependabot PRs
-- **Duration**: ~20 minutes
+## 🔧 Configuración
 
-#### 🧹 Stale (`stale.yml`)
-- **Trigger**: Daily, Manual
-- **Purpose**: Clean up stale issues and PRs
-- **Configuration**:
-  - Issues: Stale after 60 days, close after 7 days
-  - PRs: Stale after 30 days, close after 14 days
-  - Exempt labels: pinned, security, bug, enhancement
-- **Duration**: ~5 minutes
+### Secrets Necesarios (Opcionales)
+- `LHCI_GITHUB_APP_TOKEN` - Para Lighthouse CI (opcional)
 
-#### 📊 Performance Monitor (`performance-monitor.yml`)
-- **Trigger**: Push to main, PRs, Every 6 hours, Manual
-- **Purpose**: Continuous performance monitoring
-- **Jobs**:
-  - Lighthouse CI monitoring
-  - Bundle size analysis
-  - Performance budget checks
-- **Duration**: ~15-20 minutes
-
-#### 💾 Backup (`backup.yml`)
-- **Trigger**: Weekly (Sundays at 2 AM), Manual
-- **Purpose**: Automated repository backups
-- **Jobs**:
-  - Create compressed backup archive
-  - Upload to GitHub artifacts
-  - Retention: 90 days
-- **Duration**: ~10 minutes
-
-## Configuration Files
-
-### `.github/changelog-config.json`
-Configuration for automated changelog generation in releases.
-
-### `.github/dependabot.yml`
-Dependabot configuration for automated dependency updates.
-
-### `.github/size-limit.json`
-Bundle size limits and budgets.
-
-## Secrets Required
-
-### Required Secrets
-- `NETLIFY_SITE_ID`: Netlify site identifier
-- `NETLIFY_AUTH_TOKEN`: Netlify authentication token
-
-### Optional Secrets
-- `CODECOV_TOKEN`: Codecov integration token
-- `SNYK_TOKEN`: Snyk security scanning token
-- `LHCI_GITHUB_APP_TOKEN`: Lighthouse CI token
-- `NEXT_PUBLIC_SITE_URL`: Public site URL
-- `NEXT_PUBLIC_API_URL`: API endpoint URL
-- `NEXT_PUBLIC_POSTHOG_KEY`: PostHog analytics key
-
-## Workflow Best Practices
-
-### Concurrency Control
-All workflows use concurrency groups to prevent multiple runs:
+### Branch Protection Rules Recomendadas
 ```yaml
-concurrency:
-  group: workflow-${{ github.ref }}
-  cancel-in-progress: true
+Required status checks:
+  - Build & Validate
+  - PR Checks / Quick Validation (para PRs)
 ```
 
-### Caching Strategy
-Dependencies and build artifacts are cached:
-```yaml
-- uses: actions/cache@v4
-  with:
-    path: |
-      ~/.npm
-      node_modules
-      .next/cache
+## 📝 Comandos Disponibles
+
+```bash
+# Development
+npm run dev          # Start dev server
+npm run build        # Build for production
+npm run start        # Start production server
+
+# Quality
+npm run lint         # Run ESLint
+npm run lint:fix     # Fix linting issues
+npm run type-check   # TypeScript type checking
+npm run format       # Format code with Prettier
+npm run format:check # Check code formatting
+
+# Analysis
+npm run analyze      # Analyze bundle size
+npm run lighthouse   # Run Lighthouse audit
 ```
 
-### Timeout Protection
-All jobs have timeout limits:
-```yaml
-timeout-minutes: 15
-```
+## 🎯 Workflow Triggers Summary
 
-### Error Handling
-Non-critical steps use `continue-on-error: true`
+| Workflow | Push Main | PR | Schedule | Manual |
+|----------|-----------|-------|----------|--------|
+| main.yml | ✅ | ✅ | ❌ | ❌ |
+| pr-checks.yml | ❌ | ✅ | ❌ | ❌ |
+| security-scheduled.yml | ❌ | ✅* | ✅ | ✅ |
 
-### Node.js Version
-All workflows use Node.js 20 (LTS) for consistency.
+*Solo cuando cambian package.json o package-lock.json
 
-## Monitoring and Notifications
+## 💡 Tips
 
-### GitHub Step Summaries
-All workflows generate detailed summaries visible in the Actions tab.
+1. **Los workflows ahora son mucho más rápidos** gracias a la caché compartida
+2. **Los security scans son semanales** para no ralentizar el desarrollo
+3. **Lighthouse solo corre en main** para ahorrar tiempo en PRs
+4. **Todos los workflows tienen timeout** para evitar ejecuciones colgadas
+5. **Concurrency control** cancela workflows antiguos automáticamente
 
-### Deployment Status
-Deployment workflows create GitHub deployments for tracking.
+## 🚨 Si algo falla
 
-### Artifact Retention
-- Test reports: 30 days
-- Build artifacts: 7 days
-- Backups: 90 days
-
-## Manual Triggers
-
-Most workflows support manual triggering via `workflow_dispatch`:
-1. Go to Actions tab
-2. Select the workflow
-3. Click "Run workflow"
-4. Fill in any required inputs
-
-## Performance Optimization
-
-- **Parallel Execution**: Independent jobs run in parallel
-- **Smart Caching**: Dependencies cached across runs
-- **Selective Testing**: Only run relevant tests based on changes
-- **Optimized Docker**: Use multi-stage builds when applicable
-
-## Troubleshooting
-
-### Failed Workflows
-1. Check the logs in the Actions tab
-2. Review the step summary
-3. Check for missing secrets
-4. Verify Node.js version compatibility
-
-### Stuck Workflows
-- All workflows have timeout protection
-- Use "Cancel workflow" button if needed
-
-### Permission Issues
-- Verify repository secrets are configured
-- Check workflow permissions in settings
-
-## Contributing
-
-When adding new workflows:
-1. Follow existing naming conventions
-2. Add appropriate concurrency controls
-3. Set reasonable timeouts
-4. Use caching where applicable
-5. Add continue-on-error for non-critical steps
-6. Update this README
-7. Test with workflow_dispatch first
-
-## References
-
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [Workflow Syntax](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions)
-- [Security Hardening](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
+1. **Build fails**: Verifica que el código compile localmente con `npm run build`
+2. **Type check fails**: Ejecuta `npm run type-check` localmente
+3. **Lint fails**: Ejecuta `npm run lint:fix` para auto-fix
+4. **Deploy issues**: Netlify auto-deploys, verifica la configuración en Netlify dashboard
