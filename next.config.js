@@ -2,20 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
 
-  // Next.js 15 optimizations
-  turbo: {
-    resolveAlias: {
-      '@': './src',
-    },
-  },
-
-  // Performance optimizations
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production' ? {
-      exclude: ['error', 'warn'],
-    } : false,
-  },
-
   // Image optimization
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -98,9 +84,6 @@ const nextConfig = {
   // Experimental features for Next.js 15
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
-    reactCompiler: true,
-    ppr: false, // Partial Prerendering - enable when ready
-    dynamicIO: false, // Dynamic IO - enable when ready
   },
 
   // Production optimizations
@@ -116,7 +99,7 @@ const nextConfig = {
   },
 };
 
-// Conditional bundle analyzer (cleaner approach)
+// Conditional bundle analyzer
 const withBundleAnalyzer =
   process.env.ANALYZE === 'true'
     ? require('@next/bundle-analyzer')({
