@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, HTMLMotionProps } from 'framer-motion';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 type GlowVariant = 'none' | 'primary' | 'success' | 'warning' | 'error';
 
@@ -14,10 +14,11 @@ interface GlassCardProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
 
 const glowStyles: Record<GlowVariant, string> = {
   none: '',
-  primary: 'shadow-[0_0_50px_-12px_rgba(99,102,241,0.6),0_0_25px_-8px_rgba(99,102,241,0.4)] hover:shadow-[0_0_70px_-12px_rgba(99,102,241,0.8),0_0_35px_-8px_rgba(99,102,241,0.6)]',
-  success: 'shadow-[0_0_40px_-12px_rgba(34,197,94,0.5),0_0_20px_-8px_rgba(34,197,94,0.3)] hover:shadow-[0_0_60px_-12px_rgba(34,197,94,0.7),0_0_30px_-8px_rgba(34,197,94,0.5)]',
-  warning: 'shadow-[0_0_40px_-12px_rgba(251,191,36,0.5),0_0_20px_-8px_rgba(251,191,36,0.3)] hover:shadow-[0_0_60px_-12px_rgba(251,191,36,0.7),0_0_30px_-8px_rgba(251,191,36,0.5)]',
-  error: 'shadow-[0_0_40px_-12px_rgba(239,68,68,0.5),0_0_20px_-8px_rgba(239,68,68,0.3)] hover:shadow-[0_0_60px_-12px_rgba(239,68,68,0.7),0_0_30px_-8px_rgba(239,68,68,0.5)]',
+  // Mobile-optimized (lighter shadows)
+  primary: 'shadow-[0_0_30px_-12px_rgba(99,102,241,0.4)] md:shadow-[0_0_50px_-12px_rgba(99,102,241,0.6),0_0_25px_-8px_rgba(99,102,241,0.4)] hover:shadow-[0_0_40px_-12px_rgba(99,102,241,0.6)] md:hover:shadow-[0_0_70px_-12px_rgba(99,102,241,0.8),0_0_35px_-8px_rgba(99,102,241,0.6)]',
+  success: 'shadow-[0_0_25px_-12px_rgba(34,197,94,0.3)] md:shadow-[0_0_40px_-12px_rgba(34,197,94,0.5),0_0_20px_-8px_rgba(34,197,94,0.3)] hover:shadow-[0_0_35px_-12px_rgba(34,197,94,0.5)] md:hover:shadow-[0_0_60px_-12px_rgba(34,197,94,0.7),0_0_30px_-8px_rgba(34,197,94,0.5)]',
+  warning: 'shadow-[0_0_25px_-12px_rgba(251,191,36,0.3)] md:shadow-[0_0_40px_-12px_rgba(251,191,36,0.5),0_0_20px_-8px_rgba(251,191,36,0.3)] hover:shadow-[0_0_35px_-12px_rgba(251,191,36,0.5)] md:hover:shadow-[0_0_60px_-12px_rgba(251,191,36,0.7),0_0_30px_-8px_rgba(251,191,36,0.5)]',
+  error: 'shadow-[0_0_25px_-12px_rgba(239,68,68,0.3)] md:shadow-[0_0_40px_-12px_rgba(239,68,68,0.5),0_0_20px_-8px_rgba(239,68,68,0.3)] hover:shadow-[0_0_35px_-12px_rgba(239,68,68,0.5)] md:hover:shadow-[0_0_60px_-12px_rgba(239,68,68,0.7),0_0_30px_-8px_rgba(239,68,68,0.5)]',
 };
 
 const borderStyles: Record<GlowVariant, string> = {
@@ -29,7 +30,7 @@ const borderStyles: Record<GlowVariant, string> = {
 };
 
 /**
- * GlassCard - Modern glassmorphism card component
+ * GlassCard - Modern glassmorphism card component with mobile optimization
  * 
  * @example
  * <GlassCard glow="primary" hover>
@@ -44,12 +45,23 @@ export default function GlassCard({
   className = '',
   ...props
 }: GlassCardProps) {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+
+    const handleChange = () => setPrefersReducedMotion(mediaQuery.matches);
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
+      whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
-      whileHover={hover ? { scale: 1.02 } : {}}
+      whileHover={hover && !prefersReducedMotion ? { scale: 1.02 } : {}}
       transition={{
         duration: 0.3,
         ease: 'easeOut',
@@ -63,14 +75,18 @@ export default function GlassCard({
         transition-all duration-300
         ${glow !== 'none' ? glowStyles[glow] : ''}
         ${hover ? 'hover:bg-gray-900/90' : ''}
+        will-change-transform
         ${className}
       `}
+      style={{
+        transform: 'translateZ(0)', // GPU acceleration
+      }}
       {...props}
     >
-      {/* Inner glow gradient */}
+      {/* Inner glow gradient - lighter on mobile */}
       {glow !== 'none' && (
         <div
-          className="absolute inset-0 opacity-20 pointer-events-none"
+          className="absolute inset-0 opacity-15 md:opacity-20 pointer-events-none"
           style={{
             background:
               glow === 'primary'
@@ -93,7 +109,7 @@ export default function GlassCard({
 }
 
 /**
- * GlassCardStrong - Stronger glass effect variant
+ * GlassCardStrong - Stronger glass effect variant with mobile optimization
  */
 export function GlassCardStrong({
   children,
@@ -102,12 +118,23 @@ export function GlassCardStrong({
   className = '',
   ...props
 }: GlassCardProps) {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+
+    const handleChange = () => setPrefersReducedMotion(mediaQuery.matches);
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
+      whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
-      whileHover={hover ? { scale: 1.02 } : {}}
+      whileHover={hover && !prefersReducedMotion ? { scale: 1.02 } : {}}
       transition={{
         duration: 0.3,
         ease: 'easeOut',
@@ -121,14 +148,18 @@ export function GlassCardStrong({
         transition-all duration-300
         ${glow !== 'none' ? glowStyles[glow] : ''}
         ${hover ? 'hover:bg-gray-900/98' : ''}
+        will-change-transform
         ${className}
       `}
+      style={{
+        transform: 'translateZ(0)', // GPU acceleration
+      }}
       {...props}
     >
-      {/* Strong inner glow */}
+      {/* Strong inner glow - lighter on mobile */}
       {glow !== 'none' && (
         <div
-          className="absolute inset-0 opacity-30 pointer-events-none"
+          className="absolute inset-0 opacity-20 md:opacity-30 pointer-events-none"
           style={{
             background:
               glow === 'primary'
