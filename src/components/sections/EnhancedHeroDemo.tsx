@@ -1,6 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import AnimatedCounter from '@/components/ui/AnimatedCounter';
 import GlassCard from '@/components/ui/GlassCard';
 import CodePreview from '@/components/ui/CodePreview';
@@ -14,8 +15,30 @@ import Link from 'next/link';
  * - Animated statistics
  * - Interactive code examples
  * - Modern glassmorphism design
+ * - Parallax scroll effects
+ * - Micro-animations on CTAs
  */
 export default function EnhancedHeroDemo() {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const { scrollY } = useScroll();
+  
+  // Parallax transforms for background elements
+  const y1 = useTransform(scrollY, [0, 500], [0, 150]);
+  const y2 = useTransform(scrollY, [0, 500], [0, -100]);
+  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth - 0.5) * 20,
+        y: (e.clientY / window.innerHeight - 0.5) * 20,
+      });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   const stats = [
     {
       icon: <Shield className="w-6 h-6" />,
@@ -120,16 +143,53 @@ print(f'✅ Invoice submitted: {result.id}')`,
 
   return (
     <section className="relative py-24 sm:py-32 overflow-hidden bg-gray-950">
-      {/* Enhanced Background Effects */}
-      <div className="absolute inset-0" aria-hidden="true">
+      {/* Enhanced Background Effects with Parallax */}
+      <motion.div 
+        className="absolute inset-0" 
+        aria-hidden="true"
+        style={{ opacity }}
+      >
         {/* Grid pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f46e510_1px,transparent_1px),linear-gradient(to_bottom,#4f46e510_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-        {/* Gradient orbs */}
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        
+        {/* Gradient orbs with parallax and mouse tracking */}
+        <motion.div 
+          className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/20 rounded-full blur-3xl"
+          style={{
+            y: y1,
+            x: mousePosition.x,
+          }}
+          animate={{
+            scale: [1, 1.1, 1],
+            opacity: [0.2, 0.3, 0.2],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
+        <motion.div 
+          className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/15 rounded-full blur-3xl"
+          style={{
+            y: y2,
+            x: -mousePosition.x,
+          }}
+          animate={{
+            scale: [1, 1.15, 1],
+            opacity: [0.15, 0.25, 0.15],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            delay: 1,
+          }}
+        />
+        
         {/* Fade overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-950/50 to-gray-950" />
-      </div>
+      </motion.div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Heading */}
@@ -160,31 +220,52 @@ print(f'✅ Invoice submitted: {result.id}')`,
             </p>
           </motion.div>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons with Micro-animations */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10"
           >
-            <Link
-              href="/dashboard"
-              className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white transition-all duration-300 bg-primary hover:bg-primary-600 rounded-xl shadow-lg shadow-primary/50 hover:shadow-primary/80 hover:scale-105"
+            {/* Primary CTA with Ripple Effect */}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="relative"
             >
-              <span>Ir al Dashboard</span>
-              <svg className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
-            <a
+              <Link
+                href="/dashboard"
+                className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white overflow-hidden transition-all duration-300 bg-primary hover:bg-primary-600 rounded-xl shadow-lg shadow-primary/50 hover:shadow-primary/80"
+              >
+                {/* Ripple effect on hover */}
+                <span className="absolute inset-0 w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-full group-hover:h-full opacity-10"></span>
+                
+                <span className="relative">Ir al Dashboard</span>
+                
+                {/* Arrow with slide animation */}
+                <svg 
+                  className="relative ml-2 h-5 w-5 transition-transform duration-300 ease-out group-hover:translate-x-2" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </motion.div>
+
+            {/* Secondary CTA */}
+            <motion.a
               href="/docs"
-              className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white transition-all duration-300 bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 hover:border-white/30"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="group inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white transition-all duration-300 bg-white/5 hover:bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 hover:border-white/30"
             >
-              <svg className="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="mr-2 h-5 w-5 transition-transform group-hover:-translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
               Documentación API
-            </a>
+            </motion.a>
           </motion.div>
         </div>
 
@@ -262,12 +343,17 @@ print(f'✅ Invoice submitted: {result.id}')`,
               { name: 'GDPR', subtitle: 'Data Protection' },
               { name: 'HIPAA', subtitle: 'Healthcare Ready' },
             ].map((cert) => (
-              <div key={cert.name} className="text-center group cursor-default">
+              <motion.div 
+                key={cert.name} 
+                className="text-center group cursor-default"
+                whileHover={{ scale: 1.1, y: -5 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+              >
                 <div className="text-xl font-bold text-white/80 group-hover:text-primary-400 transition-colors duration-300">
                   {cert.name}
                 </div>
                 <div className="text-xs text-gray-500 mt-1">{cert.subtitle}</div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>
