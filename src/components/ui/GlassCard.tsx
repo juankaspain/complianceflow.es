@@ -14,10 +14,18 @@ interface GlassCardProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
 
 const glowStyles: Record<GlowVariant, string> = {
   none: '',
-  primary: 'shadow-[0_0_40px_-10px_rgba(99,102,241,0.5)] hover:shadow-[0_0_60px_-10px_rgba(99,102,241,0.7)]',
-  success: 'shadow-[0_0_40px_-10px_rgba(34,197,94,0.5)] hover:shadow-[0_0_60px_-10px_rgba(34,197,94,0.7)]',
-  warning: 'shadow-[0_0_40px_-10px_rgba(245,158,11,0.5)] hover:shadow-[0_0_60px_-10px_rgba(245,158,11,0.7)]',
-  error: 'shadow-[0_0_40px_-10px_rgba(239,68,68,0.5)] hover:shadow-[0_0_60px_-10px_rgba(239,68,68,0.7)]',
+  primary: 'shadow-[0_0_50px_-12px_rgba(99,102,241,0.6),0_0_25px_-8px_rgba(99,102,241,0.4)] hover:shadow-[0_0_70px_-12px_rgba(99,102,241,0.8),0_0_35px_-8px_rgba(99,102,241,0.6)]',
+  success: 'shadow-[0_0_40px_-12px_rgba(34,197,94,0.5),0_0_20px_-8px_rgba(34,197,94,0.3)] hover:shadow-[0_0_60px_-12px_rgba(34,197,94,0.7),0_0_30px_-8px_rgba(34,197,94,0.5)]',
+  warning: 'shadow-[0_0_40px_-12px_rgba(251,191,36,0.5),0_0_20px_-8px_rgba(251,191,36,0.3)] hover:shadow-[0_0_60px_-12px_rgba(251,191,36,0.7),0_0_30px_-8px_rgba(251,191,36,0.5)]',
+  error: 'shadow-[0_0_40px_-12px_rgba(239,68,68,0.5),0_0_20px_-8px_rgba(239,68,68,0.3)] hover:shadow-[0_0_60px_-12px_rgba(239,68,68,0.7),0_0_30px_-8px_rgba(239,68,68,0.5)]',
+};
+
+const borderStyles: Record<GlowVariant, string> = {
+  none: 'border-white/10 hover:border-white/20',
+  primary: 'border-primary-500/30 hover:border-primary-400/50',
+  success: 'border-green-500/30 hover:border-green-400/50',
+  warning: 'border-yellow-500/30 hover:border-yellow-400/50',
+  error: 'border-red-500/30 hover:border-red-400/50',
 };
 
 /**
@@ -47,18 +55,39 @@ export default function GlassCard({
         ease: 'easeOut',
       }}
       className={`
-        relative rounded-2xl
-        bg-gray-900/75 backdrop-blur-xl
-        border border-white/10
+        relative rounded-2xl overflow-hidden
+        bg-gray-900/80 backdrop-blur-xl
+        border
+        ${borderStyles[glow]}
         p-6
         transition-all duration-300
         ${glow !== 'none' ? glowStyles[glow] : ''}
-        ${hover ? 'hover:border-white/20 hover:bg-gray-900/90' : ''}
+        ${hover ? 'hover:bg-gray-900/90' : ''}
         ${className}
       `}
       {...props}
     >
-      {children}
+      {/* Inner glow gradient */}
+      {glow !== 'none' && (
+        <div
+          className="absolute inset-0 opacity-20 pointer-events-none"
+          style={{
+            background:
+              glow === 'primary'
+                ? 'radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.2), transparent 70%)'
+                : glow === 'success'
+                ? 'radial-gradient(circle at 50% 0%, rgba(34, 197, 94, 0.2), transparent 70%)'
+                : glow === 'warning'
+                ? 'radial-gradient(circle at 50% 0%, rgba(251, 191, 36, 0.2), transparent 70%)'
+                : 'radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.2), transparent 70%)',
+          }}
+        />
+      )}
+      
+      {/* Content */}
+      <div className="relative z-10">
+        {children}
+      </div>
     </motion.div>
   );
 }
@@ -84,18 +113,39 @@ export function GlassCardStrong({
         ease: 'easeOut',
       }}
       className={`
-        relative rounded-2xl
-        bg-gray-900/90 backdrop-blur-2xl
-        border border-white/20
+        relative rounded-2xl overflow-hidden
+        bg-gray-900/95 backdrop-blur-2xl
+        border-2
+        ${borderStyles[glow]}
         p-6
         transition-all duration-300
         ${glow !== 'none' ? glowStyles[glow] : ''}
-        ${hover ? 'hover:border-white/30 hover:bg-gray-900/95' : ''}
+        ${hover ? 'hover:bg-gray-900/98' : ''}
         ${className}
       `}
       {...props}
     >
-      {children}
+      {/* Strong inner glow */}
+      {glow !== 'none' && (
+        <div
+          className="absolute inset-0 opacity-30 pointer-events-none"
+          style={{
+            background:
+              glow === 'primary'
+                ? 'radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.25), transparent 60%)'
+                : glow === 'success'
+                ? 'radial-gradient(circle at 50% 0%, rgba(34, 197, 94, 0.25), transparent 60%)'
+                : glow === 'warning'
+                ? 'radial-gradient(circle at 50% 0%, rgba(251, 191, 36, 0.25), transparent 60%)'
+                : 'radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.25), transparent 60%)',
+          }}
+        />
+      )}
+      
+      {/* Content */}
+      <div className="relative z-10">
+        {children}
+      </div>
     </motion.div>
   );
 }
