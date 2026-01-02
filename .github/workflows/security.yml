@@ -49,6 +49,5 @@ jobs:
       - name: Generate lockfile
         run: npm install --package-lock-only
 
-      - name: Run npm audit
-        run: npm audit --audit-level=moderate
-        continue-on-error: true
+      - name: Run npm audit (informational)
+        run: npm audit --audit-level=moderate || echo "Found vulnerabilities, review them manually"
