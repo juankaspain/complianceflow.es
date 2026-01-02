@@ -24,6 +24,8 @@ export default function EnhancedHeroDemo() {
       decimals: 2,
       label: 'Uptime SLA',
       color: 'text-green-400',
+      glowColor: 'bg-green-400/20',
+      glowColorHover: 'group-hover:bg-green-400/30',
       glow: 'success' as const,
     },
     {
@@ -33,6 +35,8 @@ export default function EnhancedHeroDemo() {
       decimals: 0,
       label: 'Respuesta API',
       color: 'text-blue-400',
+      glowColor: 'bg-blue-400/20',
+      glowColorHover: 'group-hover:bg-blue-400/30',
       glow: 'primary' as const,
     },
     {
@@ -42,6 +46,8 @@ export default function EnhancedHeroDemo() {
       decimals: 0,
       label: 'Empresas',
       color: 'text-purple-400',
+      glowColor: 'bg-purple-400/20',
+      glowColorHover: 'group-hover:bg-purple-400/30',
       glow: 'primary' as const,
     },
     {
@@ -51,6 +57,8 @@ export default function EnhancedHeroDemo() {
       decimals: 0,
       label: 'Integración',
       color: 'text-yellow-400',
+      glowColor: 'bg-yellow-400/20',
+      glowColorHover: 'group-hover:bg-yellow-400/30',
       glow: 'warning' as const,
     },
   ];
@@ -192,11 +200,20 @@ print(f'✅ Invoice submitted: {result.id}')`,
               <GlassCard
                 glow={stat.glow}
                 hover
-                className="text-center p-6"
+                className="text-center p-6 group"
               >
-                <div className={`flex justify-center mb-4 ${stat.color}`}>
-                  {stat.icon}
+                {/* Icon with glow background */}
+                <div className="flex justify-center mb-4">
+                  <div className={`relative inline-flex items-center justify-center w-16 h-16 rounded-2xl ${stat.glowColor} ${stat.glowColorHover} transition-all duration-300`}>
+                    {/* Outer glow ring */}
+                    <div className={`absolute inset-0 rounded-2xl ${stat.glowColor} blur-xl opacity-50 group-hover:opacity-70 transition-opacity duration-300`} />
+                    {/* Icon */}
+                    <div className={`relative ${stat.color}`}>
+                      {stat.icon}
+                    </div>
+                  </div>
                 </div>
+                
                 <div className="text-4xl font-bold text-white mb-2">
                   <AnimatedCounter
                     value={stat.value}
