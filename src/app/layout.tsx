@@ -1,15 +1,26 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { Analytics } from '@/lib/analytics/posthog';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import Image from 'next/image';
 
+// Inter font - Primary UI font
 const inter = Inter({ 
-  subsets: ['latin'], 
+  subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
   preload: true,
+  weight: ['300', '400', '500', '600', '700', '800'],
+});
+
+// JetBrains Mono - Code and technical content
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
+  preload: false,
+  weight: ['400', '500', '600', '700'],
 });
 
 // Viewport configuration (separate from metadata as per Next.js 14 requirements)
@@ -99,7 +110,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className={inter.variable}>
+    <html lang="es" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
         {/* Preconnect to external domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -183,7 +194,7 @@ export default function RootLayout({
                 </a>
                 <a
                   href="/signup"
-                  className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/50 hover:bg-primary-600 transition-all hover:shadow-primary/70 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-950"
+                  className="cta-button rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/50 hover:bg-primary-600 transition-all hover:shadow-primary/70 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-950"
                   aria-label="Crear cuenta gratis"
                 >
                   Probar gratis
