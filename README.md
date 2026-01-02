@@ -1,69 +1,58 @@
-# ComplianceFlow
+# ComplianceFlow 🚀
 
-<div align="center">
+[![Next.js](https://img.shields.io/badge/Next.js-15.1-black?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.0-blue?logo=react)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![License](https://img.shields.io/badge/license-Private-red)](LICENSE)
 
-<img src="public/logo-main.svg" alt="ComplianceFlow Logo" width="300" />
-
-**Enterprise Compliance APIs**
-
-Infraestructura enterprise-grade con las certificaciones y estándares más exigentes del sector.
-
-[![CI/CD](https://github.com/juankaspain/complianceflow.es/actions/workflows/ci.yml/badge.svg)](https://github.com/juankaspain/complianceflow.es/actions)
-[![Security Scan](https://github.com/juankaspain/complianceflow.es/actions/workflows/security-scan.yml/badge.svg)](https://github.com/juankaspain/complianceflow.es/actions)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-2.0.0-green.svg)](CHANGELOG.md)
-
-[🌐 Website](https://complianceflow.netlify.app) • [📚 Docs](docs/) • [🤝 Contributing](docs/CONTRIBUTING_GUIDE.md)
-
-</div>
-
----
+> Enterprise-grade compliance platform providing APIs for Spanish tax regulations (SII, Verifactu) and KYC integrations.
 
 ## 🌟 Features
 
-### 🎨 Professional Branding
-- **Custom Logo System**: 5 logo variations (main, icon, white, horizontal, favicon)
-- **Brand Colors**: Professional gradient (Indigo #4F46E5 → Green #10B981)
-- **Dark Theme**: Modern dark professional SaaS design
-- **Glass Morphism**: Backdrop blur effects and modern UI patterns
-- **Responsive Design**: Mobile-first approach with breakpoint optimization
+- **⚡ Next.js 15** with Turbopack for blazing-fast development
+- **🎨 Tailwind CSS 4** with Oxide engine for optimal performance
+- **🔐 Enterprise Security** with OWASP compliance and GDPR adherence
+- **📊 Analytics** powered by PostHog for product insights
+- **🧪 Testing Suite** with Vitest + Playwright for reliability
+- **♿ Accessibility** WCAG 2.1 compliant components
+- **🌍 SEO Optimized** with Next.js metadata and structured data
+- **📱 Responsive Design** mobile-first approach
 
-### ⚡ Performance Optimized
-- **Static Export**: Next.js static site generation for optimal performance
-- **Image Optimization**: SVG logos and optimized assets
-- **Code Splitting**: Automatic route-based splitting
-- **Fast Loading**: <2s initial page load
-- **CDN Distribution**: Global edge network via Netlify
+## 🛠️ Tech Stack v3.0
 
-### 🎯 SEO & Accessibility
-- **Dynamic Metadata**: Automatic SEO optimization
-- **OpenGraph**: Social media sharing optimization
-- **Semantic HTML**: Proper heading hierarchy and ARIA labels
-- **Multi-language Ready**: i18n infrastructure in place
+### Core Framework
+- **Next.js 15.1** - React framework with App Router, Server Components, and Turbopack
+- **React 19.0** - Latest React with concurrent features
+- **TypeScript 5.7** - Strict type safety with enhanced compiler checks
 
-### 🛠️ Developer Experience
-- **TypeScript**: Full type safety
-- **Modern Stack**: Next.js 14 + React 18 + Tailwind CSS 3.4
-- **Hot Reload**: Instant feedback during development
-- **ESLint + Prettier**: Automated code quality
-- **Git Hooks**: Pre-commit checks with Husky
+### Styling & UI
+- **Tailwind CSS 4.0** - Utility-first CSS with Oxide engine
+- **Framer Motion 11** - Production-ready animation library
+- **Radix UI** - Headless accessible components
+- **Lucide React** - Beautiful & consistent icon set
 
-### 🧪 Testing & CI/CD
-- **GitHub Actions**: Automated workflows
-- **CI Pipeline**: Build, lint, and type checking
-- **Security Scanning**: CodeQL and dependency audits
-- **Code Quality**: ESLint and Prettier checks
-- **Automated Deployment**: Push to deploy
+### Development Tools
+- **Vitest 2.1** - Fast unit testing with native ESM support
+- **Playwright 1.49** - Reliable E2E testing across browsers
+- **ESLint 9** - Modern linting with flat config
+- **Prettier 3.4** - Code formatting with Tailwind plugin
+- **Husky 9** - Git hooks for quality checks
 
----
+### Utilities
+- **Zod 3.24** - TypeScript-first schema validation
+- **PostHog** - Product analytics and feature flags
+- **NextAuth v5** - Authentication for Next.js
+- **Upstash** - Serverless Redis for rate limiting
+- **Pino** - High-performance logging
 
-## 🚀 Quick Start
+## 🚀 Getting Started
 
 ### Prerequisites
 
 ```bash
-Node.js 18+ and npm 9+
-Git
+node >= 20.0.0
+npm >= 10.0.0
 ```
 
 ### Installation
@@ -74,299 +63,197 @@ git clone https://github.com/juankaspain/complianceflow.es.git
 cd complianceflow.es
 
 # Install dependencies
-npm ci
+npm install
 
-# Start development server
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your configuration
+
+# Run development server with Turbopack
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Build for Production
-
-```bash
-# Build static site
-npm run build
-
-# Output will be in ./out directory
-ls -la out/
-```
-
----
-
-## 💻 Tech Stack
-
-### Frontend
-- **Framework**: [Next.js 14](https://nextjs.org/) (App Router + Static Export)
-- **Language**: [TypeScript 5.3](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS 3.4](https://tailwindcss.com/)
-- **UI Components**: [Radix UI](https://www.radix-ui.com/)
-- **Animations**: [Framer Motion 11](https://www.framer.com/motion/)
-- **Forms**: [React Hook Form 7](https://react-hook-form.com/) + [Zod 3](https://zod.dev/)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **Theme**: [next-themes](https://github.com/pacocoursey/next-themes)
-
-### Infrastructure
-- **Hosting**: [Netlify](https://www.netlify.com/) (Edge Network)
-- **CDN**: Netlify Global CDN
-- **Analytics**: [PostHog](https://posthog.com/) (ready to configure)
-
-### Development Tools
-- **Testing**: [Vitest](https://vitest.dev/) + [Playwright](https://playwright.dev/)
-- **Linting**: [ESLint 8](https://eslint.org/) + [Prettier 3](https://prettier.io/)
-- **Git Hooks**: [Husky 9](https://typicode.github.io/husky/)
-- **CI/CD**: [GitHub Actions](https://github.com/features/actions)
-- **Bundle Analysis**: [@next/bundle-analyzer](https://www.npmjs.com/package/@next/bundle-analyzer)
-
----
-
-## 🛠️ Available Scripts
+## 📦 Available Scripts
 
 ### Development
 ```bash
-npm run dev              # Start dev server at localhost:3000
-npm run build            # Build static site to ./out
-npm run start            # Preview production build
-npm run clean            # Clean build artifacts
-```
-
-### Code Quality
-```bash
+npm run dev              # Start dev server with Turbopack (faster)
+npm run build            # Build for production
+npm run start            # Start production server
 npm run lint             # Run ESLint
-npm run lint:fix         # Fix ESLint errors automatically
-npm run type-check       # TypeScript type checking
+npm run lint:fix         # Fix ESLint issues
 npm run format           # Format code with Prettier
-npm run format:check     # Check code formatting
+npm run type-check       # Check TypeScript types
 ```
 
 ### Testing
 ```bash
-npm run test             # Run all tests
-npm run test:unit        # Run unit tests (optional)
-npm run test:e2e         # Run E2E tests (optional)
+npm run test             # Run unit tests
 npm run test:watch       # Run tests in watch mode
+npm run test:ui          # Open Vitest UI
 npm run test:coverage    # Generate coverage report
+npm run test:e2e         # Run E2E tests with Playwright
+npm run test:e2e:ui      # Open Playwright UI
 ```
 
 ### Analysis
 ```bash
 npm run analyze          # Analyze bundle size
-npm run lighthouse       # Run Lighthouse audit (optional)
+npm run lighthouse       # Run Lighthouse CI
 ```
 
----
-
-## 📁 Project Structure
+## 🏗️ Project Structure
 
 ```
 complianceflow.es/
-├── .github/
-│   └── workflows/           # CI/CD pipelines
-│       ├── ci.yml          # Build, lint, test
-│       ├── security-scan.yml
-│       ├── code-quality.yml
-│       └── deploy-production.yml
-├── docs/                    # Documentation
-│   ├── WORKFLOW_FIXES.md
-│   ├── LOGO_USAGE.md
-│   ├── BRAND_GUIDELINES.md
-│   └── BRANDING_USAGE.md
-├── public/                  # Static assets
-│   ├── logo-main.svg       # Main logo
-│   ├── logo-icon.svg       # Icon logo
-│   ├── logo-white.svg      # White version
-│   ├── logo-horizontal.svg # Horizontal layout
-│   └── favicon.svg         # Favicon
 ├── src/
-│   ├── app/                # Next.js app directory
-│   │   ├── layout.tsx      # Root layout with logo
-│   │   ├── page.tsx        # Homepage
-│   │   └── globals.css     # Global styles
-│   ├── components/         # React components
-│   │   ├── ErrorBoundary.tsx
-│   │   ├── sections/       # Page sections
-│   │   └── brand/          # Brand components (if created)
-│   ├── lib/                # Utility libraries
-│   │   ├── analytics/      # PostHog integration
-│   │   │   └── posthog.tsx
-│   │   └── utils.ts        # Utility functions
-│   └── styles/             # Additional styles
-├── .env.example            # Environment variables template
-├── .eslintrc.json          # ESLint config
-├── .prettierrc             # Prettier config
-├── next.config.js          # Next.js config (static export)
-├── tailwind.config.ts      # Tailwind CSS config
-├── tsconfig.json           # TypeScript config
-└── package.json            # Dependencies
+│   ├── app/                 # Next.js App Router
+│   │   ├── (routes)/        # Route groups
+│   │   ├── api/             # API routes
+│   │   └── layout.tsx       # Root layout
+│   ├── components/          # React components
+│   │   ├── ui/              # Reusable UI components
+│   │   └── features/        # Feature-specific components
+│   ├── lib/                 # Utilities and helpers
+│   │   ├── api/             # API clients
+│   │   ├── hooks/           # Custom React hooks
+│   │   └── utils/           # Utility functions
+│   ├── styles/              # Global styles
+│   └── types/               # TypeScript types
+├── tests/
+│   ├── unit/                # Unit tests
+│   └── e2e/                 # E2E tests
+├── public/                  # Static assets
+└── config files             # Configuration
 ```
 
----
+## 🧪 Testing Strategy
 
-## 🎨 Branding
+### Unit Tests (Vitest)
 
-### Logo Variations
+Test individual components and functions:
 
-We provide 5 professional logo variations:
+```typescript
+// src/components/Button/__tests__/Button.test.tsx
+import { render, screen } from '@testing-library/react';
+import { Button } from '../Button';
 
-1. **Main Logo** (`logo-main.svg`) - Full logo with gradient
-2. **Icon** (`logo-icon.svg`) - Square icon for small spaces
-3. **White** (`logo-white.svg`) - For very dark backgrounds
-4. **Horizontal** (`logo-horizontal.svg`) - For headers/navigation
-5. **Favicon** (`favicon.svg`) - Browser tab icon
-
-### Brand Colors
-
-```css
-/* Primary Gradient */
-Indigo: #4F46E5 → Green: #10B981
-
-/* Usage */
-.bg-primary        /* Indigo-600 */
-.bg-secondary      /* Green-500 */
-.bg-gradient-primary /* Gradient */
+test('renders button with text', () => {
+  render(<Button>Click me</Button>);
+  expect(screen.getByText('Click me')).toBeInTheDocument();
+});
 ```
 
-### Documentation
+### E2E Tests (Playwright)
 
-- **[Logo Usage Guide](docs/LOGO_USAGE.md)** - How to use logos correctly
-- **[Brand Guidelines](docs/BRAND_GUIDELINES.md)** - Complete brand guide
-- **[Branding Usage](docs/BRANDING_USAGE.md)** - Code examples
+Test critical user flows:
 
----
+```typescript
+// tests/e2e/home.spec.ts
+import { test, expect } from '@playwright/test';
+
+test('homepage loads correctly', async ({ page }) => {
+  await page.goto('/');
+  await expect(page).toHaveTitle(/ComplianceFlow/);
+});
+```
+
+## 🌐 Environment Variables
+
+Create `.env.local` with:
+
+```env
+# Site Configuration
+NEXT_PUBLIC_SITE_URL=https://complianceflow.es
+NEXT_PUBLIC_API_URL=https://api.complianceflow.es
+
+# PostHog Analytics
+NEXT_PUBLIC_POSTHOG_KEY=your_posthog_key
+NEXT_PUBLIC_POSTHOG_HOST=https://app.posthog.com
+
+# Authentication (NextAuth v5)
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_secret_here
+
+# Upstash Redis (Rate Limiting)
+UPSTASH_REDIS_REST_URL=your_upstash_url
+UPSTASH_REDIS_REST_TOKEN=your_upstash_token
+```
+
+## 🚢 Deployment
+
+### Cloudflare Pages (Recommended)
+
+1. Connect your GitHub repository
+2. Configure build settings:
+   - **Build command**: `npm run build`
+   - **Build output directory**: `.next`
+   - **Root directory**: `/`
+3. Add environment variables
+4. Deploy!
+
+### Vercel (Alternative)
+
+```bash
+npm i -g vercel
+vercel --prod
+```
+
+## 📈 Performance
+
+- **Lighthouse Score**: 95+ across all metrics
+- **First Contentful Paint**: < 1.5s
+- **Time to Interactive**: < 3.0s
+- **Cumulative Layout Shift**: < 0.1
 
 ## 🔒 Security
 
-ComplianceFlow implements:
-
-- ✅ **Secure Headers**: CSP, HSTS, X-Frame-Options
-- ✅ **Input Validation**: Zod schemas for all forms
-- ✅ **Dependency Scanning**: Automated vulnerability checks
-- ✅ **Secret Scanning**: TruffleHog in CI/CD
-- ✅ **CodeQL Analysis**: Weekly security scans
-- ✅ **Static Export**: No server-side attack surface
-
-**Security Contact**: juanca755@hotmail.com
-
----
+- HTTPS enforced with HSTS
+- CSP headers configured
+- XSS protection enabled
+- CSRF protection via NextAuth
+- Rate limiting on API routes
+- Input validation with Zod
+- Regular security audits
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please:
+This is a private repository. For internal contributors:
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. Create a feature branch: `git checkout -b feature/amazing-feature`
+2. Make your changes
+3. Run tests: `npm run test && npm run test:e2e`
+4. Commit with conventional commits: `git commit -m 'feat: add amazing feature'`
+5. Push and create a Pull Request
 
 ### Commit Convention
 
-We use [Conventional Commits](https://www.conventionalcommits.org/):
+- `feat:` New feature
+- `fix:` Bug fix
+- `docs:` Documentation changes
+- `style:` Code style changes (formatting)
+- `refactor:` Code refactoring
+- `test:` Adding or updating tests
+- `chore:` Maintenance tasks
 
-```
-feat: add new feature
-fix: bug fix
-docs: documentation changes
-style: formatting, missing semicolons, etc.
-refactor: code refactoring
-test: adding tests
-chore: maintenance tasks
-```
+## 📄 License
 
-See [CONTRIBUTING_GUIDE.md](docs/CONTRIBUTING_GUIDE.md) for more details.
+Private and Proprietary - All rights reserved.
 
----
+## 👤 Author
 
-## 📊 Current Status
-
-### Completed ✅
-- [x] Professional logo system (5 variations)
-- [x] Dark theme design
-- [x] Static site generation
-- [x] CI/CD pipelines (6 workflows)
-- [x] TypeScript full coverage
-- [x] Responsive design
-- [x] SEO optimization
-- [x] GitHub Actions automation
-- [x] Security scanning
-- [x] Documentation
-- [x] Brand guidelines
-
-### Ready to Configure 🔧
-- [ ] PostHog analytics (needs API key)
-- [ ] Custom domain DNS
-- [ ] Email notifications
-
-### Future Enhancements 📋
-- [ ] Blog section
-- [ ] Documentation portal
-- [ ] API demos
-- [ ] Interactive compliance tools
-- [ ] Multi-language content
-
----
-
-## 📈 Performance Metrics
-
-### Target Metrics
-
-| Metric | Target | Status |
-|--------|--------|--------|
-| **Initial Load** | < 2s | ✅ Achieved |
-| **Build Time** | < 3 min | ✅ ~2 min |
-| **Bundle Size** | < 300KB | ✅ ~150KB |
-| **Lighthouse Performance** | > 90 | ✅ 95+ |
-| **Accessibility** | 100 | ✅ 100 |
-| **SEO** | 100 | ✅ 100 |
-
----
-
-## 🔗 Links
-
-- **Website**: https://complianceflow.netlify.app
-- **Repository**: https://github.com/juankaspain/complianceflow.es
-- **Issues**: https://github.com/juankaspain/complianceflow.es/issues
-- **Workflows**: https://github.com/juankaspain/complianceflow.es/actions
-
----
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 💬 Support
-
-- **Email**: juanca755@hotmail.com
-- **GitHub Issues**: [Create an issue](https://github.com/juankaspain/complianceflow.es/issues/new)
-- **GitHub Discussions**: [Start a discussion](https://github.com/juankaspain/complianceflow.es/discussions)
-
----
-
-## 👥 Author
-
-**Juan Carlos García Arriero**
-- GitHub: [@juankaspain](https://github.com/juankaspain)
+**Juan Carlos Garcia Arriero**
 - Email: juanca755@hotmail.com
-
----
+- GitHub: [@juankaspain](https://github.com/juankaspain)
 
 ## 🙏 Acknowledgments
 
-- Next.js team for an amazing framework
-- Vercel for excellent tooling
-- Netlify for hosting and deployment
-- The open-source community
+- Next.js team for the amazing framework
+- Vercel for hosting and tooling
+- Open source community
 
 ---
 
-<div align="center">
-
-**Built with ❤️ in Spain 🇪🇸**
-
-[Website](https://complianceflow.netlify.app) • [GitHub](https://github.com/juankaspain/complianceflow.es)
-
-**⭐ If you like this project, please consider giving it a star! ⭐**
-
-</div>
+**Built with ❤️ using Next.js 15 and React 19**
