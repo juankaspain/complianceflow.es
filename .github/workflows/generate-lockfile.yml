@@ -1,0 +1,27 @@
+name: Generate Package Lock
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate-lockfile:
+    name: Generate package-lock.json
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate package-lock.json
+        run: npm install --package-lock-only
+
+      - name: Commit package-lock.json
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add package-lock.json
+          git commit -m "chore: add package-lock.json for npm caching" || echo "No changes to commit"
+          git push
