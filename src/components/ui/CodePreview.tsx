@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check, Copy } from 'lucide-react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 type Language = 'curl' | 'javascript' | 'typescript' | 'python';
 
@@ -32,22 +30,145 @@ const languageLabels: Record<Language, string> = {
   python: 'Python',
 };
 
-// Custom dark theme optimized for ComplianceFlow
-const customStyle = {
-  ...vscDarkPlus,
-  'pre[class*="language-"]': {
-    ...vscDarkPlus['pre[class*="language-"]'],
-    background: 'transparent',
-    margin: 0,
-    padding: 0,
-  },
-  'code[class*="language-"]': {
-    ...vscDarkPlus['code[class*="language-"]'],
-    background: 'transparent',
-    textShadow: 'none',
-    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
-  },
-};
+/**
+ * Simple syntax highlighter using regex patterns
+ */
+function highlightCode(code: string, language: Language): React.ReactNode {
+  const lines = code.split('\n');
+  
+  return lines.map((line, lineIndex) => {
+    let highlightedLine = line;
+    const spans: Array<{ start: number; end: number; className: string; text: string }> = [];
+
+    // JavaScript/TypeScript patterns
+    if (language === 'javascript' || language === 'typescript') {
+      // Keywords
+      const keywords = /\b(import|from|const|let|var|function|async|await|return|if|else|for|while|new|class|export|default|interface|type)\b/g;
+      let match;
+      while ((match = keywords.exec(line)) !== null) {
+        spans.push({ start: match.index, end: match.index + match[0].length, className: 'text-purple-400', text: match[0] });
+      }
+
+      // Strings
+      const strings = /(['"`])(?:(?=(\\?))\2.)*?\1/g;
+      while ((match = strings.exec(line)) !== null) {
+        spans.push({ start: match.index, end: match.index + match[0].length, className: 'text-green-400', text: match[0] });
+      }
+
+      // Numbers
+      const numbers = /\b\d+(\.\d+)?\b/g;
+      while ((match = numbers.exec(line)) !== null) {
+        spans.push({ start: match.index, end: match.index + match[0].length, className: 'text-orange-400', text: match[0] });
+      }
+
+      // Comments
+      const comment = line.indexOf('//');
+      if (comment !== -1) {
+        spans.push({ start: comment, end: line.length, className: 'text-gray-500 italic', text: line.slice(comment) });
+      }
+    }
+
+    // Python patterns
+    if (language === 'python') {
+      // Keywords
+      const keywords = /\b(import|from|def|class|if|else|elif|for|while|return|async|await|with|as|try|except|finally|print|lambda)\b/g;
+      let match;
+      while ((match = keywords.exec(line)) !== null) {
+        spans.push({ start: match.index, end: match.index + match[0].length, className: 'text-purple-400', text: match[0] });
+      }
+
+      // Strings
+      const strings = /(['"`])(?:(?=(\\?))\2.)*?\1/g;
+      while ((match = strings.exec(line)) !== null) {
+        spans.push({ start: match.index, end: match.index + match[0].length, className: 'text-green-400', text: match[0] });
+      }
+
+      // f-strings
+      const fstrings = /f(['"]).*?\1/g;
+      while ((match = fstrings.exec(line)) !== null) {
+        spans.push({ start: match.index, end: match.index + match[0].length, className: 'text-green-400', text: match[0] });
+      }
+
+      // Comments
+      const comment = line.indexOf('#');
+      if (comment !== -1) {
+        spans.push({ start: comment, end: line.length, className: 'text-gray-500 italic', text: line.slice(comment) });
+      }
+    }
+
+    // Bash/cURL patterns
+    if (language === 'curl') {
+      // Commands
+      const commands = /\b(curl|POST|GET|PUT|DELETE|HEAD)\b/g;
+      let match;
+      while ((match = commands.exec(line)) !== null) {
+        spans.push({ start: match.index, end: match.index + match[0].length, className: 'text-cyan-400', text: match[0] });
+      }
+
+      // Flags
+      const flags = /-[A-Za-z]\b/g;
+      while ((match = flags.exec(line)) !== null) {
+        spans.push({ start: match.index, end: match.index + match[0].length, className: 'text-yellow-400', text: match[0] });
+      }
+
+      // Strings
+      const strings = /(['"`])(?:(?=(\\?))\2.)*?\1/g;
+      while ((match = strings.exec(line)) !== null) {
+        spans.push({ start: match.index, end: match.index + match[0].length, className: 'text-green-400', text: match[0] });
+      }
+    }
+
+    // Sort spans by start position
+    spans.sort((a, b) => a.start - b.start);
+
+    // Build the highlighted line
+    if (spans.length === 0) {
+      return (
+        <div key={lineIndex} className="text-gray-300">
+          {line || '\u00A0'}
+        </div>
+      );
+    }
+
+    const elements: React.ReactNode[] = [];
+    let lastEnd = 0;
+
+    spans.forEach((span, i) => {
+      // Add text before this span
+      if (span.start > lastEnd) {
+        elements.push(
+          <span key={`text-${i}`} className="text-gray-300">
+            {line.slice(lastEnd, span.start)}
+          </span>
+        );
+      }
+
+      // Add the highlighted span
+      elements.push(
+        <span key={`span-${i}`} className={span.className}>
+          {span.text}
+        </span>
+      );
+
+      lastEnd = span.end;
+    });
+
+    // Add remaining text
+    if (lastEnd < line.length) {
+      elements.push(
+        <span key="text-end" className="text-gray-300">
+          {line.slice(lastEnd)}
+        </span>
+      );
+    }
+
+    return (
+      <div key={lineIndex} className="min-h-[1.5rem]">
+        {elements.length > 0 ? elements : '\u00A0'}
+      </div>
+    );
+  });
+}
 
 /**
  * CodePreview - Interactive code example component with syntax highlighting
@@ -76,13 +197,6 @@ export default function CodePreview({
     await navigator.clipboard.writeText(activeExample.code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  // Map language to syntax highlighter language
-  const getSyntaxLanguage = (lang: Language): string => {
-    if (lang === 'curl') return 'bash';
-    if (lang === 'typescript') return 'typescript';
-    return lang;
   };
 
   return (
@@ -135,7 +249,7 @@ export default function CodePreview({
         </motion.button>
       </div>
 
-      {/* Code Display with Syntax Highlighting */}
+      {/* Code Display with Custom Syntax Highlighting */}
       <motion.div
         key={activeTab}
         initial={{ opacity: 0, x: 20 }}
@@ -144,22 +258,9 @@ export default function CodePreview({
         className="relative bg-[#1e1e1e] overflow-hidden"
       >
         <div className="overflow-x-auto">
-          <SyntaxHighlighter
-            language={getSyntaxLanguage(activeExample.language)}
-            style={customStyle}
-            showLineNumbers={false}
-            wrapLines={true}
-            wrapLongLines={true}
-            customStyle={{
-              margin: 0,
-              padding: '1.5rem',
-              background: 'transparent',
-              fontSize: '0.875rem',
-              lineHeight: '1.5',
-            }}
-          >
-            {activeExample.code}
-          </SyntaxHighlighter>
+          <pre className="p-6 text-sm font-mono leading-relaxed">
+            {highlightCode(activeExample.code, activeExample.language)}
+          </pre>
         </div>
       </motion.div>
 
