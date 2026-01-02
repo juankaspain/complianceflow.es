@@ -1,117 +1,123 @@
-# GitHub Actions Workflows - Optimized
+# GitHub Actions Workflows
 
-## 🚀 Workflows Activos
+## 🎯 Optimized Workflow Structure
 
-### 1. **main.yml** - Main CI/CD Pipeline
-**Cuándo se ejecuta:** En cada push a `main` y en PRs
-**Qué hace:**
-- ✅ Build del proyecto
-- ✅ Type checking con TypeScript
-- ✅ Linting con ESLint
-- ✅ Format checking con Prettier
-- ✅ Lighthouse audit (solo en main)
-- ✅ Deploy automático a Netlify (solo en main)
+This project uses **3 consolidated workflows** instead of 16+ redundant ones, reducing CI/CD overhead by ~80%.
 
-**Jobs:**
-1. `build-and-validate` - Validaciones y build
-2. `lighthouse` - Performance audit
-3. `deploy` - Información de deployment
+## 📋 Active Workflows
 
-### 2. **pr-checks.yml** - PR Quick Checks
-**Cuándo se ejecuta:** En PRs (opened, synchronize, reopened)
-**Qué hace:**
-- ⚡ Validaciones rápidas antes del review
-- ⚡ Type checking
-- ⚡ Linting
+### 1. CI Pipeline (`ci.yml`)
+**Triggers**: Push to main/develop, Pull Requests  
+**Purpose**: Complete code quality and build validation
 
-### 3. **security-scheduled.yml** - Weekly Security Scan
-**Cuándo se ejecuta:** 
-- 🕐 Lunes a las 2 AM UTC (weekly)
-- 🔧 Manualmente via workflow_dispatch
-- 📦 Cuando cambian dependencias en PRs
+**Jobs**:
+- Type checking with TypeScript
+- Linting with ESLint 9
+- Code formatting validation
+- Unit tests with Vitest
+- Production build verification
 
-**Qué hace:**
-- 🔒 npm audit
-- 🔍 CodeQL analysis
+**Optimizations**:
+- Uses `concurrency` to cancel redundant runs
+- Leverages npm cache for faster installs
+- Runs on every push and PR
 
-## 🗑️ Workflows Removidos/Consolidados
+---
 
-Estos workflows fueron **consolidados en main.yml** para evitar ejecuciones duplicadas:
+### 2. Security Scan (`security.yml`)
+**Triggers**: Push to main, Pull Requests, Weekly schedule (Mondays)  
+**Purpose**: Security vulnerability detection
 
-- ❌ `ci.yml` → Consolidado en `main.yml`
-- ❌ `test.yml` → Removido (scripts de test no existen)
-- ❌ `deploy-production.yml` → Consolidado en `main.yml`
-- ❌ `security.yml` → Ahora es `security-scheduled.yml` (solo weekly)
-- ❌ `code-quality.yml` → Consolidado en `main.yml`
-- ❌ `lighthouse.yml` → Consolidado en `main.yml`
+**Jobs**:
+- **CodeQL Analysis**: Scans TypeScript/JavaScript for security issues
+- **Dependency Audit**: Runs npm audit for vulnerable packages
 
-## 📊 Mejoras de Performance
+**Optimizations**:
+- Consolidated 3 separate security workflows into 1
+- Weekly scheduled scans to catch new vulnerabilities
+- Uses `continue-on-error` to not block PRs on audit warnings
 
-### Antes:
-- 9+ jobs ejecutándose en paralelo en cada push
-- ~15-20 minutos de ejecución total
-- Múltiples instalaciones de dependencias
-- Workflows fallando por scripts inexistentes
+---
 
-### Después:
-- 3 jobs secuenciales y eficientes
-- ~5-8 minutos de ejecución total
-- Caché compartido entre jobs
-- Sin errores de workflows
+### 3. Performance (`performance.yml`)
+**Triggers**: Pull Requests, Weekly schedule (Mondays 2 AM)  
+**Purpose**: Performance monitoring and Lighthouse audits
 
-## 🔧 Configuración
+**Jobs**:
+- Lighthouse CI audits (Performance, SEO, Accessibility, Best Practices)
+- Bundle size analysis
 
-### Secrets Necesarios (Opcionales)
-- `LHCI_GITHUB_APP_TOKEN` - Para Lighthouse CI (opcional)
+**Optimizations**:
+- Only runs on PRs and weekly (not every push)
+- Uses `continue-on-error` to not block development
 
-### Branch Protection Rules Recomendadas
-```yaml
-Required status checks:
-  - Build & Validate
-  - PR Checks / Quick Validation (para PRs)
-```
+---
 
-## 📝 Comandos Disponibles
+## 🗑️ Removed Workflows
 
-```bash
-# Development
-npm run dev          # Start dev server
-npm run build        # Build for production
-npm run start        # Start production server
+The following redundant/stub workflows were removed:
 
-# Quality
-npm run lint         # Run ESLint
-npm run lint:fix     # Fix linting issues
-npm run type-check   # TypeScript type checking
-npm run format       # Format code with Prettier
-npm run format:check # Check code formatting
+| Workflow | Reason | Replaced By |
+|----------|--------|-------------|
+| `main.yml` | Duplicate CI pipeline | `ci.yml` |
+| `code-quality.yml` | Duplicate linting | `ci.yml` |
+| `pr-checks.yml` | Duplicate PR checks | `ci.yml` |
+| `security-scan.yml` | Duplicate security | `security.yml` |
+| `security-scheduled.yml` | Duplicate scheduled scan | `security.yml` |
+| `lighthouse.yml` | Duplicate performance | `performance.yml` |
+| `performance-monitor.yml` | Stub file (382 bytes) | `performance.yml` |
+| `backup.yml` | Stub file (347 bytes) | N/A |
+| `dependency-update.yml` | Stub file (384 bytes) | Use Dependabot |
+| `verify-secrets.yml` | Stub file (382 bytes) | N/A |
 
-# Analysis
-npm run analyze      # Analyze bundle size
-npm run lighthouse   # Run Lighthouse audit
-```
+---
 
-## 🎯 Workflow Triggers Summary
+## 📊 Impact
 
-| Workflow | Push Main | PR | Schedule | Manual |
-|----------|-----------|-------|----------|--------|
-| main.yml | ✅ | ✅ | ❌ | ❌ |
-| pr-checks.yml | ❌ | ✅ | ❌ | ❌ |
-| security-scheduled.yml | ❌ | ✅* | ✅ | ✅ |
+### Before Optimization
+- **16 workflows** running on every event
+- **1,341 workflow runs** accumulated
+- Multiple duplicate jobs per push
+- High GitHub Actions minutes consumption
 
-*Solo cuando cambian package.json o package-lock.json
+### After Optimization
+- **3 consolidated workflows**
+- ~**80% reduction** in workflow runs
+- **Faster CI/CD** with concurrency controls
+- **Lower Actions minutes** usage
 
-## 💡 Tips
+---
 
-1. **Los workflows ahora son mucho más rápidos** gracias a la caché compartida
-2. **Los security scans son semanales** para no ralentizar el desarrollo
-3. **Lighthouse solo corre en main** para ahorrar tiempo en PRs
-4. **Todos los workflows tienen timeout** para evitar ejecuciones colgadas
-5. **Concurrency control** cancela workflows antiguos automáticamente
+## 🔧 Keeping Workflows
 
-## 🚨 Si algo falla
+These workflows are intentionally kept (for specific use cases):
 
-1. **Build fails**: Verifica que el código compile localmente con `npm run build`
-2. **Type check fails**: Ejecuta `npm run type-check` localmente
-3. **Lint fails**: Ejecuta `npm run lint:fix` para auto-fix
-4. **Deploy issues**: Netlify auto-deploys, verifica la configuración en Netlify dashboard
+- `deploy-preview.yml` - Deploy previews for specific branches
+- `release.yml` - Release automation
+- `stale.yml` - Issue/PR management
+
+---
+
+## 🚀 Best Practices Applied
+
+1. **Concurrency Control**: Automatically cancels outdated workflow runs
+2. **Smart Caching**: Uses npm cache to speed up installs
+3. **Strategic Triggers**: Only runs when necessary
+4. **Fail-Safe**: Uses `continue-on-error` for non-blocking checks
+5. **DRY Principle**: No duplicate functionality
+
+---
+
+## 📝 Adding New Workflows
+
+Before adding a new workflow, ask:
+
+1. Can this be added to an existing workflow?
+2. Does it need to run on every push?
+3. Is there a native GitHub feature (like Dependabot) instead?
+
+If you must add a new workflow:
+- Always use `concurrency` groups
+- Use caching when possible
+- Document the trigger conditions
+- Consider scheduled runs vs event-based
