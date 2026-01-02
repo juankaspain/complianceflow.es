@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import AnimatedCounter from '@/components/ui/AnimatedCounter';
 import GlassCard from '@/components/ui/GlassCard';
 import CodePreview from '@/components/ui/CodePreview';
+import { ISO27001Badge, SOC2Badge, GDPRBadge, HIPAABadge } from '@/components/ui/TrustBadge';
 import { Zap, Shield, Clock, Globe } from 'lucide-react';
 import Link from 'next/link';
 
@@ -17,6 +18,7 @@ import Link from 'next/link';
  * - Modern glassmorphism design
  * - Parallax scroll effects
  * - Micro-animations on CTAs
+ * - Trust badges with verification
  */
 export default function EnhancedHeroDemo() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -326,7 +328,7 @@ print(f'✅ Invoice submitted: {result.id}')`,
           />
         </motion.div>
 
-        {/* Trust Badges */}
+        {/* Trust Badges with Logos */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -336,25 +338,11 @@ print(f'✅ Invoice submitted: {result.id}')`,
           <p className="text-center text-sm text-gray-500 uppercase tracking-wider mb-10 font-semibold">
             Certificado y auditado por
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-            {[
-              { name: 'ISO 27001', subtitle: 'Information Security' },
-              { name: 'SOC 2 Type II', subtitle: 'Security & Privacy' },
-              { name: 'GDPR', subtitle: 'Data Protection' },
-              { name: 'HIPAA', subtitle: 'Healthcare Ready' },
-            ].map((cert) => (
-              <motion.div 
-                key={cert.name} 
-                className="text-center group cursor-default"
-                whileHover={{ scale: 1.1, y: -5 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-              >
-                <div className="text-xl font-bold text-white/80 group-hover:text-primary-400 transition-colors duration-300">
-                  {cert.name}
-                </div>
-                <div className="text-xs text-gray-500 mt-1">{cert.subtitle}</div>
-              </motion.div>
-            ))}
+          <div className="flex flex-wrap justify-center items-start gap-8 md:gap-12">
+            <ISO27001Badge />
+            <SOC2Badge />
+            <GDPRBadge />
+            <HIPAABadge />
           </div>
         </motion.div>
       </div>
