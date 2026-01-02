@@ -44,6 +44,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Generate lockfile
+        run: npm install --package-lock-only
+
       - name: Run npm audit
         run: npm audit --audit-level=moderate
         continue-on-error: true
