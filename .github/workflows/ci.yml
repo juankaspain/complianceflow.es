@@ -30,9 +30,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Type check
         run: npm run type-check
@@ -64,9 +65,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Generate lockfile
-        run: npm install --package-lock-only
 
       - name: Run npm audit
         run: npm audit --audit-level=moderate || echo "Found vulnerabilities, review manually"
