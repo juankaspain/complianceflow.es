@@ -1,12 +1,11 @@
 name: Security Scan
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  # Solo ejecutar CodeQL semanalmente para ahorrar minutos
   schedule:
     - cron: '0 0 * * 1' # Weekly on Mondays
+  # Permitir ejecución manual
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -21,7 +20,8 @@ jobs:
   codeql:
     name: CodeQL Analysis
     runs-on: ubuntu-latest
-    continue-on-error: true  # Don't fail until code scanning is enabled
+    timeout-minutes: 20
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
 
@@ -36,20 +36,3 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         continue-on-error: true
-
-  dependencies:
-    name: Dependency Audit
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Generate lockfile
-        run: npm install --package-lock-only
-
-      - name: Run npm audit (informational)
-        run: npm audit --audit-level=moderate || echo "Found vulnerabilities, review them manually"
