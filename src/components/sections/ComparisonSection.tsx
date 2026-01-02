@@ -7,49 +7,42 @@ export default function ComparisonSection() {
       complianceflow: '< 1 semana',
       inhouse: '6-12 meses',
       otros: '2-4 meses',
-      cfColor: 'bg-secondary/10 text-secondary-300',
     },
     {
       criterio: 'Coste inicial',
       complianceflow: '0 € (sandbox)',
       inhouse: '€80K-150K',
       otros: '€5K-15K',
-      cfColor: 'bg-secondary/10 text-secondary-300',
     },
     {
       criterio: 'Mantenimiento',
       complianceflow: 'Incluido',
       inhouse: '2-3 devs full-time',
       otros: 'Variable',
-      cfColor: 'bg-secondary/10 text-secondary-300',
     },
     {
       criterio: 'Actualizaciones regulatorias',
       complianceflow: 'Automáticas',
       inhouse: 'Manual',
       otros: 'Manual/lenta',
-      cfColor: 'bg-secondary/10 text-secondary-300',
     },
     {
       criterio: 'SLA & Soporte',
       complianceflow: '99.9% + 4h response',
       inhouse: 'Sin garantía',
       otros: 'Variable',
-      cfColor: 'bg-secondary/10 text-secondary-300',
     },
     {
       criterio: 'Escalabilidad',
       complianceflow: 'Ilimitada',
       inhouse: 'Requiere inversión',
       otros: 'Limitada',
-      cfColor: 'bg-secondary/10 text-secondary-300',
     },
     {
       criterio: 'Certificaciones',
       complianceflow: 'ISO 27001, SOC 2, GDPR',
       inhouse: 'A conseguir',
       otros: 'Algunas',
-      cfColor: 'bg-secondary/10 text-secondary-300',
     },
   ];
 
@@ -83,40 +76,40 @@ export default function ComparisonSection() {
                   <tr>
                     <th
                       scope="col"
-                      className="bg-primary/10 px-6 py-5 text-left text-sm font-semibold text-white uppercase tracking-wider w-1/5"
+                      className="bg-gray-800/80 px-6 py-5 text-left text-sm font-semibold text-white uppercase tracking-wider w-1/4"
                     >
                       Criterio
                     </th>
                     <th
                       scope="col"
-                      className="bg-primary px-6 py-5 text-center text-sm font-semibold text-white uppercase tracking-wider w-1/5"
+                      className="bg-gradient-to-br from-primary-600 to-primary-700 px-6 py-5 text-center text-sm font-bold text-white uppercase tracking-wider w-1/4 shadow-lg shadow-primary/20"
                     >
-                      <div className="flex flex-col items-center gap-1">
+                      <div className="flex flex-col items-center gap-2">
                         <svg
-                          className="h-6 w-6"
+                          className="h-7 w-7"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
+                          strokeWidth={2.5}
                         >
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            strokeWidth={2}
                             d="M5 13l4 4L19 7"
                           />
                         </svg>
-                        <span>ComplianceFlow</span>
+                        <span className="text-base">ComplianceFlow</span>
                       </div>
                     </th>
                     <th
                       scope="col"
-                      className="bg-gray-800/50 px-6 py-5 text-center text-sm font-semibold text-gray-300 uppercase tracking-wider w-1/5"
+                      className="bg-gray-800/50 px-6 py-5 text-center text-sm font-semibold text-gray-400 uppercase tracking-wider w-1/4"
                     >
                       Desarrollo in-house
                     </th>
                     <th
                       scope="col"
-                      className="bg-gray-800/50 px-6 py-5 text-center text-sm font-semibold text-gray-300 uppercase tracking-wider w-1/5"
+                      className="bg-gray-800/50 px-6 py-5 text-center text-sm font-semibold text-gray-400 uppercase tracking-wider w-1/4"
                     >
                       Otros proveedores
                     </th>
@@ -124,31 +117,35 @@ export default function ComparisonSection() {
                 </thead>
 
                 {/* Table Body */}
-                <tbody className="divide-y divide-gray-800 bg-gray-950">
+                <tbody className="divide-y divide-gray-800/50 bg-gray-950">
                   {comparisonData.map((row, index) => (
                     <tr
                       key={index}
-                      className="hover:bg-gray-900/50 transition-colors"
+                      className="hover:bg-gray-900/50 transition-colors duration-200"
                     >
                       {/* Criterio */}
-                      <td className="px-6 py-5 text-sm font-medium text-white whitespace-nowrap">
+                      <td className="px-6 py-5 text-sm font-semibold text-gray-200 bg-gray-900/30">
                         {row.criterio}
                       </td>
 
-                      {/* ComplianceFlow - Highlighted */}
-                      <td
-                        className={`px-6 py-5 text-center text-sm font-semibold whitespace-nowrap ${row.cfColor}`}
-                      >
-                        {row.complianceflow}
+                      {/* ComplianceFlow - Highlighted with better contrast */}
+                      <td className="px-6 py-5 text-center text-base font-bold bg-gradient-to-br from-primary-500/20 to-secondary-500/20 border-l-2 border-r-2 border-primary-500/30 relative">
+                        {/* Glow effect background */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-primary-400/10 to-transparent pointer-events-none" />
+                        
+                        {/* Text content */}
+                        <span className="relative z-10 text-primary-200 drop-shadow-[0_0_8px_rgba(129,140,248,0.5)]">
+                          {row.complianceflow}
+                        </span>
                       </td>
 
                       {/* In-house */}
-                      <td className="px-6 py-5 text-center text-sm text-gray-400 whitespace-nowrap">
+                      <td className="px-6 py-5 text-center text-sm text-gray-500">
                         {row.inhouse}
                       </td>
 
                       {/* Otros */}
-                      <td className="px-6 py-5 text-center text-sm text-gray-400 whitespace-nowrap">
+                      <td className="px-6 py-5 text-center text-sm text-gray-500">
                         {row.otros}
                       </td>
                     </tr>
@@ -160,23 +157,23 @@ export default function ComparisonSection() {
         </div>
 
         {/* Veredicto */}
-        <div className="mt-12 text-center">
-          <div className="inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/30 px-8 py-4">
+        <div className="mt-16 text-center">
+          <div className="inline-flex items-center gap-4 rounded-2xl bg-gradient-to-r from-primary/20 to-secondary/20 border-2 border-primary/40 px-10 py-5 shadow-xl shadow-primary/10">
             <svg
-              className="h-6 w-6 text-secondary-400 flex-shrink-0"
+              className="h-8 w-8 text-green-400 flex-shrink-0"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
+              strokeWidth={2}
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            <p className="text-lg text-gray-300">
-              <span className="font-semibold text-white">Veredicto:</span>{' '}
+            <p className="text-lg text-gray-200">
+              <span className="font-bold text-white">Veredicto:</span>{' '}
               ComplianceFlow ofrece el mejor balance entre velocidad, coste y fiabilidad
             </p>
           </div>
