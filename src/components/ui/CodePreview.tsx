@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check, Copy } from 'lucide-react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 type Language = 'curl' | 'javascript' | 'typescript' | 'python';
 
@@ -28,6 +30,23 @@ const languageLabels: Record<Language, string> = {
   javascript: 'JavaScript',
   typescript: 'TypeScript',
   python: 'Python',
+};
+
+// Custom dark theme optimized for ComplianceFlow
+const customStyle = {
+  ...vscDarkPlus,
+  'pre[class*="language-"]': {
+    ...vscDarkPlus['pre[class*="language-"]'],
+    background: 'transparent',
+    margin: 0,
+    padding: 0,
+  },
+  'code[class*="language-"]': {
+    ...vscDarkPlus['code[class*="language-"]'],
+    background: 'transparent',
+    textShadow: 'none',
+    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+  },
 };
 
 /**
@@ -59,8 +78,15 @@ export default function CodePreview({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  // Map language to syntax highlighter language
+  const getSyntaxLanguage = (lang: Language): string => {
+    if (lang === 'curl') return 'bash';
+    if (lang === 'typescript') return 'typescript';
+    return lang;
+  };
+
   return (
-    <div className={`rounded-2xl overflow-hidden border border-white/10 bg-gray-950 ${className}`}>
+    <div className={`rounded-2xl overflow-hidden border border-white/10 bg-gray-950 shadow-2xl ${className}`}>
       {/* Header */}
       {title && (
         <div className="px-6 py-4 border-b border-white/10 bg-gray-900/50">
@@ -70,7 +96,7 @@ export default function CodePreview({
 
       {/* Tab Navigation */}
       <div className="flex items-center justify-between gap-2 bg-gray-900/80 px-4 py-3 border-b border-white/10">
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {examples.map((example) => (
             <motion.button
               key={example.language}
@@ -98,28 +124,43 @@ export default function CodePreview({
           {copied ? (
             <>
               <Check className="w-4 h-4 text-green-400" />
-              <span className="text-green-400">Copiado</span>
+              <span className="text-green-400 hidden sm:inline">Copiado</span>
             </>
           ) : (
             <>
               <Copy className="w-4 h-4" />
-              <span>Copiar</span>
+              <span className="hidden sm:inline">Copiar</span>
             </>
           )}
         </motion.button>
       </div>
 
-      {/* Code Display */}
+      {/* Code Display with Syntax Highlighting */}
       <motion.div
         key={activeTab}
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3 }}
-        className="relative"
+        className="relative bg-[#1e1e1e] overflow-hidden"
       >
-        <pre className="p-6 overflow-x-auto text-sm">
-          <code className="text-gray-300 font-mono">{activeExample.code}</code>
-        </pre>
+        <div className="overflow-x-auto">
+          <SyntaxHighlighter
+            language={getSyntaxLanguage(activeExample.language)}
+            style={customStyle}
+            showLineNumbers={false}
+            wrapLines={true}
+            wrapLongLines={true}
+            customStyle={{
+              margin: 0,
+              padding: '1.5rem',
+              background: 'transparent',
+              fontSize: '0.875rem',
+              lineHeight: '1.5',
+            }}
+          >
+            {activeExample.code}
+          </SyntaxHighlighter>
+        </div>
       </motion.div>
 
       {/* Response Preview */}
