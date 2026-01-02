@@ -1,12 +1,13 @@
-// Service Worker for PWA functionality
-const CACHE_NAME = 'complianceflow-v2.0.0';
-const STATIC_CACHE = 'static-v2.0.0';
-const DYNAMIC_CACHE = 'dynamic-v2.0.0';
+// Service Worker for PWA capabilities
+const CACHE_NAME = 'complianceflow-v1';
+const STATIC_CACHE = 'static-v1';
+const DYNAMIC_CACHE = 'dynamic-v1';
 
-// Assets to cache on install
+// Assets to cache immediately
 const STATIC_ASSETS = [
   '/',
-  '/offline',
+  '/dashboard',
+  '/docs',
   '/manifest.json',
   '/favicon.ico',
 ];
@@ -22,7 +23,7 @@ self.addEventListener('install', (event) => {
     })
   );
   
-  // Activate immediately
+  // Force the waiting service worker to become active
   self.skipWaiting();
 });
 
@@ -45,69 +46,80 @@ self.addEventListener('activate', (event) => {
     })
   );
   
-  // Take control immediately
+  // Take control of all pages immediately
   return self.clients.claim();
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - serve from cache or network
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
-  
-  // Skip non-GET requests
-  if (request.method !== 'GET') {
-    return;
-  }
-  
+
   // Skip cross-origin requests
-  if (url.origin !== self.location.origin) {
+  if (url.origin !== location.origin) {
     return;
   }
-  
-  // Network first for API calls
+
+  // API requests - Network first, fallback to cache
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(networkFirst(request));
     return;
   }
-  
-  // Cache first for static assets
+
+  // Images and fonts - Cache first, fallback to network
   if (
-    url.pathname.match(/\.(js|css|png|jpg|jpeg|svg|gif|webp|avif|woff|woff2)$/)
+    request.destination === 'image' ||
+    request.destination === 'font' ||
+    url.pathname.match(/\.(jpg|jpeg|png|gif|svg|webp|woff|woff2|ttf)$/)
   ) {
     event.respondWith(cacheFirst(request));
     return;
   }
-  
-  // Stale while revalidate for pages
+
+  // HTML pages - Network first
+  if (request.mode === 'navigate') {
+    event.respondWith(networkFirst(request));
+    return;
+  }
+
+  // Everything else - Stale while revalidate
   event.respondWith(staleWhileRevalidate(request));
 });
 
-// Cache first strategy
+// Strategy: Cache first, fallback to network
 async function cacheFirst(request) {
-  const cache = await caches.open(STATIC_CACHE);
-  const cached = await cache.match(request);
-  
-  if (cached) {
-    return cached;
-  }
-  
   try {
+    const cache = await caches.open(DYNAMIC_CACHE);
+    const cached = await cache.match(request);
+    
+    if (cached) {
+      console.log('[SW] Serving from cache:', request.url);
+      return cached;
+    }
+    
     const response = await fetch(request);
+    
+    // Cache successful responses
     if (response.ok) {
       cache.put(request, response.clone());
     }
+    
     return response;
   } catch (error) {
     console.error('[SW] Cache first failed:', error);
-    return new Response('Offline', { status: 503 });
+    return new Response('Offline - Resource not available', {
+      status: 503,
+      statusText: 'Service Unavailable',
+    });
   }
 }
 
-// Network first strategy
+// Strategy: Network first, fallback to cache
 async function networkFirst(request) {
   try {
     const response = await fetch(request);
     
+    // Cache successful responses
     if (response.ok) {
       const cache = await caches.open(DYNAMIC_CACHE);
       cache.put(request, response.clone());
@@ -115,23 +127,37 @@ async function networkFirst(request) {
     
     return response;
   } catch (error) {
-    const cache = await caches.open(DYNAMIC_CACHE);
-    const cached = await cache.match(request);
+    console.log('[SW] Network failed, trying cache:', request.url);
+    
+    const cached = await caches.match(request);
     
     if (cached) {
       return cached;
     }
     
-    return new Response('Offline', { status: 503 });
+    // Return offline page for navigation requests
+    if (request.mode === 'navigate') {
+      const offlineCache = await caches.match('/');
+      if (offlineCache) {
+        return offlineCache;
+      }
+    }
+    
+    return new Response('Offline - No cached version available', {
+      status: 503,
+      statusText: 'Service Unavailable',
+    });
   }
 }
 
-// Stale while revalidate strategy
+// Strategy: Stale while revalidate
 async function staleWhileRevalidate(request) {
   const cache = await caches.open(DYNAMIC_CACHE);
   const cached = await cache.match(request);
   
+  // Return cached version immediately if available
   const fetchPromise = fetch(request).then((response) => {
+    // Update cache in background
     if (response.ok) {
       cache.put(request, response.clone());
     }
@@ -141,43 +167,72 @@ async function staleWhileRevalidate(request) {
   return cached || fetchPromise;
 }
 
-// Background sync
+// Background sync for failed requests
 self.addEventListener('sync', (event) => {
   console.log('[SW] Background sync:', event.tag);
   
-  if (event.tag === 'sync-data') {
-    event.waitUntil(syncData());
+  if (event.tag === 'sync-api-calls') {
+    event.waitUntil(syncFailedRequests());
   }
 });
 
-async function syncData() {
-  // Implement your background sync logic here
-  console.log('[SW] Syncing data...');
+async function syncFailedRequests() {
+  // Get failed requests from IndexedDB and retry
+  console.log('[SW] Syncing failed requests...');
+  // Implementation depends on your API queue system
 }
 
-// Push notifications
+// Push notification support
 self.addEventListener('push', (event) => {
-  const data = event.data?.json() || {};
+  console.log('[SW] Push notification received');
   
+  const data = event.data ? event.data.json() : {};
+  const title = data.title || 'ComplianceFlow';
   const options = {
-    body: data.body || 'New notification',
-    icon: '/icon-192x192.png',
-    badge: '/badge-72x72.png',
+    body: data.body || 'New update available',
+    icon: '/icon-192.png',
+    badge: '/icon-192.png',
     vibrate: [200, 100, 200],
-    data: data.data || {},
-    actions: data.actions || [],
+    data: data.url || '/',
+    actions: [
+      { action: 'open', title: 'Open' },
+      { action: 'close', title: 'Close' },
+    ],
   };
   
   event.waitUntil(
-    self.registration.showNotification(data.title || 'ComplianceFlow', options)
+    self.registration.showNotification(title, options)
   );
 });
 
-// Notification click
+// Notification click handler
 self.addEventListener('notificationclick', (event) => {
+  console.log('[SW] Notification clicked:', event.action);
+  
   event.notification.close();
   
-  event.waitUntil(
-    clients.openWindow(event.notification.data?.url || '/')
-  );
+  if (event.action === 'open' || !event.action) {
+    event.waitUntil(
+      clients.openWindow(event.notification.data || '/')
+    );
+  }
+});
+
+// Message handler for client communication
+self.addEventListener('message', (event) => {
+  console.log('[SW] Message received:', event.data);
+  
+  if (event.data.action === 'skipWaiting') {
+    self.skipWaiting();
+  }
+  
+  if (event.data.action === 'clearCache') {
+    event.waitUntil(
+      caches.keys().then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((name) => caches.delete(name))
+        );
+      })
+    );
+  }
 });
