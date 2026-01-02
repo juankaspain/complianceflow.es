@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Priority } from '@prisma/client';
 import { hash } from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -78,14 +78,14 @@ async function main() {
       description:
         'Personal data shall be processed lawfully, fairly and in a transparent manner',
       category: 'Data Processing',
-      priority: 'HIGH',
+      priority: Priority.HIGH,
     },
     {
       code: 'GDPR-ART-6',
       title: 'Lawfulness of processing',
       description: 'Processing shall be lawful only if and to the extent that at least one applies',
       category: 'Legal Basis',
-      priority: 'CRITICAL',
+      priority: Priority.CRITICAL,
     },
     {
       code: 'GDPR-ART-32',
@@ -93,7 +93,7 @@ async function main() {
       description:
         'Appropriate technical and organisational measures to ensure a level of security',
       category: 'Security',
-      priority: 'HIGH',
+      priority: Priority.HIGH,
     },
   ];
 
