@@ -1,13 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  
-  // Performance optimizations
-  swcMinify: true,
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
+
+  // Next.js 15 optimizations
+  turbo: {
+    resolveAlias: {
+      '@': './src',
+    },
   },
-  
+
+  // Performance optimizations
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
+
   // Image optimization
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -21,8 +29,8 @@ const nextConfig = {
       },
     ],
   },
-  
-  // Headers for security and performance
+
+  // Security and performance headers
   async headers() {
     return [
       {
@@ -54,7 +62,7 @@ const nextConfig = {
           },
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()',
+            value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
           },
         ],
       },
@@ -68,7 +76,7 @@ const nextConfig = {
         ],
       },
       {
-        source: '/:path*.svg',
+        source: '/:path*.(svg|jpg|jpeg|png|gif|webp|avif)',
         headers: [
           {
             key: 'Cache-Control',
@@ -78,58 +86,42 @@ const nextConfig = {
       },
     ];
   },
-  
+
   // Environment variables
   env: {
-    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://complianceflow.netlify.app',
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://api.complianceflow.es',
+    NEXT_PUBLIC_SITE_URL:
+      process.env.NEXT_PUBLIC_SITE_URL || 'https://complianceflow.es',
+    NEXT_PUBLIC_API_URL:
+      process.env.NEXT_PUBLIC_API_URL || 'https://api.complianceflow.es',
   },
-  
-  // Webpack configuration
-  webpack: (config, { dev, isServer }) => {
-    // Optimization for production
-    if (!dev) {
-      config.optimization = {
-        ...config.optimization,
-        minimize: true,
-        moduleIds: 'deterministic',
-      };
-    }
-    
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
-      };
-    }
-    
-    return config;
-  },
-  
-  // Enable experimental features for better performance
+
+  // Experimental features for Next.js 15
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    reactCompiler: true,
+    ppr: false, // Partial Prerendering - enable when ready
+    dynamicIO: false, // Dynamic IO - enable when ready
   },
-  
-  // Production source maps (disabled for smaller bundle)
+
+  // Production optimizations
   productionBrowserSourceMaps: false,
-  
-  // Compress output
   compress: true,
-  
-  // PoweredBy header removal
   poweredByHeader: false,
+
+  // Logging
+  logging: {
+    fetches: {
+      fullUrl: process.env.NODE_ENV === 'development',
+    },
+  },
 };
 
-// Bundle analyzer (only in production with ANALYZE=true)
-if (process.env.ANALYZE === 'true') {
-  const withBundleAnalyzer = require('@next/bundle-analyzer')({
-    enabled: true,
-  });
-  module.exports = withBundleAnalyzer(nextConfig);
-} else {
-  module.exports = nextConfig;
-}
+// Conditional bundle analyzer (cleaner approach)
+const withBundleAnalyzer =
+  process.env.ANALYZE === 'true'
+    ? require('@next/bundle-analyzer')({
+        enabled: true,
+      })
+    : (config) => config;
+
+module.exports = withBundleAnalyzer(nextConfig);
