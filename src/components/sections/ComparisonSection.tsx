@@ -1,45 +1,54 @@
 'use client';
 
+import Tooltip from '@/components/ui/Tooltip';
+
 export default function ComparisonSection() {
   const comparisonData = [
     {
       criterio: 'Time-to-market',
+      tooltip: 'Tiempo desde la decisión hasta tener el sistema en producción',
       complianceflow: '< 1 semana',
       inhouse: '6-12 meses',
       otros: '2-4 meses',
     },
     {
       criterio: 'Coste inicial',
+      tooltip: 'Inversión necesaria para comenzar a usar el sistema',
       complianceflow: '0 € (sandbox)',
       inhouse: '€80K-150K',
       otros: '€5K-15K',
     },
     {
       criterio: 'Mantenimiento',
+      tooltip: 'Recursos necesarios para mantener el sistema actualizado y funcionando',
       complianceflow: 'Incluido',
       inhouse: '2-3 devs full-time',
       otros: 'Variable',
     },
     {
       criterio: 'Actualizaciones regulatorias',
+      tooltip: 'Cómo se aplican cambios en normativas (SII, Verifactu, GDPR, etc.)',
       complianceflow: 'Automáticas',
       inhouse: 'Manual',
       otros: 'Manual/lenta',
     },
     {
       criterio: 'SLA & Soporte',
+      tooltip: 'Service Level Agreement: garantía de disponibilidad y tiempo de respuesta a incidencias',
       complianceflow: '99.9% + 4h response',
       inhouse: 'Sin garantía',
       otros: 'Variable',
     },
     {
       criterio: 'Escalabilidad',
+      tooltip: 'Capacidad del sistema para crecer con tu negocio sin pérdida de rendimiento',
       complianceflow: 'Ilimitada',
       inhouse: 'Requiere inversión',
       otros: 'Limitada',
     },
     {
       criterio: 'Certificaciones',
+      tooltip: 'Estándares internacionales de seguridad y privacidad',
       complianceflow: 'ISO 27001, SOC 2, GDPR',
       inhouse: 'A conseguir',
       otros: 'Algunas',
@@ -128,9 +137,13 @@ export default function ComparisonSection() {
                       key={index}
                       className="hover:bg-gray-900/50 transition-colors duration-200"
                     >
-                      {/* Criterio */}
+                      {/* Criterio with Tooltip */}
                       <td className="px-6 py-5 text-sm font-semibold text-gray-200 bg-gray-900/30">
-                        {row.criterio}
+                        <Tooltip content={row.tooltip} position="right">
+                          <span className="cursor-help border-b border-dotted border-gray-500 hover:border-primary-400 transition-colors">
+                            {row.criterio}
+                          </span>
+                        </Tooltip>
                       </td>
 
                       {/* ComplianceFlow - Highlighted with better contrast */}
