@@ -1,64 +1,60 @@
-# ComplianceFlow 🚀
+# ComplianceFlow
 
-[![Next.js](https://img.shields.io/badge/Next.js-15.1-black?logo=next.js)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19.0-blue?logo=react)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
-[![License](https://img.shields.io/badge/license-Private-red)](LICENSE)
+> Enterprise-grade compliance platform with APIs for SII, Verifactu, and KYC integrations
 
-> Enterprise-grade compliance platform providing APIs for Spanish tax regulations (SII, Verifactu) and KYC integrations.
+[![Next.js](https://img.shields.io/badge/Next.js-15.1-black?style=flat&logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.0-blue?style=flat&logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38bdf8?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
 
-## 🌟 Features
-
-- **⚡ Next.js 15** with Turbopack for blazing-fast development
-- **🎨 Tailwind CSS 4** with Oxide engine for optimal performance
-- **🔐 Enterprise Security** with OWASP compliance and GDPR adherence
-- **📊 Analytics** powered by PostHog for product insights
-- **🧪 Testing Suite** with Vitest + Playwright for reliability
-- **♿ Accessibility** WCAG 2.1 compliant components
-- **🌍 SEO Optimized** with Next.js metadata and structured data
-- **📱 Responsive Design** mobile-first approach
-
-## 🛠️ Tech Stack v3.0
+## 🚀 Tech Stack
 
 ### Core Framework
-- **Next.js 15.1** - React framework with App Router, Server Components, and Turbopack
-- **React 19.0** - Latest React with concurrent features
-- **TypeScript 5.7** - Strict type safety with enhanced compiler checks
+- **Next.js 15.1.3** - React framework with App Router, Server Components, and Turbopack
+- **React 19.0.0** - Latest stable with Actions, Suspense improvements, and React Compiler support
+- **TypeScript 5.7.2** - Strict type checking with advanced configurations
 
 ### Styling & UI
-- **Tailwind CSS 4.0** - Utility-first CSS with Oxide engine
-- **Framer Motion 11** - Production-ready animation library
-- **Radix UI** - Headless accessible components
-- **Lucide React** - Beautiful & consistent icon set
+- **Tailwind CSS 4.0.0** - CSS framework with new Oxide engine (10x faster builds)
+- **Framer Motion 11.15.0** - Advanced animations and gestures
+- **Radix UI** - Accessible, unstyled component primitives
+  - Dialog, Dropdown Menu, Slot
+- **Lucide React 0.468.0** - Modern icon library
 
-### Development Tools
-- **Vitest 2.1** - Fast unit testing with native ESM support
-- **Playwright 1.49** - Reliable E2E testing across browsers
-- **ESLint 9** - Modern linting with flat config
-- **Prettier 3.4** - Code formatting with Tailwind plugin
-- **Husky 9** - Git hooks for quality checks
+### Data & Validation
+- **Zod 3.24.1** - TypeScript-first schema validation
+- **zod-to-json-schema** - Automatic API schema documentation
 
-### Utilities
-- **Zod 3.24** - TypeScript-first schema validation
-- **PostHog** - Product analytics and feature flags
-- **NextAuth v5** - Authentication for Next.js
-- **Upstash** - Serverless Redis for rate limiting
-- **Pino** - High-performance logging
+### Authentication & Security
+- **NextAuth v5** - Authentication with App Router support
+- **Upstash Rate Limit** - Edge-ready rate limiting
+- **Upstash Redis** - Serverless Redis for sessions and caching
 
-## 🚀 Getting Started
+### Logging & Analytics
+- **Pino 9.5.0** - High-performance structured logging
+- **PostHog 1.187.2** - Product analytics, feature flags, session replay
 
-### Prerequisites
+### Testing
+- **Vitest 2.1.8** - Fast unit testing with native ESM support
+- **Playwright 1.49.1** - End-to-end testing
+- **Testing Library** - React component testing
+- **Coverage V8** - Native code coverage
+
+### Code Quality
+- **ESLint 9.17.0** - Flat config format with TypeScript support
+- **Prettier 3.4.2** - Code formatting
+- **Husky 9.1.7** - Git hooks
+- **lint-staged** - Run linters on staged files
+
+### Performance & Optimization
+- **Bundle Analyzer** - Visualize bundle size
+- **Lighthouse CI** - Automated performance audits
+- **Turbopack** - Next.js dev server (76% faster)
+
+## 📦 Installation
 
 ```bash
-node >= 20.0.0
-npm >= 10.0.0
-```
-
-### Installation
-
-```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/juankaspain/complianceflow.es.git
 cd complianceflow.es
 
@@ -67,180 +63,168 @@ npm install
 
 # Set up environment variables
 cp .env.example .env.local
-# Edit .env.local with your configuration
 
 # Run development server with Turbopack
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+## 🛠️ Development
 
-## 📦 Available Scripts
-
-### Development
 ```bash
-npm run dev              # Start dev server with Turbopack (faster)
-npm run build            # Build for production
-npm run start            # Start production server
-npm run lint             # Run ESLint
-npm run lint:fix         # Fix ESLint issues
-npm run format           # Format code with Prettier
-npm run type-check       # Check TypeScript types
+# Development server with Turbopack (faster HMR)
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Type checking
+npm run type-check
+
+# Linting
+npm run lint
+npm run lint:fix
+
+# Formatting
+npm run format
+npm run format:check
 ```
 
-### Testing
+## 🧪 Testing
+
 ```bash
-npm run test             # Run unit tests
-npm run test:watch       # Run tests in watch mode
-npm run test:ui          # Open Vitest UI
-npm run test:coverage    # Generate coverage report
-npm run test:e2e         # Run E2E tests with Playwright
-npm run test:e2e:ui      # Open Playwright UI
+# Run unit tests
+npm test
+
+# Watch mode
+npm run test:watch
+
+# UI mode (interactive)
+npm run test:ui
+
+# Coverage report
+npm run test:coverage
+
+# E2E tests
+npm run test:e2e
+npm run test:e2e:ui
 ```
 
-### Analysis
+## 📊 Performance Analysis
+
 ```bash
-npm run analyze          # Analyze bundle size
-npm run lighthouse       # Run Lighthouse CI
+# Analyze bundle size
+npm run analyze
+
+# Run Lighthouse CI
+npm run lighthouse
 ```
 
-## 🏗️ Project Structure
+## 🎨 Project Structure
 
 ```
 complianceflow.es/
 ├── src/
-│   ├── app/                 # Next.js App Router
-│   │   ├── (routes)/        # Route groups
-│   │   ├── api/             # API routes
-│   │   └── layout.tsx       # Root layout
-│   ├── components/          # React components
-│   │   ├── ui/              # Reusable UI components
-│   │   └── features/        # Feature-specific components
-│   ├── lib/                 # Utilities and helpers
-│   │   ├── api/             # API clients
-│   │   ├── hooks/           # Custom React hooks
-│   │   └── utils/           # Utility functions
-│   ├── styles/              # Global styles
-│   └── types/               # TypeScript types
-├── tests/
-│   ├── unit/                # Unit tests
-│   └── e2e/                 # E2E tests
-├── public/                  # Static assets
-└── config files             # Configuration
+│   ├── app/              # Next.js App Router pages
+│   │   ├── api/          # API routes
+│   │   ├── globals.css   # Tailwind 4 theme config
+│   │   └── layout.tsx    # Root layout
+│   ├── components/       # React components
+│   │   ├── ui/          # Reusable UI components
+│   │   └── brand/       # Brand-specific components
+│   ├── lib/             # Utilities and helpers
+│   └── types/           # TypeScript type definitions
+├── public/              # Static assets
+├── tests/               # Test files
+│   ├── unit/           # Unit tests
+│   └── e2e/            # Playwright E2E tests
+├── eslint.config.mjs    # ESLint 9 flat config
+├── tailwind.config.ts   # Tailwind configuration
+├── vitest.config.ts     # Vitest configuration
+└── next.config.js       # Next.js configuration
 ```
 
-## 🧪 Testing Strategy
+## 🔧 Configuration
 
-### Unit Tests (Vitest)
+### Environment Variables
 
-Test individual components and functions:
-
-```typescript
-// src/components/Button/__tests__/Button.test.tsx
-import { render, screen } from '@testing-library/react';
-import { Button } from '../Button';
-
-test('renders button with text', () => {
-  render(<Button>Click me</Button>);
-  expect(screen.getByText('Click me')).toBeInTheDocument();
-});
-```
-
-### E2E Tests (Playwright)
-
-Test critical user flows:
-
-```typescript
-// tests/e2e/home.spec.ts
-import { test, expect } from '@playwright/test';
-
-test('homepage loads correctly', async ({ page }) => {
-  await page.goto('/');
-  await expect(page).toHaveTitle(/ComplianceFlow/);
-});
-```
-
-## 🌐 Environment Variables
-
-Create `.env.local` with:
+Create a `.env.local` file:
 
 ```env
-# Site Configuration
-NEXT_PUBLIC_SITE_URL=https://complianceflow.es
+# App
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_API_URL=https://api.complianceflow.es
 
-# PostHog Analytics
-NEXT_PUBLIC_POSTHOG_KEY=your_posthog_key
+# NextAuth
+NEXTAUTH_SECRET=your-secret-here
+NEXTAUTH_URL=http://localhost:3000
+
+# PostHog
+NEXT_PUBLIC_POSTHOG_KEY=your-key-here
 NEXT_PUBLIC_POSTHOG_HOST=https://app.posthog.com
 
-# Authentication (NextAuth v5)
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your_secret_here
-
-# Upstash Redis (Rate Limiting)
-UPSTASH_REDIS_REST_URL=your_upstash_url
-UPSTASH_REDIS_REST_TOKEN=your_upstash_token
+# Upstash Redis
+UPSTASH_REDIS_REST_URL=your-url-here
+UPSTASH_REDIS_REST_TOKEN=your-token-here
 ```
 
-## 🚢 Deployment
+## 🚀 Optimizations Applied
 
-### Cloudflare Pages (Recommended)
+### Recent Updates (January 2026)
 
-1. Connect your GitHub repository
-2. Configure build settings:
-   - **Build command**: `npm run build`
-   - **Build output directory**: `.next`
-   - **Root directory**: `/`
-3. Add environment variables
-4. Deploy!
+1. **Next.js 15 + React 19**
+   - 76.7% faster dev server startup
+   - 96.3% faster Fast Refresh
+   - Improved Server Components
 
-### Vercel (Alternative)
+2. **Tailwind CSS 4**
+   - 10x faster builds with Oxide engine
+   - CSS-based configuration (`@theme`)
+   - P3 color space support
 
-```bash
-npm i -g vercel
-vercel --prod
-```
+3. **ESLint 9 Flat Config**
+   - Modern configuration format
+   - Better TypeScript integration
+   - Improved performance
 
-## 📈 Performance
+4. **Complete Testing Suite**
+   - Vitest for unit tests
+   - Playwright for E2E
+   - Coverage reporting
 
-- **Lighthouse Score**: 95+ across all metrics
-- **First Contentful Paint**: < 1.5s
-- **Time to Interactive**: < 3.0s
-- **Cumulative Layout Shift**: < 0.1
+5. **Enterprise Features**
+   - Rate limiting with Upstash
+   - Structured logging with Pino
+   - Session management with Redis
+   - Authentication with NextAuth v5
 
-## 🔒 Security
+## 📝 Scripts Explanation
 
-- HTTPS enforced with HSTS
-- CSP headers configured
-- XSS protection enabled
-- CSRF protection via NextAuth
-- Rate limiting on API routes
-- Input validation with Zod
-- Regular security audits
+- `dev` - Start development server with Turbopack
+- `build` - Create production build
+- `start` - Start production server
+- `lint` - Run ESLint
+- `lint:fix` - Fix linting issues
+- `type-check` - Run TypeScript compiler check
+- `format` - Format code with Prettier
+- `test` - Run unit tests
+- `test:e2e` - Run E2E tests
+- `analyze` - Analyze bundle size
+- `lighthouse` - Run Lighthouse audits
 
 ## 🤝 Contributing
 
-This is a private repository. For internal contributors:
-
-1. Create a feature branch: `git checkout -b feature/amazing-feature`
-2. Make your changes
-3. Run tests: `npm run test && npm run test:e2e`
-4. Commit with conventional commits: `git commit -m 'feat: add amazing feature'`
-5. Push and create a Pull Request
-
-### Commit Convention
-
-- `feat:` New feature
-- `fix:` Bug fix
-- `docs:` Documentation changes
-- `style:` Code style changes (formatting)
-- `refactor:` Code refactoring
-- `test:` Adding or updating tests
-- `chore:` Maintenance tasks
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## 📄 License
 
-Private and Proprietary - All rights reserved.
+Private - All rights reserved
 
 ## 👤 Author
 
@@ -248,12 +232,6 @@ Private and Proprietary - All rights reserved.
 - Email: juanca755@hotmail.com
 - GitHub: [@juankaspain](https://github.com/juankaspain)
 
-## 🙏 Acknowledgments
-
-- Next.js team for the amazing framework
-- Vercel for hosting and tooling
-- Open source community
-
 ---
 
-**Built with ❤️ using Next.js 15 and React 19**
+**Built with ❤️ for enterprise compliance**
