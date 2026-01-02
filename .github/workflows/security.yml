@@ -8,6 +8,11 @@ on:
   schedule:
     - cron: '0 0 * * 1' # Weekly on Mondays
 
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -16,9 +21,6 @@ jobs:
   codeql:
     name: CodeQL Analysis
     runs-on: ubuntu-latest
-    permissions:
-      security-events: write
-      contents: read
     steps:
       - uses: actions/checkout@v4
 
