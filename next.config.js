@@ -83,7 +83,16 @@ const nextConfig = {
 
   // Experimental features for Next.js 15
   experimental: {
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    // Optimize package imports for better tree-shaking
+    optimizePackageImports: [
+      'lucide-react',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-slot',
+      'framer-motion',
+    ],
+    // External packages for server components
+    serverComponentsExternalPackages: ['pino', 'pino-pretty'],
   },
 
   // Production optimizations
