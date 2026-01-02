@@ -58,6 +58,12 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  applicationName: 'ComplianceFlow',
+  appleWebApp: {
+    capable: true,
+    title: 'ComplianceFlow',
+    statusBarStyle: 'black-translucent',
+  },
   openGraph: {
     type: 'website',
     locale: 'es_ES',
@@ -117,13 +123,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         
-        {/* msapplication-TileColor for Windows */}
+        {/* Modern mobile web app meta tags */}
+        <meta name="mobile-web-app-capable" content="yes" />
         <meta name="msapplication-TileColor" content="#4F46E5" />
-        
-        {/* Apple specific */}
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="ComplianceFlow" />
+        <meta name="msapplication-tap-highlight" content="no" />
       </head>
       <body className="min-h-screen bg-gray-950 font-sans antialiased">
         <ErrorBoundary>
