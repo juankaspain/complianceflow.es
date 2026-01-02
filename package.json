@@ -43,7 +43,7 @@
     "posthog-js": "^1.187.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "tailwind-merge": "^2.7.0",
+    "tailwind-merge": "^2.6.0",
     "zod": "^3.24.1",
     "zod-to-json-schema": "^3.24.1"
   },
@@ -80,6 +80,12 @@
     "typescript": "^5.7.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^2.1.8"
+  },
+  "overrides": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@types/react": "^19.0.6",
+    "@types/react-dom": "^19.0.2"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
