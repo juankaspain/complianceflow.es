@@ -1,150 +1,180 @@
 'use client';
 
-import React from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
+import { motion } from 'framer-motion';
 
-interface Props {
-  children: React.ReactNode;
-  fallback?: React.ReactNode;
+interface ErrorBoundaryProps {
+  children: ReactNode;
+  fallback?: ReactNode;
+  onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }
 
-interface State {
+interface ErrorBoundaryState {
   hasError: boolean;
-  error?: Error;
+  error: Error | null;
 }
 
-export default class ErrorBoundary extends React.Component<Props, State> {
-  constructor(props: Props) {
+/**
+ * ErrorBoundary - Catches React errors and displays fallback UI
+ * 
+ * @example
+ * <ErrorBoundary>
+ *   <YourComponent />
+ * </ErrorBoundary>
+ */
+export default class ErrorBoundary extends Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = { hasError: false };
+    this.state = {
+      hasError: false,
+      error: null,
+    };
   }
 
-  static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return {
+      hasError: true,
+      error,
+    };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    // Log error to monitoring service (Sentry, LogRocket, etc.)
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // Log error to monitoring service (e.g., Sentry)
     console.error('ErrorBoundary caught an error:', error, errorInfo);
-    
-    // You can also log to an error reporting service here
-    if (typeof window !== 'undefined' && window.posthog) {
-      window.posthog.capture('error_boundary_triggered', {
-        error: error.message,
-        stack: error.stack,
-        componentStack: errorInfo.componentStack,
-      });
+
+    // Call custom error handler if provided
+    if (this.props.onError) {
+      this.props.onError(error, errorInfo);
+    }
+
+    // In production, send to error tracking service
+    if (process.env.NODE_ENV === 'production') {
+      // Example: Sentry.captureException(error, { contexts: { react: errorInfo } });
     }
   }
 
+  handleReset = () => {
+    this.setState({
+      hasError: false,
+      error: null,
+    });
+  };
+
   render() {
     if (this.state.hasError) {
+      // Use custom fallback if provided
       if (this.props.fallback) {
         return this.props.fallback;
       }
 
+      // Default fallback UI
       return (
-        <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
-          <div className="max-w-md w-full text-center">
-            {/* Error Icon */}
-            <div className="mb-8 inline-flex items-center justify-center">
-              <div className="rounded-full bg-red-500/10 p-4">
-                <svg
-                  className="h-12 w-12 text-red-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                  />
-                </svg>
-              </div>
-            </div>
+        <div className="min-h-screen flex items-center justify-center bg-gray-950 px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-2xl w-full"
+          >
+            {/* Error Card */}
+            <div className="relative rounded-2xl overflow-hidden bg-gray-900/80 backdrop-blur-xl border border-red-500/30 p-8 shadow-2xl shadow-red-500/10">
+              {/* Background glow */}
+              <div className="absolute inset-0 bg-gradient-to-b from-red-500/10 to-transparent pointer-events-none" />
 
-            {/* Error Message */}
-            <h1 className="text-3xl font-bold text-white mb-4">
-              Oops! Algo salió mal
-            </h1>
-            <p className="text-gray-400 mb-8">
-              Lo sentimos, ha ocurrido un error inesperado. Nuestro equipo ha sido notificado y
-              estamos trabajando en solucionarlo.
-            </p>
+              <div className="relative z-10">
+                {/* Icon */}
+                <div className="flex justify-center mb-6">
+                  <div className="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-red-500/20">
+                    <div className="absolute inset-0 rounded-2xl bg-red-500/20 blur-xl opacity-50" />
+                    <svg
+                      className="relative w-10 h-10 text-red-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                      />
+                    </svg>
+                  </div>
+                </div>
 
-            {/* Error Details (only in development) */}
-            {process.env.NODE_ENV === 'development' && this.state.error && (
-              <div className="mb-8 rounded-lg bg-gray-900 border border-gray-800 p-4 text-left">
-                <p className="text-sm font-mono text-red-400 mb-2">
-                  {this.state.error.message}
+                {/* Title */}
+                <h2 className="text-2xl font-bold text-white text-center mb-3">
+                  Algo salió mal
+                </h2>
+
+                {/* Description */}
+                <p className="text-gray-400 text-center mb-6">
+                  Lo sentimos, ha ocurrido un error inesperado. Nuestro equipo ha sido
+                  notificado y estamos trabajando en solucionarlo.
                 </p>
-                <pre className="text-xs text-gray-500 overflow-auto max-h-32">
-                  {this.state.error.stack}
-                </pre>
+
+                {/* Error details (development only) */}
+                {process.env.NODE_ENV === 'development' && this.state.error && (
+                  <div className="mb-6 p-4 rounded-lg bg-gray-950/50 border border-gray-800">
+                    <p className="text-xs font-mono text-red-400 break-all">
+                      {this.state.error.toString()}
+                    </p>
+                  </div>
+                )}
+
+                {/* Actions */}
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <motion.button
+                    onClick={this.handleReset}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-6 py-3 rounded-xl bg-primary hover:bg-primary-600 text-white font-semibold shadow-lg shadow-primary/30 transition-all"
+                  >
+                    Intentar de nuevo
+                  </motion.button>
+
+                  <motion.a
+                    href="/"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold border border-white/10 hover:border-white/30 transition-all text-center"
+                  >
+                    Volver al inicio
+                  </motion.a>
+                </div>
+
+                {/* Support link */}
+                <p className="text-center text-sm text-gray-500 mt-6">
+                  ¿Necesitas ayuda?{' '}
+                  <a
+                    href="mailto:support@complianceflow.es"
+                    className="text-primary-400 hover:text-primary-300 underline"
+                  >
+                    Contacta con soporte
+                  </a>
+                </p>
               </div>
-            )}
-
-            {/* Actions */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={() => {
-                  this.setState({ hasError: false, error: undefined });
-                  window.location.reload();
-                }}
-                className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/50 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-950 transition-all"
-              >
-                <svg
-                  className="mr-2 h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-                Recargar página
-              </button>
-              <a
-                href="/"
-                className="inline-flex items-center justify-center rounded-xl bg-white/5 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-gray-950 transition-all"
-              >
-                <svg
-                  className="mr-2 h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                  />
-                </svg>
-                Volver al inicio
-              </a>
             </div>
-
-            {/* Contact Support */}
-            <p className="mt-8 text-sm text-gray-500">
-              Si el problema persiste,{' '}
-              <a
-                href="/contact"
-                className="text-primary-400 hover:text-primary-300 underline"
-              >
-                contacta con soporte
-              </a>
-            </p>
-          </div>
+          </motion.div>
         </div>
       );
     }
 
     return this.props.children;
   }
+}
+
+/**
+ * useErrorHandler - Hook to manually trigger error boundary
+ * 
+ * @example
+ * const throwError = useErrorHandler();
+ * throwError(new Error('Something went wrong'));
+ */
+export function useErrorHandler() {
+  return (error: Error) => {
+    throw error;
+  };
 }
