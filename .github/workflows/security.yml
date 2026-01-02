@@ -21,6 +21,7 @@ jobs:
   codeql:
     name: CodeQL Analysis
     runs-on: ubuntu-latest
+    continue-on-error: true  # Don't fail until code scanning is enabled
     steps:
       - uses: actions/checkout@v4
 
@@ -34,6 +35,7 @@ jobs:
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
+        continue-on-error: true
 
   dependencies:
     name: Dependency Audit
