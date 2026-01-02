@@ -1,92 +1,172 @@
-'use client';
+import { cn } from '@/lib/utils';
 
 interface SkeletonProps {
   className?: string;
-  variant?: 'text' | 'circular' | 'rectangular';
-  width?: string | number;
-  height?: string | number;
-  animation?: 'pulse' | 'wave' | 'none';
+  variant?: 'default' | 'circular' | 'rectangular';
+  animation?: 'pulse' | 'shimmer' | 'none';
 }
 
-export default function Skeleton({
-  className = '',
-  variant = 'rectangular',
-  width,
-  height,
-  animation = 'pulse',
-}: SkeletonProps) {
-  const baseClasses = 'bg-gray-800';
-  
-  const variantClasses = {
-    text: 'h-4 w-full rounded',
-    circular: 'rounded-full',
-    rectangular: 'rounded-lg',
-  };
-
-  const animationClasses = {
-    pulse: 'animate-pulse',
-    wave: 'animate-wave',
-    none: '',
-  };
-
-  const style: React.CSSProperties = {};
-  if (width) style.width = typeof width === 'number' ? `${width}px` : width;
-  if (height) style.height = typeof height === 'number' ? `${height}px` : height;
-
+/**
+ * Skeleton loading component with premium shimmer effect
+ * 
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <Skeleton className="h-12 w-full" />
+ * 
+ * // Circular avatar skeleton
+ * <Skeleton variant="circular" className="h-16 w-16" />
+ * 
+ * // Card skeleton
+ * <div className="space-y-4">
+ *   <Skeleton className="h-48 w-full" />
+ *   <Skeleton className="h-4 w-3/4" />
+ *   <Skeleton className="h-4 w-1/2" />
+ * </div>
+ * ```
+ */
+export function Skeleton({
+  className,
+  variant = 'default',
+  animation = 'shimmer',
+  ...props
+}: SkeletonProps & React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={`${baseClasses} ${variantClasses[variant]} ${animationClasses[animation]} ${className}`}
-      style={style}
-      aria-hidden="true"
+      role="status"
+      aria-label="Loading..."
+      aria-live="polite"
+      className={cn(
+        'relative overflow-hidden bg-gray-800',
+        {
+          'rounded-md': variant === 'default',
+          'rounded-full': variant === 'circular',
+          'rounded-none': variant === 'rectangular',
+        },
+        {
+          'animate-pulse': animation === 'pulse',
+          'shimmer': animation === 'shimmer',
+        },
+        className
+      )}
+      {...props}
+    >
+      <span className="sr-only">Loading...</span>
+    </div>
+  );
+}
+
+/**
+ * Skeleton text component for text loading states
+ */
+export function SkeletonText({
+  lines = 3,
+  className,
+}: {
+  lines?: number;
+  className?: string;
+}) {
+  return (
+    <div className={cn('space-y-3', className)} role="status" aria-label="Loading text...">
+      {Array.from({ length: lines }).map((_, i) => (
+        <Skeleton
+          key={i}
+          className={cn(
+            'h-4',
+            i === lines - 1 ? 'w-3/4' : 'w-full' // Last line shorter
+          )}
+        />
+      ))}
+    </div>
+  );
+}
+
+/**
+ * Skeleton card component
+ */
+export function SkeletonCard({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn('glass rounded-2xl p-6 space-y-4', className)}
+      role="status"
+      aria-label="Loading card..."
+    >
+      <Skeleton className="h-48 w-full rounded-xl" />
+      <div className="space-y-3">
+        <Skeleton className="h-6 w-3/4" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-5/6" />
+      </div>
+      <div className="flex gap-2">
+        <Skeleton className="h-10 w-24 rounded-lg" />
+        <Skeleton className="h-10 w-24 rounded-lg" />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Skeleton avatar component
+ */
+export function SkeletonAvatar({
+  size = 'md',
+  className,
+}: {
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  className?: string;
+}) {
+  const sizeClasses = {
+    sm: 'h-8 w-8',
+    md: 'h-12 w-12',
+    lg: 'h-16 w-16',
+    xl: 'h-24 w-24',
+  };
+
+  return (
+    <Skeleton
+      variant="circular"
+      className={cn(sizeClasses[size], className)}
+      aria-label="Loading avatar..."
     />
   );
 }
 
-// Preset skeleton components
-export function CardSkeleton() {
+/**
+ * Skeleton table component
+ */
+export function SkeletonTable({
+  rows = 5,
+  columns = 4,
+  className,
+}: {
+  rows?: number;
+  columns?: number;
+  className?: string;
+}) {
   return (
-    <div className="rounded-2xl border border-gray-800 bg-gray-900/50 p-6 space-y-4">
-      <Skeleton variant="circular" width={48} height={48} />
-      <Skeleton variant="text" className="w-3/4" />
-      <Skeleton variant="text" className="w-full" />
-      <Skeleton variant="text" className="w-5/6" />
-    </div>
-  );
-}
-
-export function TestimonialSkeleton() {
-  return (
-    <div className="rounded-2xl border border-gray-800 bg-gray-900/50 p-8 space-y-4">
-      <div className="flex gap-1">
-        {[...Array(5)].map((_, i) => (
-          <Skeleton key={i} variant="circular" width={20} height={20} />
+    <div
+      className={cn('space-y-4', className)}
+      role="status"
+      aria-label="Loading table..."
+    >
+      {/* Header */}
+      <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+        {Array.from({ length: columns }).map((_, i) => (
+          <Skeleton key={`header-${i}`} className="h-10" />
         ))}
       </div>
-      <Skeleton variant="text" className="w-full h-20" />
-      <div className="flex items-center gap-4">
-        <Skeleton variant="circular" width={48} height={48} />
-        <div className="flex-1 space-y-2">
-          <Skeleton variant="text" className="w-32" />
-          <Skeleton variant="text" className="w-48" />
+      {/* Rows */}
+      {Array.from({ length: rows }).map((_, rowIndex) => (
+        <div
+          key={`row-${rowIndex}`}
+          className="grid gap-4"
+          style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+        >
+          {Array.from({ length: columns }).map((_, colIndex) => (
+            <Skeleton key={`cell-${rowIndex}-${colIndex}`} className="h-12" />
+          ))}
         </div>
-      </div>
-    </div>
-  );
-}
-
-export function HeroSkeleton() {
-  return (
-    <div className="max-w-7xl mx-auto px-4 py-24 space-y-8">
-      <div className="text-center space-y-6">
-        <Skeleton variant="rectangular" className="w-64 h-10 mx-auto" />
-        <Skeleton variant="text" className="w-full max-w-4xl h-16 mx-auto" />
-        <Skeleton variant="text" className="w-full max-w-4xl h-16 mx-auto" />
-        <Skeleton variant="text" className="w-3/4 max-w-2xl h-8 mx-auto" />
-        <div className="flex gap-4 justify-center mt-8">
-          <Skeleton variant="rectangular" className="w-40 h-14" />
-          <Skeleton variant="rectangular" className="w-40 h-14" />
-        </div>
-      </div>
+      ))}
     </div>
   );
 }
