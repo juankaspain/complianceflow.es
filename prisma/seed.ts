@@ -116,7 +116,7 @@ async function main() {
   console.log('✅ Created sample controls');
 
   // Create sample audit
-  const audit = await prisma.audit.create({
+  void await prisma.audit.create({
     data: {
       title: 'Q1 2025 GDPR Compliance Audit',
       description: 'Quarterly compliance audit for GDPR requirements',
