@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { HeroSection } from '@/components/sections/Hero';
 import { FeaturesSection } from '@/components/sections/Features';
 import { UseCasesSection } from '@/components/sections/UseCases';
