@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/providers'
 import { OrganizationSchema, LocalBusinessSchema } from '@/components/seo/structured-data'
+import { Analytics } from '@/lib/analytics'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -204,6 +205,7 @@ export default function RootLayout({
         <meta name="color-scheme" content="light dark" />
       </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+        <Analytics />
         <OrganizationSchema />
         <LocalBusinessSchema />
         <Providers>{children}</Providers>
