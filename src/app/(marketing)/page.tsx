@@ -10,6 +10,7 @@ import { FAQSection } from '@/components/sections/faq-section'
 import { NewsletterSection } from '@/components/sections/newsletter-section'
 import { CTASection } from '@/components/sections/cta-section'
 import { AnimatedBackground } from '@/components/ui/animated-background'
+import { FAQSchema, ProductSchema } from '@/components/seo/structured-data'
 
 const stats = [
   {
@@ -37,6 +38,8 @@ const stats = [
 export default function HomePage() {
   return (
     <main className="relative">
+      <FAQSchema />
+      <ProductSchema />
       <AnimatedBackground />
 
       {/* Hero Section */}
