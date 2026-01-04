@@ -1,158 +1,220 @@
-# Contribuir a ComplianceFlow
+# Contributing to ComplianceFlow
 
-¡Gracias por tu interés en contribuir a ComplianceFlow! 🎉
+First off, thank you for considering contributing to ComplianceFlow! 🎉
 
-## Código de Conducta
+## 📋 Table of Contents
 
-Este proyecto se adhiere a los estándares de conducta profesional. Se espera que todos los participantes:
+- [Code of Conduct](#code-of-conduct)
+- [How Can I Contribute?](#how-can-i-contribute)
+- [Development Setup](#development-setup)
+- [Pull Request Process](#pull-request-process)
+- [Coding Standards](#coding-standards)
+- [Commit Messages](#commit-messages)
 
-- Sean respetuosos y considerados
-- Acepten críticas constructivas
-- Se centren en lo que es mejor para la comunidad
-- Muestren empatía hacia otros miembros
+## 📜 Code of Conduct
 
-## ¿Cómo puedo contribuir?
+This project adheres to a Code of Conduct. By participating, you are expected to uphold this code.
 
-### Reportar Bugs
+- Be respectful and inclusive
+- Welcome newcomers
+- Accept constructive criticism
+- Focus on what's best for the community
 
-Antes de crear un reporte de bug:
+## 🤝 How Can I Contribute?
 
-1. **Verifica** que no exista ya un issue similar
-2. **Recopila información** sobre el bug:
-   - ¿Qué versión del navegador usas?
-   - ¿Cuáles son los pasos para reproducirlo?
-   - ¿Cuál es el comportamiento esperado vs el actual?
-   - ¿Tienes screenshots o logs?
+### Reporting Bugs
 
-### Sugerir Mejoras
+Before creating bug reports, please check existing issues. When creating a bug report, include:
 
-Las sugerencias de mejoras son bienvenidas:
+- **Clear title and description**
+- **Steps to reproduce**
+- **Expected vs actual behavior**
+- **Screenshots** (if applicable)
+- **Environment** (OS, browser, Node version)
 
-1. **Usa un título claro y descriptivo**
-2. **Describe el caso de uso actual** y por qué es insuficiente
-3. **Explica la mejora propuesta** con ejemplos si es posible
-4. **Considera el impacto** en usuarios existentes
+### Suggesting Enhancements
 
-### Pull Requests
+Enhancement suggestions are tracked as GitHub issues. Create an issue and provide:
 
-1. **Fork** el repositorio
-2. **Crea una rama** desde `main`:
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-3. **Haz tus cambios** siguiendo las guías de estilo
-4. **Ejecuta los tests**:
-   ```bash
-   npm run lint
-   npm run format
-   npm test
-   ```
-5. **Commit** tus cambios usando [Conventional Commits](https://www.conventionalcommits.org/):
-   ```bash
-   git commit -m "feat: add amazing feature"
-   ```
-6. **Push** a tu fork:
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-7. **Abre un Pull Request**
+- **Clear use case**
+- **Expected behavior**
+- **Why this enhancement would be useful**
+- **Possible implementation** (optional)
 
-## Guías de Estilo
+### Your First Code Contribution
 
-### Commits
+Unsure where to begin? Look for issues tagged with:
 
-Usamos [Conventional Commits](https://www.conventionalcommits.org/):
+- `good first issue` - Good for newcomers
+- `help wanted` - Extra attention needed
 
-- `feat:` - Nueva funcionalidad
-- `fix:` - Corrección de bug
-- `docs:` - Cambios en documentación
-- `style:` - Cambios de formato (espacios, punto y coma, etc.)
-- `refactor:` - Refactorización de código
-- `perf:` - Mejoras de performance
-- `test:` - Añadir o corregir tests
-- `chore:` - Cambios en build, CI, etc.
+## 💻 Development Setup
 
-Ejemplos:
-```bash
-feat: add support for multi-language
-fix: resolve mobile navigation bug
-docs: update API documentation
-```
+1. **Fork the repository**
 
-### Código JavaScript
+2. **Clone your fork**
 
-- Usa **ESLint** para validar código
-- Usa **Prettier** para formatear
-- Escribe **JSDoc comments** para funciones públicas
-- Mantén funciones **pequeñas y enfocadas**
-- Usa **nombres descriptivos**
+\`\`\`bash
+git clone https://github.com/YOUR-USERNAME/complianceflow.es.git
+cd complianceflow.es
+\`\`\`
 
-Ejemplo:
-```javascript
-/**
- * Validate user input before API call
- * @param {string} email - User email address
- * @param {string} password - User password
- * @returns {Object} Validation result with errors if any
- */
-function validateCredentials(email, password) {
-  // Implementation
-}
-```
+3. **Add upstream remote**
 
-### HTML
+\`\`\`bash
+git remote add upstream https://github.com/juankaspain/complianceflow.es.git
+\`\`\`
 
-- Usa **semántica HTML5**
-- Incluye **ARIA labels** cuando sea necesario
-- Asegúrate de que sea **accesible** (WCAG 2.1 AA)
-- Usa **alt text** descriptivo en imágenes
+4. **Install dependencies**
 
-### CSS
+\`\`\`bash
+npm install
+\`\`\`
 
-- Usa **custom properties** para valores reutilizables
-- Sigue la metodología **BEM** cuando sea apropiado
-- Asegúrate de que sea **responsive**
-- Optimiza para **performance** (evita selectores pesados)
+5. **Create a branch**
 
-## Proceso de Revisión
+\`\`\`bash
+git checkout -b feature/my-feature
+\`\`\`
 
-1. Un maintainer revisará tu PR
-2. Puede solicitar cambios o mejoras
-3. Una vez aprobado, se mergeará a `main`
-4. El deploy a producción es automático
+6. **Start development**
 
-## Testing
+\`\`\`bash
+npm run dev
+\`\`\`
 
-Antes de enviar tu PR:
+## 🔄 Pull Request Process
 
-```bash
-# Lint
+1. **Update your fork**
+
+\`\`\`bash
+git fetch upstream
+git rebase upstream/main
+\`\`\`
+
+2. **Make your changes**
+
+- Write clean, documented code
+- Follow coding standards
+- Add tests if applicable
+- Update documentation
+
+3. **Test your changes**
+
+\`\`\`bash
+npm run build
 npm run lint
+npm run type-check
+\`\`\`
 
-# Format
-npm run format
+4. **Commit your changes**
 
-# Tests unitarios
-npm run test:unit
+\`\`\`bash
+git add .
+git commit -m "feat: add amazing feature"
+\`\`\`
 
-# Tests E2E
-npm run test:e2e
+5. **Push to your fork**
 
-# Performance audit
-npm run lighthouse
-```
+\`\`\`bash
+git push origin feature/my-feature
+\`\`\`
 
-## Recursos
+6. **Create Pull Request**
 
-- [Documentación API](https://complianceflow.es/docs/)
-- [Issues abiertos](https://github.com/juankaspain/complianceflow.es/issues)
-- [Roadmap del proyecto](https://github.com/juankaspain/complianceflow.es/projects)
+- Use a clear PR title
+- Describe your changes
+- Link related issues
+- Request review
 
-## Preguntas?
+## 📝 Coding Standards
 
-Si tienes preguntas, no dudes en:
+### TypeScript
 
-- Abrir un [issue](https://github.com/juankaspain/complianceflow.es/issues/new)
-- Contactar a [hola@complianceflow.es](mailto:hola@complianceflow.es)
+- Use TypeScript for all new files
+- Define proper types (no `any`)
+- Use interfaces for object shapes
+- Export types when reusable
 
-¡Gracias por contribuir! 🚀
+### React
+
+- Use functional components
+- Use hooks appropriately
+- Keep components small and focused
+- Use proper prop types
+
+### Styling
+
+- Use Tailwind CSS utilities
+- Follow mobile-first approach
+- Use design system tokens
+- Keep styles consistent
+
+### File Naming
+
+- Components: `PascalCase.tsx`
+- Utilities: `camelCase.ts`
+- Constants: `UPPER_SNAKE_CASE`
+- Files: `kebab-case.ts`
+
+## 📌 Commit Messages
+
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+\`\`\`
+<type>(<scope>): <description>
+
+[optional body]
+
+[optional footer]
+\`\`\`
+
+### Types
+
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation
+- `style`: Formatting, missing semicolons, etc.
+- `refactor`: Code restructuring
+- `perf`: Performance improvement
+- `test`: Adding tests
+- `chore`: Maintenance tasks
+
+### Examples
+
+\`\`\`bash
+feat(api): add SII invoice validation endpoint
+fix(auth): resolve token refresh issue
+docs(readme): update installation instructions
+refactor(ui): extract button component
+\`\`\`
+
+## 🧪 Testing
+
+- Write tests for new features
+- Ensure existing tests pass
+- Aim for high coverage
+- Test edge cases
+
+## 📚 Documentation
+
+- Update README if needed
+- Document new features
+- Add JSDoc comments
+- Update API docs
+
+## ❓ Questions?
+
+Feel free to:
+
+- Open a discussion on GitHub
+- Join our Discord
+- Email: dev@complianceflow.es
+
+## 🙏 Thank You!
+
+Your contributions make ComplianceFlow better for everyone!
+
+---
+
+Happy coding! 🚀
