@@ -1,63 +1,75 @@
-import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
+import type { Metadata } from 'next'
+import { Inter, JetBrains_Mono } from 'next/font/google'
+import './globals.css'
+import { Providers } from '@/components/providers'
 
-// Optimize font loading with display swap
-const inter = Inter({
+const inter = Inter({ 
   subsets: ['latin'],
-  display: 'swap',
-  preload: true,
-  fallback: [
-    '-apple-system',
-    'BlinkMacSystemFont',
-    'Segoe UI',
-    'Roboto',
-    'Oxygen',
-    'Ubuntu',
-    'Cantarell',
-    'Helvetica Neue',
-    'sans-serif',
-  ],
-  adjustFontFallback: true,
   variable: '--font-inter',
-});
+  display: 'swap',
+})
 
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 5,
-  userScalable: true,
-  themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-  ],
-};
+const jetbrainsMono = JetBrains_Mono({ 
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://complianceflow.es'),
   title: {
-    default: 'ComplianceFlow · Compliance via APIs',
+    default: 'ComplianceFlow · SII, Verifactu y TicketBAI via API',
     template: '%s | ComplianceFlow',
   },
   description:
-    'APIs enterprise para automatizar SII, Verifactu y KYC. Integración en minutos con certificaciones ISO 27001, SOC 2 Type II y GDPR.',
+    'API REST para compliance fiscal automatizado en España. SII, Verifactu, TicketBAI integrados en 5 minutos. +500 empresas confían en nosotros. Prueba gratis 14 días.',
   keywords: [
     'SII',
+    'Suministro Inmediato Información',
     'Verifactu',
-    'KYC',
-    'Compliance',
-    'API',
+    'TicketBAI',
+    'API facturación',
+    'compliance fiscal',
     'AEAT',
-    'Facturación',
-    'España',
-    'Enterprise',
-    'ISO 27001',
-    'SOC 2',
-    'GDPR',
+    'facturación electrónica',
+    'automatización fiscal',
+    'ERP integración',
+    'País Vasco TicketBAI',
+    'facturación España',
   ],
-  authors: [{ name: 'ComplianceFlow', url: 'https://complianceflow.es' }],
+  authors: [{ name: 'ComplianceFlow Team' }],
   creator: 'ComplianceFlow',
   publisher: 'ComplianceFlow',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'es_ES',
+    url: 'https://complianceflow.es',
+    siteName: 'ComplianceFlow',
+    title: 'ComplianceFlow · Compliance Fiscal Automatizado via API',
+    description:
+      'Integra SII, Verifactu y TicketBAI en 5 minutos. API REST moderna para compliance fiscal en España. Trusted by +500 companies.',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'ComplianceFlow - Compliance Fiscal via API',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ComplianceFlow · SII, Verifactu y TicketBAI via API',
+    description:
+      'API REST para compliance fiscal automatizado. Integración en 5 minutos. +500 empresas confían en nosotros.',
+    images: ['/og-image.png'],
+    creator: '@complianceflow',
+  },
   robots: {
     index: true,
     follow: true,
@@ -69,74 +81,35 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  openGraph: {
-    type: 'website',
-    locale: 'es_ES',
-    url: 'https://complianceflow.es',
-    siteName: 'ComplianceFlow',
-    title: 'ComplianceFlow · Compliance via APIs',
-    description:
-      'APIs enterprise para automatizar SII, Verifactu y KYC. Integración en minutos.',
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'ComplianceFlow - Compliance Automation',
-      },
-    ],
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon-16x16.png',
+    apple: '/apple-touch-icon.png',
   },
-  twitter: {
-    card: 'summary_large_image',
-    site: '@complianceflow',
-    creator: '@complianceflow',
-    title: 'ComplianceFlow · Compliance via APIs',
-    description:
-      'APIs enterprise para automatizar SII, Verifactu y KYC. Integración en minutos.',
-    images: ['/twitter-image.png'],
-  },
+  manifest: '/site.webmanifest',
   alternates: {
     canonical: 'https://complianceflow.es',
-    languages: {
-      'es-ES': 'https://complianceflow.es',
-      'en-US': 'https://complianceflow.es/en',
-    },
   },
-  manifest: '/manifest.json',
-  icons: {
-    icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
-    ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
+  verification: {
+    google: 'your-google-verification-code',
+    yandex: 'your-yandex-verification-code',
   },
-  category: 'technology',
-};
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="es" className={inter.variable}>
+    <html lang="es" suppressHydrationWarning>
       <head>
-        {/* Preconnect to external domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        
-        {/* DNS prefetch for faster connections */}
-        <link rel="dns-prefetch" href="https://api.complianceflow.es" />
-        
-        {/* Resource hints */}
-        <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       </head>
-      <body className={`${inter.className} antialiased bg-gray-950 text-white`}>
-        {children}
+      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+        <Providers>{children}</Providers>
       </body>
     </html>
-  );
+  )
 }
