@@ -1,226 +1,199 @@
 /**
- * Advanced rate limiter with multiple strategies
+ * Client-side rate limiting utility
+ * Prevents API abuse and improves UX
  */
 
 interface RateLimitConfig {
-  windowMs: number;
-  maxRequests: number;
-  strategy?: 'fixed-window' | 'sliding-window' | 'token-bucket';
+  maxRequests: number
+  windowMs: number
+  message?: string
 }
 
-interface RateLimitEntry {
-  count: number;
-  resetTime: number;
-  tokens?: number;
-  lastRefill?: number;
+interface RateLimitState {
+  requests: number[]
+  blocked: boolean
+  resetAt: number
 }
+
+// ============================================================================
+// RATE LIMITER CLASS
+// ============================================================================
 
 class RateLimiter {
-  private limits = new Map<string, RateLimitEntry>();
-  private config: Required<RateLimitConfig>;
-
-  constructor(config: RateLimitConfig) {
-    this.config = {
-      ...config,
-      strategy: config.strategy || 'sliding-window',
-    };
-
-    // Cleanup old entries periodically
-    setInterval(() => this.cleanup(), 60000);
-  }
+  private states: Map<string, RateLimitState> = new Map()
 
   /**
    * Check if request is allowed
    */
-  async check(identifier: string): Promise<{ allowed: boolean; remaining: number; resetTime: number }> {
-    const now = Date.now();
-    const entry = this.limits.get(identifier);
+  isAllowed(key: string, config: RateLimitConfig): boolean {
+    const now = Date.now()
+    const state = this.getState(key)
 
-    switch (this.config.strategy) {
-      case 'fixed-window':
-        return this.fixedWindow(identifier, now, entry);
-      case 'sliding-window':
-        return this.slidingWindow(identifier, now, entry);
-      case 'token-bucket':
-        return this.tokenBucket(identifier, now, entry);
-      default:
-        return this.slidingWindow(identifier, now, entry);
+    // Remove old requests outside the window
+    state.requests = state.requests.filter((timestamp) => now - timestamp < config.windowMs)
+
+    // Check if blocked
+    if (state.blocked && now < state.resetAt) {
+      return false
     }
+
+    // Check limit
+    if (state.requests.length >= config.maxRequests) {
+      state.blocked = true
+      state.resetAt = now + config.windowMs
+      this.setState(key, state)
+      return false
+    }
+
+    // Allow and record
+    state.requests.push(now)
+    state.blocked = false
+    this.setState(key, state)
+    return true
   }
 
   /**
-   * Fixed window algorithm
+   * Get remaining requests
    */
-  private fixedWindow(
-    identifier: string,
-    now: number,
-    entry?: RateLimitEntry
-  ): { allowed: boolean; remaining: number; resetTime: number } {
-    if (!entry || now >= entry.resetTime) {
-      const resetTime = now + this.config.windowMs;
-      this.limits.set(identifier, {
-        count: 1,
-        resetTime,
-      });
-      return {
-        allowed: true,
-        remaining: this.config.maxRequests - 1,
-        resetTime,
-      };
-    }
+  getRemaining(key: string, config: RateLimitConfig): number {
+    const now = Date.now()
+    const state = this.getState(key)
 
-    if (entry.count >= this.config.maxRequests) {
-      return {
-        allowed: false,
-        remaining: 0,
-        resetTime: entry.resetTime,
-      };
-    }
+    state.requests = state.requests.filter((timestamp) => now - timestamp < config.windowMs)
 
-    entry.count++;
-    return {
-      allowed: true,
-      remaining: this.config.maxRequests - entry.count,
-      resetTime: entry.resetTime,
-    };
+    return Math.max(0, config.maxRequests - state.requests.length)
   }
 
   /**
-   * Sliding window algorithm (more accurate)
+   * Get time until reset (ms)
    */
-  private slidingWindow(
-    identifier: string,
-    now: number,
-    entry?: RateLimitEntry
-  ): { allowed: boolean; remaining: number; resetTime: number } {
-    if (!entry || now >= entry.resetTime) {
-      const resetTime = now + this.config.windowMs;
-      this.limits.set(identifier, {
-        count: 1,
-        resetTime,
-      });
-      return {
-        allowed: true,
-        remaining: this.config.maxRequests - 1,
-        resetTime,
-      };
-    }
-
-    // Calculate weighted count based on time passed
-    const timePassedRatio = (now - (entry.resetTime - this.config.windowMs)) / this.config.windowMs;
-    const weightedCount = entry.count * (1 - timePassedRatio);
-
-    if (weightedCount >= this.config.maxRequests) {
-      return {
-        allowed: false,
-        remaining: 0,
-        resetTime: entry.resetTime,
-      };
-    }
-
-    entry.count = weightedCount + 1;
-    entry.resetTime = now + this.config.windowMs;
-    return {
-      allowed: true,
-      remaining: Math.floor(this.config.maxRequests - entry.count),
-      resetTime: entry.resetTime,
-    };
+  getResetTime(key: string): number {
+    const state = this.getState(key)
+    if (!state.blocked) return 0
+    return Math.max(0, state.resetAt - Date.now())
   }
 
   /**
-   * Token bucket algorithm (smoothest)
+   * Reset limit for key
    */
-  private tokenBucket(
-    identifier: string,
-    now: number,
-    entry?: RateLimitEntry
-  ): { allowed: boolean; remaining: number; resetTime: number } {
-    const refillRate = this.config.maxRequests / (this.config.windowMs / 1000); // tokens per second
-
-    if (!entry) {
-      const resetTime = now + this.config.windowMs;
-      this.limits.set(identifier, {
-        count: 0,
-        resetTime,
-        tokens: this.config.maxRequests - 1,
-        lastRefill: now,
-      });
-      return {
-        allowed: true,
-        remaining: this.config.maxRequests - 1,
-        resetTime,
-      };
-    }
-
-    // Refill tokens based on time passed
-    const timePassed = (now - (entry.lastRefill || now)) / 1000;
-    const tokensToAdd = timePassed * refillRate;
-    entry.tokens = Math.min(
-      this.config.maxRequests,
-      (entry.tokens || 0) + tokensToAdd
-    );
-    entry.lastRefill = now;
-
-    if (entry.tokens < 1) {
-      return {
-        allowed: false,
-        remaining: 0,
-        resetTime: now + (1 - entry.tokens) * (1000 / refillRate),
-      };
-    }
-
-    entry.tokens -= 1;
-    return {
-      allowed: true,
-      remaining: Math.floor(entry.tokens),
-      resetTime: now + this.config.windowMs,
-    };
+  reset(key: string): void {
+    this.states.delete(key)
   }
 
   /**
-   * Reset rate limit for identifier
+   * Reset all limits
    */
-  reset(identifier: string): void {
-    this.limits.delete(identifier);
+  resetAll(): void {
+    this.states.clear()
   }
 
-  /**
-   * Clear all rate limits
-   */
-  clearAll(): void {
-    this.limits.clear();
-  }
-
-  /**
-   * Cleanup expired entries
-   */
-  private cleanup(): void {
-    const now = Date.now();
-    for (const [key, entry] of this.limits.entries()) {
-      if (now > entry.resetTime) {
-        this.limits.delete(key);
-      }
+  private getState(key: string): RateLimitState {
+    if (!this.states.has(key)) {
+      this.states.set(key, {
+        requests: [],
+        blocked: false,
+        resetAt: 0,
+      })
     }
+    return this.states.get(key)!
+  }
+
+  private setState(key: string, state: RateLimitState): void {
+    this.states.set(key, state)
   }
 }
 
-// Export pre-configured rate limiters
-export const apiRateLimiter = new RateLimiter({
-  windowMs: 60000, // 1 minute
-  maxRequests: 100,
-  strategy: 'sliding-window',
-});
+// ============================================================================
+// SINGLETON INSTANCE
+// ============================================================================
 
-export const authRateLimiter = new RateLimiter({
-  windowMs: 900000, // 15 minutes
-  maxRequests: 5,
-  strategy: 'fixed-window',
-});
+export const rateLimiter = new RateLimiter()
 
-export const strictRateLimiter = new RateLimiter({
-  windowMs: 60000, // 1 minute
-  maxRequests: 10,
-  strategy: 'token-bucket',
-});
+// ============================================================================
+// RATE LIMIT CONFIGS
+// ============================================================================
 
-export { RateLimiter };
+export const RATE_LIMITS = {
+  // Form submissions
+  newsletter: {
+    maxRequests: 3,
+    windowMs: 60 * 60 * 1000, // 1 hour
+    message: 'Demasiadas suscripciones. Inténtalo en 1 hora.',
+  },
+  contact: {
+    maxRequests: 2,
+    windowMs: 60 * 60 * 1000, // 1 hour
+    message: 'Demasiados mensajes. Inténtalo en 1 hora.',
+  },
+  trial: {
+    maxRequests: 1,
+    windowMs: 24 * 60 * 60 * 1000, // 24 hours
+    message: 'Ya solicitaste una prueba. Espera 24 horas.',
+  },
+
+  // API calls
+  search: {
+    maxRequests: 20,
+    windowMs: 60 * 1000, // 1 minute
+    message: 'Demasiadas búsquedas. Espera un momento.',
+  },
+  api: {
+    maxRequests: 100,
+    windowMs: 60 * 1000, // 1 minute
+    message: 'Límite de API alcanzado. Espera 1 minuto.',
+  },
+} as const
+
+// ============================================================================
+// REACT HOOK
+// ============================================================================
+
+import { useState, useCallback } from 'react'
+
+export function useRateLimit(key: string, config: RateLimitConfig) {
+  const [isBlocked, setIsBlocked] = useState(false)
+  const [remaining, setRemaining] = useState(config.maxRequests)
+  const [resetIn, setResetIn] = useState(0)
+
+  const checkLimit = useCallback((): boolean => {
+    const allowed = rateLimiter.isAllowed(key, config)
+    setIsBlocked(!allowed)
+    setRemaining(rateLimiter.getRemaining(key, config))
+    setResetIn(rateLimiter.getResetTime(key))
+    return allowed
+  }, [key, config])
+
+  const reset = useCallback(() => {
+    rateLimiter.reset(key)
+    setIsBlocked(false)
+    setRemaining(config.maxRequests)
+    setResetIn(0)
+  }, [key, config.maxRequests])
+
+  return {
+    isBlocked,
+    remaining,
+    resetIn,
+    checkLimit,
+    reset,
+  }
+}
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+/**
+ * Format reset time for display
+ */
+export function formatResetTime(ms: number): string {
+  if (ms === 0) return 'ahora'
+
+  const seconds = Math.ceil(ms / 1000)
+  const minutes = Math.floor(seconds / 60)
+  const hours = Math.floor(minutes / 60)
+
+  if (hours > 0) return `${hours}h`
+  if (minutes > 0) return `${minutes}m`
+  return `${seconds}s`
+}
