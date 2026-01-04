@@ -1,6 +1,4 @@
-import { MetadataRoute } from 'next';
-
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://complianceflow.netlify.app';
+import { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -8,14 +6,27 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin/', '/api/', '/dashboard/settings/', '/_next/', '/private/'],
+        disallow: [
+          '/api/',
+          '/dashboard/',
+          '/_next/',
+          '/admin/',
+          '/*.json$',
+          '/*?*sort=',
+          '/*?*filter=',
+        ],
       },
       {
-        userAgent: ['CCBot', 'GPTBot', 'ChatGPT-User', 'Google-Extended'],
-        disallow: ['/'],
+        userAgent: 'Googlebot',
+        allow: '/',
+        disallow: ['/api/', '/dashboard/', '/admin/'],
+      },
+      {
+        userAgent: 'Googlebot-Image',
+        allow: '/',
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
-    host: baseUrl,
-  };
+    sitemap: 'https://complianceflow.es/sitemap.xml',
+    host: 'https://complianceflow.es',
+  }
 }
