@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { Breadcrumbs } from '@/components/seo/breadcrumbs'
 import { GradientCard } from '@/components/ui/gradient-card'
 import { Code, CheckCircle, AlertCircle, Zap } from 'lucide-react'
+import { ArticleSchema, HowToSchema } from '@/components/seo/content-schemas'
 
 export const metadata: Metadata = {
   title: 'Guía Completa de Integración SII con API REST',
@@ -26,6 +27,32 @@ export const metadata: Metadata = {
 
 export default function SIIIntegrationGuide() {
   return (
+    <>
+      <ArticleSchema
+        title="Guía Completa de Integración SII con API REST"
+        description="Aprende a integrar el Suministro Inmediato de Información (SII) de la AEAT en tu aplicación usando nuestra API REST. Tutorial paso a paso con ejemplos de código."
+        datePublished="2026-01-04T00:00:00Z"
+        url="https://complianceflow.es/blog/guia-integracion-sii"
+      />
+      <HowToSchema
+        name="Cómo integrar SII con ComplianceFlow API"
+        description="Tutorial paso a paso para integrar el SII en tu aplicación"
+        totalTime="PT30M"
+        steps={[
+          {
+            name: 'Obtener API Key',
+            text: 'Regístrate en ComplianceFlow y obtén tu API key desde el dashboard',
+          },
+          {
+            name: 'Enviar factura',
+            text: 'Usa el endpoint POST /v1/sii/invoices con tus datos de factura',
+          },
+          {
+            name: 'Configurar webhooks',
+            text: 'Configura tu endpoint para recibir notificaciones en tiempo real',
+          },
+        ]}
+      />
     <div className="min-h-screen py-12">
       <div className="container max-w-4xl">
         <Breadcrumbs
@@ -312,5 +339,6 @@ console.log('SII Response:', response.data);
         </article>
       </div>
     </div>
+    </>
   )
 }
