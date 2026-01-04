@@ -1,8 +1,13 @@
 import { HeroSection } from '@/components/sections/hero-section'
 import { StatsGrid } from '@/components/ui/stats-counter'
+import { TrustLogos } from '@/components/sections/trust-logos'
 import { FeatureShowcase } from '@/components/sections/feature-showcase'
+import { ROICalculator } from '@/components/sections/roi-calculator'
 import { PricingSection } from '@/components/sections/pricing-section'
+import { ComparisonTable } from '@/components/sections/comparison-table'
 import { TestimonialsSection } from '@/components/sections/testimonials-section'
+import { FAQSection } from '@/components/sections/faq-section'
+import { NewsletterSection } from '@/components/sections/newsletter-section'
 import { CTASection } from '@/components/sections/cta-section'
 import { AnimatedBackground } from '@/components/ui/animated-background'
 
@@ -44,14 +49,29 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Trust Indicators */}
+      <TrustLogos />
+
       {/* Features */}
       <FeatureShowcase />
+
+      {/* ROI Calculator */}
+      <ROICalculator />
+
+      {/* Comparison Table */}
+      <ComparisonTable />
 
       {/* Pricing */}
       <PricingSection />
 
       {/* Testimonials */}
       <TestimonialsSection />
+
+      {/* FAQ */}
+      <FAQSection />
+
+      {/* Newsletter */}
+      <NewsletterSection />
 
       {/* Final CTA */}
       <CTASection />
