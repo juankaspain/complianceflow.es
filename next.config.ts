@@ -1,33 +1,50 @@
-import type { NextConfig } from 'next';
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  // Enable React strict mode for better development experience
-  reactStrictMode: true,
-
-  // Enable SWC minification for faster builds
-  swcMinify: true,
-
-  // Optimize images
+  // Image optimization
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 60,
+    minimumCacheTTL: 31536000, // 1 year
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
-  // Enable compression
-  compress: true,
+  // Compiler optimizations
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
 
-  // Optimize fonts
-  optimizeFonts: true,
+  // Production optimizations
+  ...(process.env.NODE_ENV === 'production' && {
+    compress: true,
+    swcMinify: true,
+    reactStrictMode: true,
+    poweredByHeader: false,
+  }),
 
-  // Power by header (security through obscurity)
-  poweredByHeader: false,
+  // Bundle analyzer (optional, enable when needed)
+  // webpack: (config, { isServer }) => {
+  //   if (!isServer) {
+  //     config.optimization.splitChunks = {
+  //       chunks: 'all',
+  //       cacheGroups: {
+  //         default: false,
+  //         vendors: false,
+  //         commons: {
+  //           name: 'commons',
+  //           chunks: 'all',
+  //           minChunks: 2,
+  //         },
+  //       },
+  //     }
+  //   }
+  //   return config
+  // },
 
-  // Strict CSP for security
+  // Security headers (now in middleware, but backup here)
   async headers() {
     return [
       {
@@ -43,7 +60,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
+            value: 'DENY',
           },
           {
             key: 'X-Content-Type-Options',
@@ -55,75 +72,37 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
+            value: 'strict-origin-when-cross-origin',
           },
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()',
+            value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
           },
         ],
       },
-    ];
+    ]
   },
 
-  // Webpack optimizations
-  webpack: (config, { dev, isServer }) => {
-    // Production optimizations
-    if (!dev && !isServer) {
-      config.optimization = {
-        ...config.optimization,
-        moduleIds: 'deterministic',
-        runtimeChunk: 'single',
-        splitChunks: {
-          chunks: 'all',
-          cacheGroups: {
-            default: false,
-            vendors: false,
-            // Vendor chunk
-            vendor: {
-              name: 'vendor',
-              chunks: 'all',
-              test: /node_modules/,
-              priority: 20,
-            },
-            // Common chunk
-            common: {
-              name: 'common',
-              minChunks: 2,
-              chunks: 'all',
-              priority: 10,
-              reuseExistingChunk: true,
-              enforce: true,
-            },
-            // Framework chunk (React, Next.js)
-            framework: {
-              name: 'framework',
-              test: /[\\/]node_modules[\\/](react|react-dom|next)[\\/]/,
-              priority: 40,
-              chunks: 'all',
-            },
-            // Framer Motion chunk
-            framer: {
-              name: 'framer',
-              test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
-              priority: 30,
-              chunks: 'all',
-            },
-          },
-        },
-      };
-    }
-
-    return config;
+  // Redirects (SEO)
+  async redirects() {
+    return [
+      {
+        source: '/home',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/documentation',
+        destination: '/docs',
+        permanent: true,
+      },
+    ]
   },
 
-  // Experimental features
+  // Experimental features for performance
   experimental: {
-    // Enable optimizeCss for production
-    optimizeCss: true,
-    // Enable modern JavaScript output
-    modernBuildOutput: true,
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig
