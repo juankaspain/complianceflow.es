@@ -1,33 +1,39 @@
 'use client'
 
 import Script from 'next/script'
-import { usePathname, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
+import { usePathname, useSearchParams } from 'next/navigation'
 
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-XXXXXXXXXX'
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID
 
-declare global {
-  interface Window {
-    gtag: (command: string, ...args: any[]) => void
-    dataLayer: any[]
-  }
-}
+// ============================================================================
+# GOOGLE ANALYTICS 4
+// ============================================================================
 
-export function Analytics() {
+export function GoogleAnalytics() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
   useEffect(() => {
-    if (pathname) {
-      pageview(pathname)
-    }
+    if (!GA_ID) return
+
+    const url = pathname + searchParams.toString()
+
+    // Page view tracking
+    window.gtag?.('config', GA_ID, {
+      page_path: url,
+    })
   }, [pathname, searchParams])
+
+  if (!GA_ID || process.env.NODE_ENV !== 'production') {
+    return null
+  }
 
   return (
     <>
       <Script
         strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
       />
       <Script
         id="google-analytics"
@@ -37,9 +43,10 @@ export function Analytics() {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${GA_MEASUREMENT_ID}', {
+            gtag('config', '${GA_ID}', {
               page_path: window.location.pathname,
-              send_page_view: false
+              send_page_view: true,
+              cookie_flags: 'SameSite=None;Secure'
             });
           `,
         }}
@@ -48,144 +55,180 @@ export function Analytics() {
   )
 }
 
-// Pageview tracking
-export const pageview = (url: string) => {
-  if (typeof window.gtag !== 'undefined') {
-    window.gtag('config', GA_MEASUREMENT_ID, {
-      page_path: url,
+// ============================================================================
+// EVENT TRACKING FUNCTIONS
+// ============================================================================
+
+type EventParams = {
+  action: string
+  category: string
+  label?: string
+  value?: number
+}
+
+export const trackEvent = ({ action, category, label, value }: EventParams) => {
+  if (!GA_ID || typeof window === 'undefined') return
+
+  window.gtag?.('event', action, {
+    event_category: category,
+    event_label: label,
+    value: value,
+  })
+}
+
+// Conversion tracking
+export const trackConversion = (value: number, currency: string = 'EUR') => {
+  trackEvent({
+    action: 'conversion',
+    category: 'ecommerce',
+    label: 'trial_signup',
+    value,
+  })
+
+  window.gtag?.('event', 'purchase', {
+    value,
+    currency,
+    items: [{ item_name: 'Trial Signup' }],
+  })
+}
+
+// Newsletter subscription
+export const trackNewsletterSignup = () => {
+  trackEvent({
+    action: 'signup',
+    category: 'newsletter',
+    label: 'footer_form',
+  })
+}
+
+// Contact form submission
+export const trackContactForm = () => {
+  trackEvent({
+    action: 'submit',
+    category: 'contact',
+    label: 'contact_page',
+  })
+}
+
+// CTA clicks
+export const trackCTA = (location: string, label: string) => {
+  trackEvent({
+    action: 'click',
+    category: 'cta',
+    label: `${location}_${label}`,
+  })
+}
+
+// Download tracking
+export const trackDownload = (fileName: string) => {
+  trackEvent({
+    action: 'download',
+    category: 'resources',
+    label: fileName,
+  })
+}
+
+// Outbound link tracking
+export const trackOutboundLink = (url: string) => {
+  trackEvent({
+    action: 'click',
+    category: 'outbound',
+    label: url,
+  })
+}
+
+// Video engagement
+export const trackVideoPlay = (videoTitle: string) => {
+  trackEvent({
+    action: 'play',
+    category: 'video',
+    label: videoTitle,
+  })
+}
+
+// Search tracking
+export const trackSearch = (searchTerm: string, resultsCount: number) => {
+  trackEvent({
+    action: 'search',
+    category: 'site_search',
+    label: searchTerm,
+    value: resultsCount,
+  })
+}
+
+// ============================================================================
+// WEB VITALS TRACKING
+// ============================================================================
+
+export const trackWebVitals = (metric: any) => {
+  const { name, value, id } = metric
+
+  window.gtag?.('event', name, {
+    event_category: 'Web Vitals',
+    value: Math.round(name === 'CLS' ? value * 1000 : value),
+    event_label: id,
+    non_interaction: true,
+  })
+}
+
+// ============================================================================
+// PERFORMANCE MONITORING
+// ============================================================================
+
+export const trackPerformance = () => {
+  if (typeof window === 'undefined') return
+
+  const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming
+
+  if (navigation) {
+    const pageLoadTime = navigation.loadEventEnd - navigation.fetchStart
+    const dnsTime = navigation.domainLookupEnd - navigation.domainLookupStart
+    const tcpTime = navigation.connectEnd - navigation.connectStart
+    const ttfb = navigation.responseStart - navigation.requestStart
+
+    trackEvent({
+      action: 'timing',
+      category: 'performance',
+      label: 'page_load',
+      value: Math.round(pageLoadTime),
+    })
+
+    trackEvent({
+      action: 'timing',
+      category: 'performance',
+      label: 'ttfb',
+      value: Math.round(ttfb),
     })
   }
 }
 
-// Event tracking
-export const event = (action: string, category: string, label?: string, value?: number) => {
-  if (typeof window.gtag !== 'undefined') {
-    window.gtag('event', action, {
-      event_category: category,
-      event_label: label,
-      value: value,
-    })
+// ============================================================================
+// ERROR TRACKING
+// ============================================================================
+
+export const trackError = (error: Error, errorInfo?: any) => {
+  trackEvent({
+    action: 'error',
+    category: 'javascript',
+    label: `${error.name}: ${error.message}`,
+  })
+
+  // Send to error tracking service (e.g., Sentry)
+  if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
+    // window.Sentry?.captureException(error, { extra: errorInfo })
   }
 }
 
-// Conversion tracking helpers
-export const trackConversion = {
-  // Newsletter signup
-  newsletterSignup: (email: string) => {
-    event('newsletter_signup', 'engagement', 'newsletter', 1)
-    if (typeof window.gtag !== 'undefined') {
-      window.gtag('event', 'conversion', {
-        send_to: `${GA_MEASUREMENT_ID}/newsletter`,
-        value: 1.0,
-        currency: 'EUR',
-      })
-    }
-  },
+// ============================================================================
+// TYPESCRIPT DECLARATIONS
+// ============================================================================
 
-  // Contact form submission
-  contactSubmit: (formType: string) => {
-    event('contact_submit', 'lead_generation', formType, 1)
-    if (typeof window.gtag !== 'undefined') {
-      window.gtag('event', 'conversion', {
-        send_to: `${GA_MEASUREMENT_ID}/contact`,
-        value: 5.0,
-        currency: 'EUR',
-      })
-    }
-  },
-
-  // Trial signup
-  trialSignup: (plan: string) => {
-    event('trial_signup', 'conversion', plan, 1)
-    if (typeof window.gtag !== 'undefined') {
-      window.gtag('event', 'conversion', {
-        send_to: `${GA_MEASUREMENT_ID}/trial`,
-        value: 10.0,
-        currency: 'EUR',
-      })
-    }
-  },
-
-  // Pricing page view
-  viewPricing: () => {
-    event('view_pricing', 'engagement', 'pricing_page', 1)
-  },
-
-  // Documentation view
-  viewDocs: (docPage: string) => {
-    event('view_docs', 'engagement', docPage, 1)
-  },
-
-  // CTA click
-  ctaClick: (ctaName: string) => {
-    event('cta_click', 'engagement', ctaName, 1)
-  },
-
-  // ROI Calculator usage
-  useROICalculator: (monthlyTransactions: number) => {
-    event('use_roi_calculator', 'engagement', 'calculator', monthlyTransactions)
-  },
-
-  // Download resources
-  downloadResource: (resourceName: string) => {
-    event('download', 'engagement', resourceName, 1)
-  },
-
-  // Video play
-  playVideo: (videoName: string) => {
-    event('video_play', 'engagement', videoName, 1)
-  },
-
-  // Feature exploration
-  viewFeature: (featureName: string) => {
-    event('view_feature', 'engagement', featureName, 1)
-  },
-
-  // Outbound link clicks
-  outboundClick: (url: string) => {
-    event('click', 'outbound', url, 1)
-  },
-}
-
-// E-commerce events for pricing
-export const trackEcommerce = {
-  viewItemList: (items: any[]) => {
-    if (typeof window.gtag !== 'undefined') {
-      window.gtag('event', 'view_item_list', {
-        item_list_id: 'pricing_plans',
-        item_list_name: 'Pricing Plans',
-        items: items,
-      })
-    }
-  },
-
-  viewItem: (item: any) => {
-    if (typeof window.gtag !== 'undefined') {
-      window.gtag('event', 'view_item', {
-        currency: 'EUR',
-        value: item.price,
-        items: [item],
-      })
-    }
-  },
-
-  selectItem: (item: any) => {
-    if (typeof window.gtag !== 'undefined') {
-      window.gtag('event', 'select_item', {
-        item_list_id: 'pricing_plans',
-        item_list_name: 'Pricing Plans',
-        items: [item],
-      })
-    }
-  },
-
-  beginCheckout: (item: any) => {
-    if (typeof window.gtag !== 'undefined') {
-      window.gtag('event', 'begin_checkout', {
-        currency: 'EUR',
-        value: item.price,
-        items: [item],
-      })
-    }
-  },
+declare global {
+  interface Window {
+    gtag?: (
+      command: string,
+      targetId: string | Date,
+      config?: Record<string, any>
+    ) => void
+  }
 }
