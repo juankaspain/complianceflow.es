@@ -7,16 +7,15 @@ module.exports = {
       [
         'feat',     // New feature
         'fix',      // Bug fix
-        'docs',     // Documentation
-        'style',    // Formatting, missing semicolons, etc.
-        'refactor', // Code change that neither fixes a bug nor adds a feature
-        'perf',     // Performance improvement
-        'test',     // Adding tests
-        'build',    // Build system or dependencies
-        'ci',       // CI configuration
-        'chore',    // Other changes that don't modify src or test files
-        'revert',   // Revert a previous commit
-        'security', // Security fixes
+        'docs',     // Documentation changes
+        'style',    // Code style changes (formatting, etc)
+        'refactor', // Code refactoring
+        'perf',     // Performance improvements
+        'test',     // Adding or updating tests
+        'build',    // Build system changes
+        'ci',       // CI configuration changes
+        'chore',    // Other changes (dependencies, etc)
+        'revert',   // Revert previous commit
       ],
     ],
     'type-case': [2, 'always', 'lower-case'],
@@ -25,8 +24,7 @@ module.exports = {
     'subject-empty': [2, 'never'],
     'subject-full-stop': [2, 'never', '.'],
     'header-max-length': [2, 'always', 100],
-    'body-leading-blank': [1, 'always'],
-    'body-max-line-length': [2, 'always', 100],
-    'footer-leading-blank': [1, 'always'],
+    'body-leading-blank': [2, 'always'],
+    'footer-leading-blank': [2, 'always'],
   },
 }
