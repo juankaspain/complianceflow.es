@@ -5,6 +5,7 @@ import { Providers } from '@/components/providers'
 import { OrganizationSchema, LocalBusinessSchema } from '@/components/seo/structured-data'
 import { Analytics } from '@/lib/analytics'
 import { CookieConsent } from '@/components/cookie-consent'
+import { SkipToContent, LiveRegion, RouteAnnouncer } from '@/lib/accessibility'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -206,6 +207,9 @@ export default function RootLayout({
         <meta name="color-scheme" content="light dark" />
       </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+        <SkipToContent />
+        <LiveRegion />
+        <RouteAnnouncer />
         <Analytics />
         <OrganizationSchema />
         <LocalBusinessSchema />
