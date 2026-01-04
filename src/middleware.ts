@@ -1,69 +1,132 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const allowedOrigins = [
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://complianceflow.netlify.app',
-  'https://complianceflow.es',
-  'https://www.complianceflow.es',
-]
+// Rate limiting configuration
+const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
+const MAX_REQUESTS_PER_WINDOW = 60
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
 
-// Rate limiting config
-const rateLimit = {
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+// Security headers configuration
+const securityHeaders = {
+  'X-DNS-Prefetch-Control': 'on',
+  'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
+  'X-Frame-Options': 'DENY',
+  'X-Content-Type-Options': 'nosniff',
+  'X-XSS-Protection': '1; mode=block',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+  'Content-Security-Policy': [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: https: blob:",
+    "connect-src 'self' https://www.google-analytics.com https://analytics.google.com",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "upgrade-insecure-requests",
+  ].join('; '),
 }
 
-export function middleware(request: NextRequest) {
-  const origin = request.headers.get('origin')
-  const pathname = request.nextUrl.pathname
+// Rate limiting helper
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now()
+  const userData = rateLimitMap.get(ip)
 
-  // CORS for API routes
-  if (pathname.startsWith('/api')) {
-    // Preflight request
-    if (request.method === 'OPTIONS') {
-      return new NextResponse(null, {
-        status: 200,
-        headers: {
-          'Access-Control-Allow-Origin': origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0],
-          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-CSRF-Token',
-          'Access-Control-Max-Age': '86400',
-        },
-      })
+  if (!userData || now > userData.resetTime) {
+    rateLimitMap.set(ip, {
+      count: 1,
+      resetTime: now + RATE_LIMIT_WINDOW,
+    })
+    return true
+  }
+
+  if (userData.count >= MAX_REQUESTS_PER_WINDOW) {
+    return false
+  }
+
+  userData.count++
+  return true
+}
+
+// Clean up old entries periodically
+setInterval(() => {
+  const now = Date.now()
+  for (const [ip, data] of rateLimitMap.entries()) {
+    if (now > data.resetTime) {
+      rateLimitMap.delete(ip)
     }
+  }
+}, RATE_LIMIT_WINDOW)
 
-    // Check if origin is allowed
-    if (origin && !allowedOrigins.includes(origin)) {
+export function middleware(request: NextRequest) {
+  const response = NextResponse.next()
+
+  // Get client IP
+  const ip = request.ip || request.headers.get('x-forwarded-for') || 'unknown'
+
+  // Apply security headers
+  Object.entries(securityHeaders).forEach(([key, value]) => {
+    response.headers.set(key, value)
+  })
+
+  // Rate limiting for API routes and forms
+  if (
+    request.nextUrl.pathname.startsWith('/api/') ||
+    request.nextUrl.pathname === '/contact' ||
+    request.nextUrl.pathname === '/newsletter'
+  ) {
+    if (!checkRateLimit(ip)) {
       return new NextResponse(
-        JSON.stringify({ 
-          success: false, 
-          message: 'CORS policy: Origin not allowed' 
+        JSON.stringify({
+          error: 'Too many requests',
+          message: 'Please try again later',
         }),
         {
-          status: 403,
-          headers: { 'Content-Type': 'application/json' },
+          status: 429,
+          headers: {
+            'Content-Type': 'application/json',
+            'Retry-After': '60',
+          },
         }
       )
     }
-
-    const response = NextResponse.next()
-
-    if (origin) {
-      response.headers.set('Access-Control-Allow-Origin', origin)
-    }
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-CSRF-Token')
-    response.headers.set('Access-Control-Allow-Credentials', 'true')
-
-    return response
   }
 
-  return NextResponse.next()
+  // CORS headers for API routes
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    response.headers.set('Access-Control-Allow-Origin', 'https://complianceflow.es')
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    response.headers.set('Access-Control-Max-Age', '86400')
+
+    // Handle preflight requests
+    if (request.method === 'OPTIONS') {
+      return new NextResponse(null, { status: 204, headers: response.headers })
+    }
+  }
+
+  // Add cache headers for static assets
+  if (
+    request.nextUrl.pathname.startsWith('/_next/static') ||
+    request.nextUrl.pathname.startsWith('/icons/')
+  ) {
+    response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
+  }
+
+  return response
 }
 
 export const config = {
   matcher: [
-    '/api/:path*',
-    '/((?!_next/static|_next/image|favicon.ico).*)',
+    /*
+     * Match all request paths except:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder
+     */
+    '/((?!_next/static|_next/image|favicon.ico|.*\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
