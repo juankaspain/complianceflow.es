@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/providers'
+import { OrganizationSchema, LocalBusinessSchema } from '@/components/seo/structured-data'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -86,7 +87,7 @@ export const metadata: Metadata = {
     shortcut: '/favicon-16x16.png',
     apple: '/apple-touch-icon.png',
   },
-  manifest: '/site.webmanifest',
+  manifest: '/manifest.json',
   alternates: {
     canonical: 'https://complianceflow.es',
   },
@@ -108,6 +109,8 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+        <OrganizationSchema />
+        <LocalBusinessSchema />
         <Providers>{children}</Providers>
       </body>
     </html>
