@@ -1,159 +1,229 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next'
+import { COMPANY, SEO, URLS } from '@/lib/constants'
 
-interface SEOConfig {
-  title: string;
-  description: string;
-  image?: string;
-  url?: string;
-  type?: 'website' | 'article';
-  publishedTime?: string;
-  modifiedTime?: string;
-  author?: string;
-  keywords?: string[];
+// ============================================================================
+// TYPES
+// ============================================================================
+
+interface SEOProps {
+  title?: string
+  description?: string
+  keywords?: string[]
+  image?: string
+  url?: string
+  type?: 'website' | 'article' | 'product'
+  author?: string
+  publishedTime?: string
+  modifiedTime?: string
+  noindex?: boolean
+  nofollow?: boolean
+  canonical?: string
 }
 
-const defaultSEO = {
-  siteName: 'ComplianceFlow',
-  siteUrl: 'https://complianceflow.es',
-  defaultImage: '/og-image.png',
-  twitterHandle: '@complianceflow',
-};
+// ============================================================================
+// GENERATE METADATA
+// ============================================================================
 
-/**
- * Generate comprehensive SEO metadata for Next.js pages
- */
-export function generateSEO(config: SEOConfig): Metadata {
-  const {
-    title,
-    description,
-    image = defaultSEO.defaultImage,
-    url,
-    type = 'website',
-    publishedTime,
-    modifiedTime,
-    author,
-    keywords,
-  } = config;
-
-  const fullTitle = `${title} | ${defaultSEO.siteName}`;
-  const fullUrl = url ? `${defaultSEO.siteUrl}${url}` : defaultSEO.siteUrl;
-  const fullImage = image.startsWith('http') ? image : `${defaultSEO.siteUrl}${image}`;
+export function generateMetadata({
+  title,
+  description = SEO.defaultDescription,
+  keywords = SEO.keywords,
+  image = SEO.ogImage,
+  url,
+  type = 'website',
+  author,
+  publishedTime,
+  modifiedTime,
+  noindex = false,
+  nofollow = false,
+  canonical,
+}: SEOProps = {}): Metadata {
+  const pageTitle = title ? `${title} | ${COMPANY.name}` : SEO.defaultTitle
+  const pageUrl = url ? `${URLS.site}${url}` : URLS.site
+  const imageUrl = image.startsWith('http') ? image : `${URLS.site}${image}`
 
   return {
-    title: fullTitle,
+    title: pageTitle,
     description,
-    keywords: keywords?.join(', '),
-    authors: author ? [{ name: author }] : undefined,
-    creator: defaultSEO.siteName,
-    publisher: defaultSEO.siteName,
+    keywords: keywords.join(', '),
+
+    authors: author ? [{ name: author }] : [{ name: COMPANY.name }],
+
+    creator: COMPANY.name,
+    publisher: COMPANY.name,
+
     robots: {
-      index: true,
-      follow: true,
+      index: !noindex,
+      follow: !nofollow,
       googleBot: {
-        index: true,
-        follow: true,
+        index: !noindex,
+        follow: !nofollow,
         'max-video-preview': -1,
         'max-image-preview': 'large',
         'max-snippet': -1,
       },
     },
+
     alternates: {
-      canonical: fullUrl,
-      languages: {
-        'es-ES': fullUrl,
-        'en-US': fullUrl.replace('.es', '.com'),
-      },
+      canonical: canonical || pageUrl,
     },
+
     openGraph: {
       type,
-      title: fullTitle,
+      locale: 'es_ES',
+      url: pageUrl,
+      siteName: COMPANY.name,
+      title: pageTitle,
       description,
-      url: fullUrl,
-      siteName: defaultSEO.siteName,
       images: [
         {
-          url: fullImage,
+          url: imageUrl,
           width: 1200,
           height: 630,
-          alt: title,
+          alt: title || COMPANY.name,
         },
       ],
-      locale: 'es_ES',
-      publishedTime,
-      modifiedTime,
+      ...(type === 'article' && {
+        publishedTime,
+        modifiedTime,
+        authors: author ? [author] : undefined,
+      }),
     },
+
     twitter: {
       card: 'summary_large_image',
-      title: fullTitle,
+      site: SEO.twitterHandle,
+      creator: SEO.twitterHandle,
+      title: pageTitle,
       description,
-      images: [fullImage],
-      creator: defaultSEO.twitterHandle,
-      site: defaultSEO.twitterHandle,
+      images: [imageUrl],
     },
+
+    viewport: {
+      width: 'device-width',
+      initialScale: 1,
+      maximumScale: 5,
+    },
+
     verification: {
-      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+      google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION,
     },
-  };
+
+    category: 'Technology',
+  }
 }
 
-/**
- * Generate JSON-LD structured data
- */
-export function generateStructuredData(config: {
-  type: 'Organization' | 'WebSite' | 'Article' | 'Product' | 'SoftwareApplication';
-  data: Record<string, unknown>;
-}): string {
-  const baseData = {
+// ============================================================================
+// PRESETS FOR COMMON PAGES
+// ============================================================================
+
+export const SEO_PRESETS = {
+  home: (): Metadata => generateMetadata({
+    title: 'API SII, Verifactu y TicketBAI para España',
+    keywords: [
+      'API SII',
+      'API Verifactu',
+      'API TicketBAI',
+      'compliance fiscal',
+      'facturación electrónica',
+      'AEAT',
+      'automatización fiscal',
+      'integracion SII',
+    ],
+  }),
+
+  pricing: (): Metadata => generateMetadata({
+    title: 'Planes y Precios - Desde €49/mes',
+    description: 'Planes transparentes y escalables. Empieza gratis y escala según crezcas. Sin sorpresas, sin permanencia.',
+    keywords: ['precios API SII', 'planes compliance', 'pricing'],
+    url: '/pricing',
+  }),
+
+  docs: (): Metadata => generateMetadata({
+    title: 'Documentación',
+    description: 'Documentación técnica completa de ComplianceFlow API. Guías, tutoriales y referencia API.',
+    keywords: ['documentación API', 'guía SII', 'tutorial Verifactu'],
+    url: '/docs',
+  }),
+
+  blog: (title?: string, description?: string, publishedTime?: string): Metadata => generateMetadata({
+    title,
+    description,
+    type: 'article',
+    publishedTime,
+    author: 'ComplianceFlow Team',
+    url: title ? `/blog/${title.toLowerCase().replace(/\s+/g, '-')}` : '/blog',
+  }),
+
+  contact: (): Metadata => generateMetadata({
+    title: 'Contacto',
+    description: 'Contacta con nuestro equipo. Soporte 24/7, respuesta en menos de 2 horas.',
+    url: '/contact',
+  }),
+}
+
+// ============================================================================
+// JSON-LD SCHEMAS
+// ============================================================================
+
+export function generateOrganizationSchema() {
+  return {
     '@context': 'https://schema.org',
-    '@type': config.type,
-    ...config.data,
-  };
-
-  return JSON.stringify(baseData);
-}
-
-/**
- * Organization structured data
- */
-export const organizationSchema = generateStructuredData({
-  type: 'Organization',
-  data: {
-    name: defaultSEO.siteName,
-    url: defaultSEO.siteUrl,
-    logo: `${defaultSEO.siteUrl}/logo.png`,
-    description: 'Plataforma profesional de gestión de cumplimiento normativo',
-    contactPoint: {
-      '@type': 'ContactPoint',
-      telephone: '+34-XXX-XXX-XXX',
-      contactType: 'customer service',
-      areaServed: 'ES',
-      availableLanguage: ['Spanish', 'English'],
+    '@type': 'Organization',
+    name: COMPANY.name,
+    legalName: COMPANY.legalName,
+    url: URLS.site,
+    logo: `${URLS.site}/logo.png`,
+    description: COMPANY.description,
+    foundingDate: COMPANY.foundedYear.toString(),
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Calle Principal 123',
+      addressLocality: 'Madrid',
+      postalCode: '28001',
+      addressCountry: 'ES',
     },
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        telephone: '+34-900-000-000',
+        contactType: 'Customer Service',
+        email: 'support@complianceflow.es',
+        availableLanguage: ['Spanish', 'English'],
+      },
+    ],
     sameAs: [
       'https://twitter.com/complianceflow',
       'https://linkedin.com/company/complianceflow',
+      'https://github.com/complianceflow',
     ],
-  },
-});
+  }
+}
 
-/**
- * SaaS Product structured data
- */
-export const softwareSchema = generateStructuredData({
-  type: 'SoftwareApplication',
-  data: {
-    name: defaultSEO.siteName,
-    applicationCategory: 'BusinessApplication',
-    operatingSystem: 'Web',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'EUR',
+export function generateWebsiteSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: COMPANY.name,
+    url: URLS.site,
+    description: SEO.defaultDescription,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${URLS.site}/search?q={search_term_string}`,
+      'query-input': 'required name=search_term_string',
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      ratingCount: '127',
-    },
-  },
-});
+  }
+}
+
+export function generateBreadcrumbSchema(items: Array<{ name: string; url: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: `${URLS.site}${item.url}`,
+    })),
+  }
+}
