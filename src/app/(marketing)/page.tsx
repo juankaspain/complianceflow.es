@@ -1,28 +1,60 @@
-import type { Metadata } from 'next';
-import { HeroSection } from '@/components/sections/Hero';
-import { FeaturesSection } from '@/components/sections/Features';
-import { UseCasesSection } from '@/components/sections/UseCases';
-import { HowItWorksSection } from '@/components/sections/HowItWorks';
-import { PricingSection } from '@/components/sections/Pricing';
-import { FAQSection } from '@/components/sections/FAQ';
-import { CTASection } from '@/components/sections/CTA';
+import { HeroSection } from '@/components/sections/hero-section'
+import { StatsGrid } from '@/components/ui/stats-counter'
+import { FeatureShowcase } from '@/components/sections/feature-showcase'
+import { PricingSection } from '@/components/sections/pricing-section'
+import { TestimonialsSection } from '@/components/sections/testimonials-section'
+import { CTASection } from '@/components/sections/cta-section'
+import { AnimatedBackground } from '@/components/ui/animated-background'
 
-export const metadata: Metadata = {
-  title: 'ComplianceFlow · APIs de Compliance para SII, KYC y AML',
-  description:
-    'Automatiza SII, Verifactu, KYC y prevención de fraude con APIs diseñadas para desarrolladores. Prueba gratis 1.000 llamadas.',
-};
+const stats = [
+  {
+    value: 500,
+    label: 'Empresas activas',
+    suffix: '+',
+  },
+  {
+    value: 10,
+    label: 'Millones de transacciones',
+    suffix: 'M+',
+  },
+  {
+    value: 99.99,
+    label: 'Uptime garantizado',
+    suffix: '%',
+  },
+  {
+    value: 24,
+    label: 'Soporte disponible',
+    suffix: '/7',
+  },
+]
 
 export default function HomePage() {
   return (
-    <>
+    <main className="relative">
+      <AnimatedBackground />
+
+      {/* Hero Section */}
       <HeroSection />
-      <FeaturesSection />
-      <UseCasesSection />
-      <HowItWorksSection />
+
+      {/* Stats Section */}
+      <section className="py-16 border-y border-border/50 bg-background/50 backdrop-blur-sm">
+        <div className="container">
+          <StatsGrid stats={stats} />
+        </div>
+      </section>
+
+      {/* Features */}
+      <FeatureShowcase />
+
+      {/* Pricing */}
       <PricingSection />
-      <FAQSection />
+
+      {/* Testimonials */}
+      <TestimonialsSection />
+
+      {/* Final CTA */}
       <CTASection />
-    </>
-  );
+    </main>
+  )
 }
